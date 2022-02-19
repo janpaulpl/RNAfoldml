@@ -15,4 +15,4 @@ RNAfoldml is an OCaml package that enables users to input both RNA sequences in 
 ### Authors
 - [Inle Bush](https://github.com/imbush)
 - [Jan-Paul Ramos](https://github.com/jpvinnie)
-- Songyu Ye
+- [Songyu Ye](https://github.com/s-ye)
