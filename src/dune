@@ -1,0 +1,3 @@
+(library
+ (name rnafoldml)
+ (public_name RNAfoldml))
