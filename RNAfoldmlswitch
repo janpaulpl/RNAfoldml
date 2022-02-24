@@ -1,0 +1,26 @@
+opam-version: "2.0"
+compiler: [
+  "base-bigarray.base"
+  "base-threads.base"
+  "base-unix.base"
+  "ocaml.4.12.0"
+  "ocaml-base-compiler.4.12.0"
+  "ocaml-config.2"
+  "ocaml-options-vanilla.1"
+]
+roots: ["ocaml-base-compiler.4.12.0" "ounit2.2.2.6"]
+installed: [
+  "base-bigarray.base"
+  "base-bytes.base"
+  "base-threads.base"
+  "base-unix.base"
+  "dune.3.0.2"
+  "ocaml.4.12.0"
+  "ocaml-base-compiler.4.12.0"
+  "ocaml-config.2"
+  "ocaml-options-vanilla.1"
+  "ocamlfind.1.9.3"
+  "ounit2.2.2.6"
+  "seq.base"
+  "stdlib-shims.0.3.0"
+]
