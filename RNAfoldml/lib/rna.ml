@@ -10,10 +10,8 @@ let read_rna_fasta s =
   in
   if s = "" then x else x
 
-let rna_from_string s =
-  let x : rna =
-    { seq = ""; name = "sdas"; attributes = [ ("ad", "sds") ] }
-  in
+let rna_from_string s name =
+  let x : rna = { seq = ""; name; attributes = [ ("ad", "sds") ] } in
   if s = "" then x else x
 
 let get_seq r = r.name

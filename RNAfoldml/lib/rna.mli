@@ -23,11 +23,12 @@ val read_rna_fasta : string -> rna list
     Effects: Prints warning message to terminal if any sequences are
     invalid. *)
 
-val rna_from_string : string -> rna
-(** [rna_from_string r] is the value of type [rna] representing the rna
-    sequence [r] and no information.
+val rna_from_string : string -> string -> rna
+(** [rna_from_string r_seq name] is the value of type [rna] with
+    sequence name [name] representing the rna sequence [r_seq] and no
+    information.
 
-    Raises: [Invalid_argument] exception if [f] contains characters
+    Raises: [Invalid_argument] exception if [r_seq] contains characters
     other than 'A', 'G', 'C', 'U'. *)
 
 val get_seq : rna -> string
