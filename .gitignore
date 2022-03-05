@@ -6,6 +6,7 @@
 *.cmx
 *.native
 *.byte
+_build
 
 # temporary files
 *.swp
