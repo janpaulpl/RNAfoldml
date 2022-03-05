@@ -9,8 +9,8 @@ type rna = {
 
 let rep_ok str =
   match Str.search_forward (Str.regexp "\\([AGCU]+\\)") str 0 with
-	Not_found -> failwith "RI"
-	| _ -> str
+	0 -> str
+	| _ -> failwith "RI"
 
 let read_rna_fasta s =
   let x : rna list =
