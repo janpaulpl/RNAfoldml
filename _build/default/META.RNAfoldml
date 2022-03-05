@@ -1,0 +1,6 @@
+description = ""
+requires = ""
+archive(byte) = "RNAfoldml.cma"
+archive(native) = "RNAfoldml.cmxa"
+plugin(byte) = "RNAfoldml.cma"
+plugin(native) = "RNAfoldml.cmxs"

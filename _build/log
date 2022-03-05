@@ -1,0 +1,130 @@
+# dune build
+# OCAMLPARAM: unset
+# Workspace root: /Users/inlebush/cs/RNAfoldml
+$ /usr/bin/getconf _NPROCESSORS_ONLN > /var/folders/d7/579zz8_n16n7smlhrw1cqk1m0000gn/T/dune08cbf5.output 2> /dev/null
+# Auto-detected concurrency: 8
+# disable binary cache
+$ /Users/inlebush/.opam/cs3110-2021fa/bin/ocamlc.opt -config > /var/folders/d7/579zz8_n16n7smlhrw1cqk1m0000gn/T/dune31f03d.output
+# Dune context:
+#  { name = "default"
+#  ; kind = "default"
+#  ; profile = Dyn
+#  ; merlin = true
+#  ; for_host = None
+#  ; fdo_target_exe = None
+#  ; build_dir = "default"
+#  ; toplevel_path =
+#      Some External "/Users/inlebush/.opam/cs3110-2021fa/lib/toplevel"
+#  ; ocaml_bin = External "/Users/inlebush/.opam/cs3110-2021fa/bin"
+#  ; ocaml = Ok External "/Users/inlebush/.opam/cs3110-2021fa/bin/ocaml"
+#  ; ocamlc = External "/Users/inlebush/.opam/cs3110-2021fa/bin/ocamlc.opt"
+#  ; ocamlopt =
+#      Ok External "/Users/inlebush/.opam/cs3110-2021fa/bin/ocamlopt.opt"
+#  ; ocamldep =
+#      Ok External "/Users/inlebush/.opam/cs3110-2021fa/bin/ocamldep.opt"
+#  ; ocamlmklib =
+#      Ok External "/Users/inlebush/.opam/cs3110-2021fa/bin/ocamlmklib.opt"
+#  ; env =
+#      map
+#        { "DUNE_OCAML_HARDCODED" : "/Users/inlebush/.opam/cs3110-2021fa/lib"
+#        ; "DUNE_OCAML_STDLIB" :
+#            "/Users/inlebush/.opam/cs3110-2021fa/lib/ocaml"
+#        ; "DUNE_SOURCEROOT" : "/Users/inlebush/cs/RNAfoldml"
+#        ; "INSIDE_DUNE" : "/Users/inlebush/cs/RNAfoldml/_build/default"
+#        ; "OCAMLFIND_IGNORE_DUPS_IN" :
+#            "/Users/inlebush/cs/RNAfoldml/_build/install/default/lib"
+#        ; "OCAMLPATH" :
+#            "/Users/inlebush/cs/RNAfoldml/_build/install/default/lib"
+#        ; "OCAMLTOP_INCLUDE_PATH" :
+#            "/Users/inlebush/cs/RNAfoldml/_build/install/default/lib/toplevel"
+#        ; "OCAML_COLOR" : "always"
+#        ; "OPAMCOLOR" : "always"
+#        }
+#  ; findlib_path = [ External "/Users/inlebush/.opam/cs3110-2021fa/lib" ]
+#  ; arch_sixtyfour = true
+#  ; natdynlink_supported = true
+#  ; supports_shared_libraries = true
+#  ; ocaml_config =
+#      { version = "4.12.0"
+#      ; standard_library_default =
+#          "/Users/inlebush/.opam/cs3110-2021fa/lib/ocaml"
+#      ; standard_library = "/Users/inlebush/.opam/cs3110-2021fa/lib/ocaml"
+#      ; standard_runtime = "the_standard_runtime_variable_was_deleted"
+#      ; ccomp_type = "cc"
+#      ; c_compiler = "cc"
+#      ; ocamlc_cflags = [ "-O2"; "-fno-strict-aliasing"; "-fwrapv" ]
+#      ; ocamlc_cppflags = [ "-D_FILE_OFFSET_BITS=64"; "-D_REENTRANT" ]
+#      ; ocamlopt_cflags = [ "-O2"; "-fno-strict-aliasing"; "-fwrapv" ]
+#      ; ocamlopt_cppflags = [ "-D_FILE_OFFSET_BITS=64"; "-D_REENTRANT" ]
+#      ; bytecomp_c_compiler =
+#          [ "cc"
+#          ; "-O2"
+#          ; "-fno-strict-aliasing"
+#          ; "-fwrapv"
+#          ; "-D_FILE_OFFSET_BITS=64"
+#          ; "-D_REENTRANT"
+#          ]
+#      ; bytecomp_c_libraries = [ "-lm"; "-lpthread" ]
+#      ; native_c_compiler =
+#          [ "cc"
+#          ; "-O2"
+#          ; "-fno-strict-aliasing"
+#          ; "-fwrapv"
+#          ; "-D_FILE_OFFSET_BITS=64"
+#          ; "-D_REENTRANT"
+#          ]
+#      ; native_c_libraries = [ "-lm" ]
+#      ; cc_profile = []
+#      ; architecture = "arm64"
+#      ; model = "default"
+#      ; int_size = 63
+#      ; word_size = 64
+#      ; system = "macosx"
+#      ; asm = [ "clang"; "-c"; "-Wno-trigraphs" ]
+#      ; asm_cfi_supported = true
+#      ; with_frame_pointers = false
+#      ; ext_exe = ""
+#      ; ext_obj = ".o"
+#      ; ext_asm = ".s"
+#      ; ext_lib = ".a"
+#      ; ext_dll = ".so"
+#      ; os_type = "Unix"
+#      ; default_executable_name = "a.out"
+#      ; systhread_supported = true
+#      ; host = "aarch64-apple-darwin20.3.0"
+#      ; target = "aarch64-apple-darwin20.3.0"
+#      ; profiling = false
+#      ; flambda = false
+#      ; spacetime = false
+#      ; safe_string = true
+#      ; exec_magic_number = "Caml1999X029"
+#      ; cmi_magic_number = "Caml1999I029"
+#      ; cmo_magic_number = "Caml1999O029"
+#      ; cma_magic_number = "Caml1999A029"
+#      ; cmx_magic_number = "Caml1999Y029"
+#      ; cmxa_magic_number = "Caml1999Z029"
+#      ; ast_impl_magic_number = "Caml1999M029"
+#      ; ast_intf_magic_number = "Caml1999N029"
+#      ; cmxs_magic_number = "Caml1999D029"
+#      ; cmt_magic_number = "Caml1999T029"
+#      ; natdynlink_supported = true
+#      ; supports_shared_libraries = true
+#      ; windows_unicode = false
+#      }
+#  }
+$ (cd _build/default && /Users/inlebush/.opam/cs3110-2021fa/bin/ocamldep.opt -modules -impl RNAfoldml/lib/rna.ml) > _build/default/RNAfoldml/lib/.RNAfoldml.objs/rna.ml.d
+$ (cd _build/default && /Users/inlebush/.opam/cs3110-2021fa/bin/ocamldep.opt -modules -impl RNAfoldml/lib/fold.ml) > _build/default/RNAfoldml/lib/.RNAfoldml.objs/fold.ml.d
+$ (cd _build/default && /Users/inlebush/.opam/cs3110-2021fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I RNAfoldml/lib/.RNAfoldml.objs/byte -intf-suffix .ml -no-alias-deps -opaque -open RNAfoldml -o RNAfoldml/lib/.RNAfoldml.objs/byte/rNAfoldml__Fold.cmo -c -impl RNAfoldml/lib/fold.ml)
+$ (cd _build/default && /Users/inlebush/.opam/cs3110-2021fa/bin/ocamlc.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -bin-annot -I RNAfoldml/lib/.RNAfoldml.objs/byte -intf-suffix .ml -no-alias-deps -opaque -open RNAfoldml -o RNAfoldml/lib/.RNAfoldml.objs/byte/rNAfoldml__Rna.cmo -c -impl RNAfoldml/lib/rna.ml)
+> File "RNAfoldml/lib/rna.ml", line 9, characters 4-10:
+> 9 | let rep_ok str =
+>         ^^^^^^
+> Error (warning 32 [unused-value-declaration]): unused value rep_ok.
+[2]
+$ (cd _build/default && /Users/inlebush/.opam/cs3110-2021fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I RNAfoldml/lib/.RNAfoldml.objs/byte -I RNAfoldml/lib/.RNAfoldml.objs/native -intf-suffix .ml -no-alias-deps -opaque -open RNAfoldml -o RNAfoldml/lib/.RNAfoldml.objs/native/rNAfoldml__Fold.cmx -c -impl RNAfoldml/lib/fold.ml)
+$ (cd _build/default && /Users/inlebush/.opam/cs3110-2021fa/bin/ocamlopt.opt -w @1..3@5..28@30..39@43@46..47@49..57@61..62-40 -strict-sequence -strict-formats -short-paths -keep-locs -g -I RNAfoldml/lib/.RNAfoldml.objs/byte -I RNAfoldml/lib/.RNAfoldml.objs/native -intf-suffix .ml -no-alias-deps -opaque -open RNAfoldml -o RNAfoldml/lib/.RNAfoldml.objs/native/rNAfoldml__Rna.cmx -c -impl RNAfoldml/lib/rna.ml)
+> File "RNAfoldml/lib/rna.ml", line 9, characters 4-10:
+> 9 | let rep_ok str =
+>         ^^^^^^
+> Error (warning 32 [unused-value-declaration]): unused value rep_ok.
+[2]

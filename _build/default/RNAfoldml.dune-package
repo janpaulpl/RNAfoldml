@@ -1,0 +1,24 @@
+(lang dune 2.9)
+(name RNAfoldml)
+(library
+ (name RNAfoldml)
+ (kind normal)
+ (archives (byte RNAfoldml.cma) (native RNAfoldml.cmxa))
+ (plugins (byte RNAfoldml.cma) (native RNAfoldml.cmxs))
+ (native_archives RNAfoldml.a)
+ (main_module_name RNAfoldml)
+ (modes byte native)
+ (modules
+  (wrapped
+   (main_module_name RNAfoldml)
+   (modules
+    ((name Fold) (obj_name rNAfoldml__Fold) (visibility public) (impl) (intf))
+    ((name Out) (obj_name rNAfoldml__Out) (visibility public) (impl) (intf))
+    ((name Rna) (obj_name rNAfoldml__Rna) (visibility public) (impl) (intf)))
+   (alias_module
+    (name RNAfoldml)
+    (obj_name rNAfoldml)
+    (visibility public)
+    (kind alias)
+    (impl))
+   (wrapped true))))

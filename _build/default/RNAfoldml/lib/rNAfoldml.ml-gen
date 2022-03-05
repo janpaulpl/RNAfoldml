@@ -1,0 +1,10 @@
+(** @canonical RNAfoldml.Fold *)
+module Fold = RNAfoldml__Fold
+
+
+(** @canonical RNAfoldml.Out *)
+module Out = RNAfoldml__Out
+
+
+(** @canonical RNAfoldml.Rna *)
+module Rna = RNAfoldml__Rna
