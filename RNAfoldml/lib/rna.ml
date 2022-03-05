@@ -1,3 +1,6 @@
+  (** Abstraction function: The string [r.seq] represents a
+      valid RNA sequence.
+			Representation invariant: [r.seq] only contains characters  *)
 type rna = {
   seq : string;
   name : string;
