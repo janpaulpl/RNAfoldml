@@ -6,9 +6,9 @@ type rna = {
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. Representation invariant: [r.seq] only contains characters *)
 
-let rep_ok str =
-  match Str.search_forward (Str.regexp "\\([AGCU]+\\)") str 0 with
-  | 0 -> str
+let rep_ok r =
+  match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.name 0 with
+  | 0 -> r
   | _ -> failwith "RI"
 
 let read_rna_fasta s =
