@@ -7,7 +7,7 @@ type rna = {
     sequence. Representation invariant: [r.seq] only contains characters *)
 
 let rep_ok r =
-  match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.name 0 with
+  match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with
   | 0 -> r
   | _ -> failwith "RI"
 
@@ -21,6 +21,6 @@ let rna_from_string s name =
   let x : rna = { seq = ""; name; attributes = [ ("ad", "sds") ] } in
   if s = "" then x else x
 
-let get_seq r = r.name
+let get_seq r = r.seq
 let get_info r = r.attributes
 let get_name r = r.name
