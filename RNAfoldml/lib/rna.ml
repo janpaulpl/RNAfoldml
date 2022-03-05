@@ -13,7 +13,9 @@ let rep_ok r =
 
 let read_rna_fasta s =
   let x : rna list =
-    [ { seq = ""; name = "sdas"; attributes = [ ("ad", "sds") ] } ]
+    [
+      rep_ok { seq = ""; name = "sdas"; attributes = [ ("ad", "sds") ] };
+    ]
   in
   if s = "" then x else x
 
