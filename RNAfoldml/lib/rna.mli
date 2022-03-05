@@ -7,7 +7,8 @@
 
 type rna
 (** The abstract type of values representing a valid RNA sequence
-    (sequence of characters ['A', 'G', 'C', 'U']), the sequence name,
+    (containing characters 'A',
+    'G', 'C', 'U'), the sequence name,
     and information about it.*)
 
 val read_rna_fasta : string -> rna list
