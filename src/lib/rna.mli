@@ -10,8 +10,8 @@ type rna
     (containing characters 'A', 'G', 'C', 'U'), the sequence name, and
     information about it.*)
 
-val read_rna_fasta : string -> rna list
-(** [read_rna_fasta f] is the list of rna sequences and information
+val rna_from_fasta : string -> rna list
+(** [rna_from_fasta f] is the list of rna sequences and information
     contained in fasta file [f]. If any sequences in [f] are invalid RNA
     sequences (containing characters other than 'A', 'G', 'C', 'U' or
     whitespace) these sequences are not included in [read_rna_fasta f].
