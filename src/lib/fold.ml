@@ -38,9 +38,13 @@ let rep_ok r =
   then failwith "rna secondary structure invalidate rep invariant."
   else r
 
+let temporary =
+  { seq = ""; pairs = make 1 1; name = ""; attributes = [ (" ", "") ] }
+
 (** [nussinov r] is the secondary structure for [r] given by Nussinov's
     algorithm to maximize pairing. *)
-let nussinov (r : Rna.rna) = if r = r then failwith "unimplemented"
+let nussinov (r : Rna.rna) =
+  if r = r then failwith "unimplemented" else rep_ok temporary
 
 let get_sec_str (rl : Rna.rna list) = List.map nussinov rl
 
