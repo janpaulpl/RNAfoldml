@@ -4,6 +4,16 @@ type rna_sec_str = {
   name : string;
   attributes : (string * string) list;
 }
+(** Abstraction function: For secondary struct [r], the string [r.seq]
+    represents a valid RNA sequence.
+
+    Representation invariant: [r.seq] only contains characters *)
+
+(** [rep_ok r] is the representation invariant checker. *)
+let rep_ok r =
+  if Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 <> 0 then
+    failwith "Invalid Sequence in seq"
+  else r
 
 let temp =
   {

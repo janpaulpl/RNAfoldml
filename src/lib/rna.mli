@@ -13,9 +13,8 @@ type rna
 val read_rna_fasta : string -> rna list
 (** [read_rna_fasta f] is the list of rna sequences and information
     contained in fasta file [f]. If any sequences in [f] are invalid RNA
-    sequences (discontinuous or containing characters other than 'A',
-    'G', 'C', 'U') these sequences are not included in
-    [read_rna_fasta f].
+    sequences (containing characters other than 'A', 'G', 'C', 'U' or
+    whitespace) these sequences are not included in [read_rna_fasta f].
 
     Raises: [Invalid_argument] exception if [f] is not a readable fasta
     file.

@@ -4,13 +4,19 @@ type rna = {
   attributes : (string * string) list;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
-    sequence. Representation invariant: [r.seq] only contains characters *)
+    sequence. The string [r.name] represents the RNA sequence name. The
+    string [r.attributes] represents the RNA sequence information.
 
-(** [rep_ok r] is the representation invariant checker. *)
+    Representation invariant: [r.seq] only consists of characters 'A',
+    'G', 'C', or 'U' *)
+
+(** [rep_ok r] is [r] if the representation invariant holds on [r].
+    Otherwise [rep_ok r] raises exception Failure("Invalidated rna
+    ri."). *)
 let rep_ok r =
   match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with
   | 0 -> r
-  | _ -> failwith "RI"
+  | _ -> failwith "Invalidated rna ri."
 
 let read_rna_fasta s =
   let x : rna list =
