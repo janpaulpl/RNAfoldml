@@ -6,6 +6,7 @@ type rna = {
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. Representation invariant: [r.seq] only contains characters *)
 
+(** [rep_ok r] is the representation invariant checker. *)
 let rep_ok r =
   match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with
   | 0 -> r
