@@ -1,52 +1,59 @@
+open Array
+
 type rna_sec_str = {
   seq : string;
-  pairs : (int * int) list;
+  pairs : int array;
   name : string;
   attributes : (string * string) list;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
-    sequence. [r.pairs] contains predicted base pairs of the form
-    [(i,j)] where [i] and [j] are indices of pairing nucleotides in seq.
-    The string [r.name] represents the RNA sequence name. [r.attributes]
+    sequence. [get r.pairs i] is the index of the predicted base pairing
+    with index [i]. If no base pairing at [i], [get r.pairs i = 0]. The
+    string [r.name] represents the RNA sequence name. [r.attributes]
     represents the RNA sequence information.
 
     Representation invariant: [r.seq] only consists of characters 'A',
-    'G', 'C', or 'U'. Any index [i] in any pair in [r.pairs] satisfies
-    [1<=i<String.length r.seq]. Any such index [i] appears in at most 1
-    pair in [r.pairs]. No index is paired with itself. *)
+    'G', 'C', or 'U'. Length of pairs is the lenght of [r.seq]. Pairs
+    relation is symmetric, i.e. if [j = get r.pairs i] then
+    [i = get r.pairs j]. Also [i <> get r.pairs i]. *)
 
-(** [valid_pair pairs s] is true if for all [(i,j)] in [pairs],
-    [1<=i,j<String.length s], any such index [i] or [j] appear in at
-    most 1 pair in [r.pairs], and [i <> j]. *)
-let rec valid_pairs pairs seq_len =
-  match pairs with
-  | [] -> true
-  | (i, j) :: t ->
-      i <> j && 1 <= i && i < seq_len && 1 <= j && j < seq_len
-      && List.for_all
-           (function
-             | a, b -> a <> i && b <> i && a <> j && b <> j)
-           t
-      && valid_pairs t seq_len
+(** [check p i j] is true iff [i] is not [j], [i,j] in
+    [\[0..length pairs\]], [p.i = j] and [p.j = i]. *)
+let check pairs i j =
+  i <> j && 0 < j
+  && j < length pairs
+  && 0 < i
+  && i < length pairs
+  && i = get pairs j
+  && j = get pairs i
 
-(** [rep_ok r] is the representation invariant checker. *)
+(** [rep_ok r] is [r] if [r] satisfies the [rna_sec_str] representation
+    invariant. Otherwise [rep_ok r] raises
+    [Failure "rna secondary structure invalidate rep invariant."] *)
 let rep_ok r =
   if
-    valid_pairs r.pairs (String.length r.seq)
+    length r.pairs = String.length r.seq
+    && fold_left ( && ) true (mapi (check r.pairs) r.pairs)
     && Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 <> 0
-  then failwith "Invalid Sequence in seq"
+  then failwith "rna secondary structure invalidate rep invariant."
   else r
-
-let temp =
-  {
-    seq = "temp";
-    name = "temp";
-    attributes = [ ("temp", "temp") ];
-    pairs = [];
-  }
 
 (** [nussinov r] is the secondary structure for [r] given by Nussinov's
     algorithm to maximize pairing. *)
-let nussinov (r : Rna.rna) = if r = r then temp else temp
+let nussinov (r : Rna.rna) = if r = r then failwith "unimplemented"
 
 let get_sec_str (rl : Rna.rna list) = List.map nussinov rl
+
+let write_ct file r =
+  let oc = open_out file in
+
+  (* [print_ct_line i j] prints line [i] of .ct file where [seq.[i]] is
+     paired to [j]. *)
+  let print_ct_line i j =
+    Printf.fprintf oc "%i %c %i %i %i %i\n" i r.seq.[i] (i - 1) (i + 1)
+      j i
+  in
+
+  Printf.fprintf oc "%i %s\n" (String.length r.seq) r.name;
+  iteri print_ct_line r.pairs;
+  close_out oc
