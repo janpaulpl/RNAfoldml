@@ -6,13 +6,14 @@ type rna = {
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. Representation invariant: [r.seq] only contains characters *)
 
-(** [rep_ok r] is the representation invariant checker. *)
+(** [rep_ok r] is a valid RNA sequence. Raises an exception if it is not
+    a valid RNA sequence. *)
 let rep_ok r =
   match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with
   | 0 -> r
   | _ -> failwith "RI"
 
-let read_rna_fasta s =
+let rna_from_fasta s =
   let x : rna list =
     [
       rep_ok { seq = ""; name = "sdas"; attributes = [ ("ad", "sds") ] };
