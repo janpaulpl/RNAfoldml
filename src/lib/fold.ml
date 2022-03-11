@@ -4,6 +4,7 @@ type rna_sec_str = {
   seq : string;
   pairs : int array;
   name : string;
+  has_pseudoknot : bool;
   attributes : (string * string) list;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
@@ -39,7 +40,13 @@ let rep_ok r =
   else r
 
 let temporary =
-  { seq = ""; pairs = make 1 1; name = ""; attributes = [ (" ", "") ] }
+  {
+    seq = "";
+    pairs = make 1 1;
+    name = "";
+    has_pseudoknot = true;
+    attributes = [ (" ", "") ];
+  }
 
 (** [nussinov r] is the secondary structure for [r] given by Nussinov's
     algorithm to maximize pairing. *)
@@ -48,7 +55,15 @@ let nussinov (r : Rna.rna) =
 
 let get_sec_str (rl : Rna.rna list) = List.map nussinov rl
 
-let write_ct file r =
+let to_dot_string r =
+  if r.has_pseudoknot then failwith "Not Yet Implemented"
+  else
+    r.pairs
+    |> mapi (fun i j ->
+           if i > j then "(" else if i < j then ")" else ".")
+    |> fold_left ( ^ ) ""
+
+let to_ct file r =
   let oc = open_out file in
 
   (* [print_ct_line i j] prints line [i] to oc file in .oc format where
