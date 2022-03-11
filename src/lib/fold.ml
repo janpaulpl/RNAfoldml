@@ -51,8 +51,8 @@ let get_sec_str (rl : Rna.rna list) = List.map nussinov rl
 let write_ct file r =
   let oc = open_out file in
 
-  (* [print_ct_line i j] prints line [i] of .ct file where [seq.[i]] is
-     paired to [j]. *)
+  (* [print_ct_line i j] prints line [i] to oc file in .oc format where
+     [seq.[i]] is paired to [j]. *)
   let print_ct_line i j =
     Printf.fprintf oc "%i %c %i %i %i %i\n" i r.seq.[i] (i - 1) (i + 1)
       j i
