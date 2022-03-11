@@ -15,7 +15,17 @@ val get_sec_str : Rna.rna list -> rna_sec_str list
     structure predictions for rna list [rl] in order (The ith structure
     in [get_sec_str rl] belongs to the rna in the ith position of [rl]). *)
 
-val write_ct : string -> rna_sec_str -> unit
+val to_dot_string : rna_sec_str -> string
+(** [to_dot_string r] is the secondary structure [r] in dot-bracket
+    notation. A dot, ['.'], indicates an unpaired nucleotide, ['(']
+    indicates a 5' nucleotide and [')'] represents a 3' nucleotide.
+
+    Requires: [r] contains no pseudo-knots
+
+    Example: ["((...))()"] is a possible secondary structure for the
+    sequence AUGGGAUCG. *)
+
+val to_ct : string -> rna_sec_str -> unit
 (** [write_ct f r] saves the rna secondary structure [r] in connectivity
     table (.ct) format in file [f]. If [f] already exists, then replaces
     the contents of [f].
