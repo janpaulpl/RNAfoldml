@@ -10,10 +10,18 @@ type rna_sec_str
 (** The abstract type of values representing an RNA sequence and its
     secondary structure. *)
 
-val get_sec_str : Rna.rna list -> rna_sec_str list
-(** [get_sec_str rl] is the list containing a list of secondary
-    structure predictions for rna list [rl] in order (The ith structure
-    in [get_sec_str rl] belongs to the rna in the ith position of [rl]). *)
+val predict : Rna.t -> rna_sec_str
+(** [get_sec_str r] is the secondary structure predictions for the rna
+    [r] *)
+
+val get_seq : rna_sec_str -> string
+(** [get_seq r] is the string of bases stored in the sequence of [r]. *)
+
+val get_info : rna_sec_str -> string
+(** [get_info r] is a string containing information about [r]. *)
+
+val get_name : rna_sec_str -> string
+(** [get_name r] is the name of [r]. *)
 
 val to_dot_string : rna_sec_str -> string
 (** [to_dot_string r] is the secondary structure [r] in dot-bracket

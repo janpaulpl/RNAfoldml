@@ -1,7 +1,7 @@
-type rna = {
+type t = {
   seq : string;
   name : string;
-  attributes : (string * string) list;
+  info : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. Representation invariant: [r.seq] only contains characters *)
@@ -15,19 +15,15 @@ let rep_ok r =
   | _ -> failwith ""
 
 let rna_from_fasta s =
-  let x : rna list =
-    [
-      rep_ok { seq = ""; name = "sdas"; attributes = [ ("ad", "sds") ] };
-    ]
-  in
+  let x : t list = [ rep_ok { seq = ""; name = "sdas"; info = "" } ] in
   if s = "" then x else x
 
 let rna_from_string s name =
-  try rep_ok { seq = s; name; attributes = [] }
+  try rep_ok { seq = s; name; info = "" }
   with Failure s -> Invalid_argument s |> raise
 
 let get_seq r = r.seq
-let get_info r = r.attributes
+let get_info r = r.info
 let get_name r = r.name
 
 (* (** Temporary read from FASTA file function. Returns the FASTA as a

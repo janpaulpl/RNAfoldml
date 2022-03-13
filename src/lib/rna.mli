@@ -5,12 +5,12 @@
     sequences. It handles loading of that data from FASTA as well as
     querying the data. *)
 
-type rna
+type t
 (** The abstract type of values representing a valid RNA sequence
     (containing characters 'A', 'G', 'C', 'U'), the sequence name, and
     information about it.*)
 
-val rna_from_fasta : string -> rna list
+val rna_from_fasta : string -> t list
 (** [rna_from_fasta f] is the list of rna sequences and information
     contained in fasta file [f]. If any sequences in [f] are invalid RNA
     sequences (containing characters other than 'A', 'G', 'C', 'U' or
@@ -22,7 +22,7 @@ val rna_from_fasta : string -> rna list
     Effects: Prints warning message to terminal if any sequences are
     invalid. *)
 
-val rna_from_string : string -> string -> rna
+val rna_from_string : string -> string -> t
 (** [rna_from_string r_seq name] is the value of type [rna] with
     sequence name [name] representing the rna sequence [r_seq] and no
     information.
@@ -30,12 +30,11 @@ val rna_from_string : string -> string -> rna
     Raises: [Invalid_argument] exception if [r_seq] contains characters
     other than 'A', 'G', 'C', 'U'. *)
 
-val get_seq : rna -> string
+val get_seq : t -> string
 (** [get_seq r] is the string of bases stored in [r]. *)
 
-val get_info : rna -> (string * string) list
-(** [get_info r] is the association list of information of [r] of form
-    [("info_name", "info")]. *)
+val get_info : t -> string
+(** [get_info r] is a string containing information about [r]. *)
 
-val get_name : rna -> string
-(** [get_name r] rna is the name of [r]. *)
+val get_name : t -> string
+(** [get_name r] is the name of [r]. *)

@@ -5,10 +5,10 @@ type rna_sec_str = {
   pairs : int array;
   name : string;
   has_pseudoknot : bool;
-  attributes : (string * string) list;
+  attributes : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
-    sequence. [get r.pairs i] is the index of the predicted base pairing
+    sequence. [r.pairs i] is the index of the predicted base pairing
     with index [i]. If no base pairing at [i], [get r.pairs i = 0]. The
     string [r.name] represents the RNA sequence name. [r.attributes]
     represents the RNA sequence information.
@@ -45,15 +45,18 @@ let temporary =
     pairs = make 1 1;
     name = "";
     has_pseudoknot = true;
-    attributes = [ (" ", "") ];
+    attributes = "";
   }
 
 (** [nussinov r] is the secondary structure for [r] given by Nussinov's
     algorithm to maximize pairing. *)
-let nussinov (r : Rna.rna) =
+let nussinov (r : Rna.t) =
   if r = r then failwith "unimplemented" else rep_ok temporary
 
-let get_sec_str (rl : Rna.rna list) = List.map nussinov rl
+let predict r = nussinov r
+let get_seq r = r.seq
+let get_info r = r.attributes
+let get_name r = r.name
 
 let to_dot_string r =
   if r.has_pseudoknot then failwith "Not Yet Implemented"
