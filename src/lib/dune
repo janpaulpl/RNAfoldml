@@ -1,4 +1,3 @@
 (library
  (public_name RNAfoldml)
- (name RNAfoldml)
- (libraries Str))
+ (name RNAfoldml))

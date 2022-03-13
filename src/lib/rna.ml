@@ -9,10 +9,9 @@ type t = {
 (** [rep_ok r] is [r] if [r] passes the rep invariant.
 
     Raises: [Failure] if [r] does not pass rep invariant. *)
-let rep_ok r =
-  match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with
-  | 0 -> r
-  | _ -> failwith ""
+let rep_ok r = r
+(* match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with |
+   0 -> r | _ -> failwith "" *)
 
 let rna_from_fasta s =
   let x : t list = [ rep_ok { seq = ""; name = "sdas"; info = "" } ] in

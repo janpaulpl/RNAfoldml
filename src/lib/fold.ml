@@ -5,7 +5,7 @@ type rna_sec_str = {
   pairs : int array;
   name : string;
   has_pseudoknot : bool;
-  attributes : string;
+  info : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. [r.pairs i] is the index of the predicted base pairing
@@ -35,27 +35,91 @@ let rep_ok r =
   if
     length r.pairs = String.length r.seq
     && fold_left ( && ) true (mapi (check r.pairs) r.pairs)
-    && Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 <> 0
+    (* && Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 <>
+       0 *)
   then failwith "rna secondary structure invalidate rep invariant."
   else r
 
-let temporary =
-  {
-    seq = "";
-    pairs = make 1 1;
-    name = "";
-    has_pseudoknot = true;
-    attributes = "";
-  }
+(** [match_pairs s i j] is true if and only if s.[i] and s.[j] form one
+    of the 6 combinations which form a valid RNA base pair*)
+let match_pairs (seq : string) i j =
+  match (seq.[i], seq.[j]) with
+  | 'A', 'C' -> true
+  | 'C', 'A' -> true
+  | 'G', 'C' -> true
+  | 'C', 'G' -> true
+  | 'G', 'U' -> true
+  | 'U', 'C' -> true
+  | _ -> false
+
+(** [get_pairs seq start fin] is the largest list of tuples (a,b) such
+    that [match_pairs a b] is true*)
+let rec get_pairs (seq : string) (start : int) (fin : int) =
+  if start >= fin then
+    let () =
+      print_endline
+        ("get_pairs start >= fin" ^ string_of_int start
+       ^ string_of_int fin)
+    in
+    []
+  else if match_pairs seq start fin then
+    let () =
+      print_endline
+        ("get_pairs match" ^ string_of_int start ^ string_of_int fin)
+    in
+    (start, fin) :: get_pairs seq (start + 1) (fin - 1)
+  else
+    let () =
+      print_endline
+        ("get_pairs don't match" ^ string_of_int start
+       ^ string_of_int fin)
+    in
+    find_max seq start fin (fin - 1) []
+
+(** [split seq start fin k]* is the list of tuples obtained by applying
+    get_pairs to the strings obtained by chopping seq at position [k] *)
+and split seq start fin k =
+  get_pairs seq start k @ get_pairs seq (k + 1) fin
+
+(** [find_max seq start fin k] is the largest list obtained by [split]
+    after chopping seq at all of the possible k values*)
+and find_max seq start fin k prev_max =
+  let l = split seq start fin k in
+  if k = start then
+    if List.length prev_max > List.length l then prev_max else l
+  else if List.length prev_max > List.length l then
+    find_max seq start fin (k - 1) prev_max
+  else find_max seq start fin (k - 1) l
+
+(** [convert seq pairs] is the array specified in rna_sec_str obtained
+    from its analagous representation as an int list*)
+let convert seq (pairs : (int * int) list) =
+  let arr = Array.make (String.length seq) 0 in
+  List.iter
+    (fun (a, b) ->
+      Array.set arr a b;
+      Array.set arr b a)
+    pairs;
+  arr
 
 (** [nussinov r] is the secondary structure for [r] given by Nussinov's
     algorithm to maximize pairing. *)
 let nussinov (r : Rna.t) =
-  if r = r then failwith "unimplemented" else rep_ok temporary
+  let x =
+    get_pairs (Rna.get_seq r) 0 (String.length (Rna.get_seq r) - 1)
+  in
+  let y = convert (Rna.get_seq r) x in
+  {
+    seq = Rna.get_seq r;
+    pairs = y;
+    name = Rna.get_name r ^ " Secondary Structure";
+    has_pseudoknot = false;
+    info = Rna.get_info r;
+  }
 
-let predict r = nussinov r
+let predict r = nussinov r |> rep_ok
 let get_seq r = r.seq
-let get_info r = r.attributes
+let get_info r = r.info
 let get_name r = r.name
 
 let to_dot_string r =
