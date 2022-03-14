@@ -40,40 +40,22 @@ let rep_ok r =
   else r
 
 (** [match_pairs s i j] is true if and only if s.[i] and s.[j] form one
-    of the 6 combinations which form a valid RNA base pair*)
+    of the 4 combinations which form a valid RNA base pair*)
 let match_pairs (seq : string) i j =
   match (seq.[i], seq.[j]) with
-  | 'A', 'C' -> true
-  | 'C', 'A' -> true
+  | 'A', 'U' -> true
+  | 'U', 'A' -> true
   | 'G', 'C' -> true
   | 'C', 'G' -> true
-  | 'G', 'U' -> true
-  | 'U', 'C' -> true
   | _ -> false
 
 (** [get_pairs seq start fin] is the largest list of tuples (a,b) such
     that [match_pairs a b] is true*)
 let rec get_pairs (seq : string) (start : int) (fin : int) =
-  if start >= fin then
-    let () =
-      print_endline
-        ("get_pairs start >= fin" ^ string_of_int start
-       ^ string_of_int fin)
-    in
-    []
+  if start >= fin then []
   else if match_pairs seq start fin then
-    let () =
-      print_endline
-        ("get_pairs match" ^ string_of_int start ^ string_of_int fin)
-    in
     (start, fin) :: get_pairs seq (start + 1) (fin - 1)
-  else
-    let () =
-      print_endline
-        ("get_pairs don't match" ^ string_of_int start
-       ^ string_of_int fin)
-    in
-    find_max seq start fin (fin - 1) []
+  else find_max seq start fin (fin - 1) []
 
 (** [split seq start fin k]* is the list of tuples obtained by applying
     get_pairs to the strings obtained by chopping seq at position [k] *)
@@ -90,9 +72,10 @@ and find_max seq start fin k prev_max =
     find_max seq start fin (k - 1) prev_max
   else find_max seq start fin (k - 1) l
 
-(** [convert seq pairs] is the array specified in rna_sec_str obtained
-    from its analagous representation as an int list*)
-let convert seq (pairs : (int * int) list) =
+(** [assoc_to_array seq pairs] is the [Array.t] in which for each entry
+    [(i,j)] in [pairs], the entry at position [i] is [j] and the entry
+    at position [j] is i. *)
+let assoc_to_array seq (pairs : (int * int) list) =
   let arr = Array.make (String.length seq) 0 in
   List.iter
     (fun (a, b) ->
@@ -104,13 +87,13 @@ let convert seq (pairs : (int * int) list) =
 (** [nussinov r] is the secondary structure for [r] given by Nussinov's
     algorithm to maximize pairing. *)
 let nussinov (r : Rna.t) =
-  let x =
+  let pairs_assoc =
     get_pairs (Rna.get_seq r) 0 (String.length (Rna.get_seq r) - 1)
   in
-  let y = convert (Rna.get_seq r) x in
+  let pairs_array = assoc_to_array (Rna.get_seq r) pairs_assoc in
   {
     seq = Rna.get_seq r;
-    pairs = y;
+    pairs = pairs_array;
     name = Rna.get_name r ^ " Secondary Structure";
     has_pseudoknot = false;
     info = Rna.get_info r;
