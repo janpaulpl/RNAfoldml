@@ -6,12 +6,15 @@ type t = {
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. Representation invariant: [r.seq] only contains characters *)
 
+exception Invalid_RI
+
 (** [rep_ok r] is [r] if [r] passes the rep invariant.
 
     Raises: [Failure] if [r] does not pass rep invariant. *)
-let rep_ok r = r
-(* match Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 with |
-   0 -> r | _ -> failwith "" *)
+let rep_ok r =
+  if Str.string_match (Str.regexp "[^AGCU]+") r.seq 0 then
+    raise Invalid_RI
+  else r
 
 let rna_from_fasta s =
   let x : t list = [ rep_ok { seq = ""; name = "sdas"; info = "" } ] in
@@ -19,7 +22,8 @@ let rna_from_fasta s =
 
 let rna_from_string s name =
   try rep_ok { seq = s; name; info = "" }
-  with Failure s -> Invalid_argument s |> raise
+  with Invalid_RI ->
+    Invalid_argument "Unable to parse RNA sequence" |> raise
 
 let get_seq r = r.seq
 let get_info r = r.info

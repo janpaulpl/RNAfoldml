@@ -35,8 +35,7 @@ let rep_ok r =
   if
     length r.pairs = String.length r.seq
     && fold_left ( && ) true (mapi (check r.pairs) r.pairs)
-    (* && Str.search_forward (Str.regexp "\\([AGCU]+\\)") r.seq 0 <>
-       0 *)
+    && not (Str.string_match (Str.regexp "\\([AGCU]+\\)") r.seq 0)
   then failwith "rna secondary structure invalidate rep invariant."
   else r
 
