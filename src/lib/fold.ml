@@ -39,21 +39,23 @@ let rep_ok r =
   then failwith "rna secondary structure invalidate rep invariant."
   else r
 
-(** [match_pairs s i j] is true if and only if s.[i] and s.[j] form one
+(** [valid_pairs s i j] is true if and only if s.[i] and s.[j] form one
     of the 4 combinations which form a valid RNA base pair*)
-let match_pairs (seq : string) i j =
+let valid_pairs (seq : string) i j =
   match (seq.[i], seq.[j]) with
   | 'A', 'U' -> true
   | 'U', 'A' -> true
   | 'G', 'C' -> true
   | 'C', 'G' -> true
+  | 'U', 'G' -> true
+  | 'G', 'U' -> true
   | _ -> false
 
 (** [get_pairs seq start fin] is the largest list of tuples (a,b) such
-    that [match_pairs a b] is true*)
+    that [valid_pairs a b] is true*)
 let rec get_pairs (seq : string) (start : int) (fin : int) =
   if start >= fin then []
-  else if match_pairs seq start fin then
+  else if valid_pairs seq start fin then
     (start, fin) :: get_pairs seq (start + 1) (fin - 1)
   else find_max seq start fin (fin - 1) []
 
