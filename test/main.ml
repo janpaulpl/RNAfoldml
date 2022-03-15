@@ -34,7 +34,9 @@ let r3 =
   | [ x ] -> x
   | _ -> failwith "test1 invalid"
 
-let s1 = Rna.rna_from_string "AAACCCUUU" "Test Seq" |> Fold.predict
+let s1 = Rna.rna_from_string "AAACCCUUU" "Test seq 1" |> Fold.predict
+let s2 = Rna.rna_from_string "AAAAUCUUU" "Test seq 2" |> Fold.predict
+let () = print_endline (Fold.to_dot_string s1)
 
 let rna_tests =
   [
@@ -52,10 +54,10 @@ let fold_tests =
       assert_equal "AAACCCUUU" (Fold.get_seq s1) );
     ( "Check Fold.predict retains info" >:: fun _ ->
       assert_equal "" (Fold.get_info s1) );
-    ( "Check Fold.predict retains name" >:: fun _ ->
-      assert_equal "Test Seq Secondary Structure" (Fold.get_name s1) );
     ( "Check Fold.predict has correct folding structure" >:: fun _ ->
       assert_equal "(((...)))" (Fold.to_dot_string s1) );
+    ( "Check Fold.predict has correct folding structure" >:: fun _ ->
+      assert_equal "(((().)))" (Fold.to_dot_string s2) );
   ]
 
 let tests = "test suite" >::: List.flatten [ rna_tests; fold_tests ]

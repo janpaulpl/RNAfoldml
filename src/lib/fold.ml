@@ -103,8 +103,8 @@ let assoc_to_array seq (pairs : (int * int) list) =
     pairs;
   arr
 
-(** [nussinov r] is a secondary structure for [r] with maximum number of
-    valid base pairs given by Nussinov's prediction algorithm. *)
+(** [nussinov r] is a secondary structure for [r] which maximumizes the
+    number of valid base pairs given by Nussinov's prediction algorithm. *)
 let nussinov (r : Rna.t) =
   let pairs_assoc =
     max_pairs (Rna.get_seq r) 0 (String.length (Rna.get_seq r) - 1)
@@ -113,7 +113,7 @@ let nussinov (r : Rna.t) =
     {
       seq = Rna.get_seq r;
       pairs = assoc_to_array (Rna.get_seq r) pairs_assoc;
-      name = Rna.get_name r ^ " Secondary Structure";
+      name = Rna.get_name r ^ "-nussinov-sec-struct";
       has_pseudoknot = false;
       info = Rna.get_info r;
     }
@@ -129,19 +129,23 @@ let get_name r = r.name
 
 let to_dot_string r =
   r.pairs
-  |> mapi (fun i j -> if i > j then "(" else if i < j then ")" else ".")
+  |> mapi (fun i j ->
+         if j = ~-1 then "." else if i < j then "(" else ")")
   |> fold_left ( ^ ) ""
 
 let to_ct file r =
+  if Sys.file_exists file then
+    print_endline ("WARNING: Program overwriting file: " ^ file)
+  else ();
   let oc = open_out file in
 
-  (* [print_ct_line i j] prints line [i] to oc file in .oc format where
-     [seq.[i]] is paired to [j]. *)
+  (* [print_ct_line i j] prints line [i] to output channel [oc] in .ct
+     format where [seq.[i+1]] is paired to [j+1]. The offset is due to
+     .ct format using 1-indexing. *)
   let print_ct_line i j =
-    Printf.fprintf oc "%i %c %i %i %i %i\n" i r.seq.[i] (i - 1) (i + 1)
-      j i
+    Printf.fprintf oc "%i %c %i %i %i %i\n" (i + 1) r.seq.[i] i (i + 2)
+      (j + 1) (i + 1)
   in
-
   Printf.fprintf oc "%i %s\n" (String.length r.seq) r.name;
   iteri print_ct_line r.pairs;
   close_out oc

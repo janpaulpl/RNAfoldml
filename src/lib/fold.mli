@@ -38,8 +38,8 @@ val to_ct : string -> rna_sec_str -> unit
     table (.ct) format in file [f]. If [f] already exists, then replaces
     the contents of [f].
 
-    Raises: [Invalid_argument] exception if [f] is not a valid file .ct
-    file name.
+    Raises: [Invalid_argument] exception if [f] is not a valid .ct file
+    name.
 
     Effects: Prints warning message to terminal if [f] already exists,
     then replaces the contents of [f]. *)
