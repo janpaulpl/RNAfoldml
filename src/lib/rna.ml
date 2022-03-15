@@ -16,9 +16,35 @@ let rep_ok r =
     raise Invalid_RI
   else r
 
+(** [string_from_fasta] is the parsed data from the fasta file as a string. Gets rid of 
+    whitespace and [;] comments. *)
+let string_from_fasta filename = let ch = open_in filename in 
+  let string_fasta = really_input_string ch (in_channel_length ch) in 
+  close_in ch; 
+  (fun r -> Str.global_replace (Str.regexp ";[^\n]*\n") "" string_fasta) "" 
+  |> Str.global_replace (Str.regexp " ") ""
+
+(** [get_from_fasta] searches for a particular regex in a given sequence string*)
+let get_from_fasta s rgx = 
+  Str.global_replace (Str.regexp rgx) "\\1" s
+
+(** [rna_from_single_fasta] builds a [t] from a single sequence (string). *)
+let rna_from_single_fasta s = 
+  { 
+    seq =  get_from_fasta s "\\([AGCU]*\\)[^\n]*\n*"; 
+    name = get_from_fasta s ">[^-]*-" ; (* This returns literally the opposite *)
+    info =  get_from_fasta s "\\(-[^\n]*\n\\)"; (* This too *)
+  }
+  
+(** [rna_from_fasta] is the [t list] with [i] sequence: 
+    name, information, and sequence data). *)
 let rna_from_fasta s =
-  let x : t list = [ rep_ok { seq = ""; name = "sdas"; info = "" } ] in
-  if s = "" then x else x
+  let f = string_from_fasta s in
+  let sequences = String.split_on_char '>' f in
+  let x : t list = List.map rna_from_single_fasta sequences in
+    x
+    |> List.map (fun r -> try [rep_ok r] with Invalid_RI -> [])  
+    |> List.flatten
 
 let rna_from_string s name =
   try rep_ok { seq = s; name; info = "" }
@@ -29,8 +55,3 @@ let get_seq r = r.seq
 let get_info r = r.info
 let get_name r = r.name
 
-(* (** Temporary read from FASTA file function. Returns the FASTA as a
-   string.*) let read_lines file process = let in_ch = open_in file in
-   let rec read_line () = let line = try input_line in_ch with
-   End_of_file -> exit 0 in process line; read_line () in read_line
-   () *)
