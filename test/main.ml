@@ -29,16 +29,12 @@ let r1 =
 
 let r2 = Rna.rna_from_string "" "Empty Seq"
 
-let t1 =
+let r3 =
   match Rna.rna_from_fasta "test_data/test1.fasta" with
   | [ x ] -> x
   | _ -> failwith "test1 invalid"
 
-(* let [ t2; t3; t4 ] = match rna_from_fasta "test_data/test2.fasta"
-   with | [ a; b; c; d ] -> [ a; b; c; d ] | _ -> failwith "test2
-   invalid" *)
-
-let broken_fasta = Rna.rna_from_fasta "test_data/broken.fasta"
+let s1 = Rna.rna_from_string "AAACCCUUU" "Test Seq" |> Fold.predict
 
 let rna_tests =
   [
@@ -50,5 +46,17 @@ let rna_tests =
     get_name_test "Empty rna has name 'Empty Seq'" r2 "Empty Seq";
   ]
 
-let tests = "test suite" >::: List.flatten [ rna_tests ]
+let fold_tests =
+  [
+    ( "Check Fold.predict retains sequence" >:: fun _ ->
+      assert_equal "AAACCCUUU" (Fold.get_seq s1) );
+    ( "Check Fold.predict retains info" >:: fun _ ->
+      assert_equal "" (Fold.get_info s1) );
+    ( "Check Fold.predict retains name" >:: fun _ ->
+      assert_equal "Test Seq Secondary Structure" (Fold.get_name s1) );
+    ( "Check Fold.predict has correct folding structure" >:: fun _ ->
+      assert_equal "(((...)))" (Fold.to_dot_string s1) );
+  ]
+
+let tests = "test suite" >::: List.flatten [ rna_tests; fold_tests ]
 let _ = run_test_tt_main tests

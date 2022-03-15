@@ -9,7 +9,7 @@ type rna_sec_str = {
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. [r.pairs i] is the index of the predicted base pairing
-    with index [i]. If no base pairing at [i], [get r.pairs i = 0]. The
+    with index [i]. If no base pairing at [i], [get r.pairs i = -1]. The
     string [r.name] represents the RNA sequence name. [r.attributes]
     represents the RNA sequence information.
 
@@ -20,12 +20,13 @@ type rna_sec_str = {
 
 exception Invalid_RI
 
-(** [check p i j] is true iff [i] is not [j], [i,j] in
-    [\[0..length pairs\]], [p.i = j] and [p.j = i]. *)
+(** [check p i j] is true if [i] is not [j], [i,j] in
+    [\[0..length pairs-1\]], [p.i = j] and [p.j = i]. Otherwise,
+    [check p i j] is false. *)
 let check pairs i j =
-  i <> j && 0 < j
+  i <> j && 0 <= j
   && j < length pairs
-  && 0 < i
+  && 0 <= i
   && i < length pairs
   && i = get pairs j
   && j = get pairs i
@@ -35,24 +36,34 @@ let check pairs i j =
 let rep_ok r =
   if
     length r.pairs = String.length r.seq
-    && fold_left ( && ) true (mapi (check r.pairs) r.pairs)
-    && not (Str.string_match (Str.regexp "\\([AGCU]+\\)") r.seq 0)
-  then raise Invalid_RI
-  else r
+    && fold_left ( && ) true
+         (mapi
+            (fun i j -> if j = ~-1 then true else check r.pairs i j)
+            r.pairs)
+    && not (Str.string_match (Str.regexp "[^AGCU]+") r.seq 0)
+  then r
+  else raise Invalid_RI
 
 (** [valid_pairs s i j] is true if and only if s.[i] and s.[j] form one
-    of the 4 combinations which form a valid RNA base pair*)
-let valid_pair (seq : string) i j =
-  match (seq.[i], seq.[j]) with
-  | 'A', 'U' -> true
-  | 'U', 'A' -> true
-  | 'G', 'C' -> true
-  | 'C', 'G' -> true
-  | 'U', 'G' -> true
-  | 'G', 'U' -> true
-  | _ -> false
+    of the 4 combinations which form a valid RNA base pair.
 
-(** [largest_lst l] is the list with maximum length *)
+    Raises: [Invalid_argument] if [i] or [j] do not lie between [0] and
+    [String.length seq - 1] inclusive. *)
+let valid_pair (seq : string) i j =
+  if i >= 0 && i < String.length seq && j >= 0 && j < String.length seq
+  then
+    match (seq.[i], seq.[j]) with
+    | 'A', 'U' -> true
+    | 'U', 'A' -> true
+    | 'G', 'C' -> true
+    | 'C', 'G' -> true
+    | 'U', 'G' -> true
+    | 'G', 'U' -> true
+    | _ -> false
+  else Invalid_argument "Invalid string position" |> raise
+
+(** [largest_lst l] is one of the lists in [l], a list of lists, which
+    has maximum length. *)
 let rec largest_lst = function
   | h :: t ->
       let lt = largest_lst t in
@@ -60,29 +71,23 @@ let rec largest_lst = function
   | [] -> []
 
 (** [max_pairs seq start fin] is the largest list of tuples [(a,b)] such
-    that [valid_pairs a b] is true. *)
+    that [valid_pair seq a b] is true, . *)
 let rec max_pairs (seq : string) (start : int) (fin : int) =
   if start >= fin then []
   else
-    [
-      (max_pairs seq (start + 1) (fin - 1)
-      @ if valid_pair seq start fin then [ (start, fin) ] else []);
-    ]
-    @ []
+    ([
+       (max_pairs seq (start + 1) (fin - 1)
+       @ if valid_pair seq start fin then [ (start, fin) ] else []);
+     ]
+    @
+    try
+      List.init
+        (fin - start - 2)
+        (fun k ->
+          max_pairs seq start (start + k + 1)
+          @ max_pairs seq (start + k + 2) fin)
+    with Invalid_argument _ -> [])
     |> largest_lst
-
-(** [split seq start fin k]* is the list of tuples obtained by applying
-    get_pairs to the strings obtained by chopping seq at position [k] *)
-(* and split seq start fin k = max_pairs seq start k @ max_pairs seq (k
-   + 1) fin *)
-
-(** [find_max seq start fin k] is the largest list obtained by [split]
-    after chopping [seq] at all of the possible k values*)
-(* and find_max seq start fin k prev_max = let l = split seq start fin k
-   in if k = start then if List.length prev_max > List.length l then
-   prev_max else l else if List.length prev_max > List.length l then
-   find_max seq start fin (k - 1) prev_max else find_max seq start fin
-   (k - 1) l *)
 
 (** [assoc_to_array seq pairs] is the [Array.t] in which for each entry
     [(i,j)] in [pairs], the entry at position [i] is [j], the entry at
@@ -90,7 +95,7 @@ let rec max_pairs (seq : string) (start : int) (fin : int) =
 
     Requires: No value is found in more than one entry of [pairs]. *)
 let assoc_to_array seq (pairs : (int * int) list) =
-  let arr = Array.make (String.length seq) 0 in
+  let arr = Array.make (String.length seq) ~-1 in
   List.iter
     (fun (a, b) ->
       Array.set arr a b;
@@ -104,13 +109,14 @@ let nussinov (r : Rna.t) =
   let pairs_assoc =
     max_pairs (Rna.get_seq r) 0 (String.length (Rna.get_seq r) - 1)
   in
-  {
-    seq = Rna.get_seq r;
-    pairs = assoc_to_array (Rna.get_seq r) pairs_assoc;
-    name = Rna.get_name r ^ " Secondary Structure";
-    has_pseudoknot = false;
-    info = Rna.get_info r;
-  }
+  rep_ok
+    {
+      seq = Rna.get_seq r;
+      pairs = assoc_to_array (Rna.get_seq r) pairs_assoc;
+      name = Rna.get_name r ^ " Secondary Structure";
+      has_pseudoknot = false;
+      info = Rna.get_info r;
+    }
 
 let predict r =
   try nussinov r |> rep_ok
