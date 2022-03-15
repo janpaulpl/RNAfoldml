@@ -39,8 +39,8 @@ let rna_from_single_fasta s =
 (** [rna_from_fasta] is the [t list] with [i] sequence: 
     name, information, and sequence data). *)
 let rna_from_fasta f =
-  let f = string_from_fasta f in
-  let sequences = String.split_on_char '>' f in
+  let s = string_from_fasta f in
+  let sequences = String.split_on_char '>' s in
   let x : t list = List.map rna_from_single_fasta sequences in
     x
     |> List.map (fun r -> try [rep_ok r] with Invalid_RI -> [])  
