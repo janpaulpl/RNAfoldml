@@ -10,7 +10,7 @@ exception Invalid_RI
 
 (** [rep_ok r] is [r] if [r] passes the rep invariant.
 
-    Raises: [Failure] if [r] does not pass rep invariant. *)
+    Raises: [Invalid_RI] if [r] does not pass rep invariant. *)
 let rep_ok r =
   if Str.string_match (Str.regexp "[^AGCU]+") r.seq 0 then
     raise Invalid_RI
@@ -55,7 +55,3 @@ let rna_from_string s name =
   try rep_ok { seq = s; name; info = "" }
   with Invalid_RI ->
     Invalid_argument "Unable to parse RNA sequence" |> raise
-
-let get_seq r = r.seq
-let get_info r = r.info
-let get_name r = r.name

@@ -1,10 +1,10 @@
 open Array
 
-type rna_sec_str = {
+type t = {
   seq : string;
   pairs : int array;
   name : string;
-  has_pseudoknot : bool;
+  has_pseudoknot : bool option;
   info : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
@@ -14,7 +14,7 @@ type rna_sec_str = {
     represents the RNA sequence information.
 
     Representation invariant: [r.seq] only consists of characters 'A',
-    'G', 'C', or 'U'. Length of pairs is the lenght of [r.seq]. Pairs
+    'G', 'C', or 'U'. Length of pairs is the length of [r.seq]. Pairs
     relation is symmetric, i.e. if [j = get r.pairs i] then
     [i = get r.pairs j]. Also [i <> get r.pairs i]. *)
 
@@ -31,8 +31,8 @@ let check pairs i j =
   && i = get pairs j
   && j = get pairs i
 
-(** [rep_ok r] is [r] if [r] satisfies the [rna_sec_str] representation
-    invariant. Otherwise [rep_ok r] raises [Invalid_RI] *)
+(** [rep_ok r] is [r] if [r] satisfies the [t] representation invariant.
+    Otherwise [rep_ok r] raises [Invalid_RI] *)
 let rep_ok r =
   if
     length r.pairs = String.length r.seq
@@ -44,14 +44,20 @@ let rep_ok r =
   then r
   else raise Invalid_RI
 
-(** [valid_pairs s i j] is true if and only if s.[i] and s.[j] form one
-    of the 4 combinations which form a valid RNA base pair.
+(** [valid_indices s i j] is true if and only if [i] and [j] are in the
+    range [0..String.length s - 1]. *)
+let valid_indices s i j =
+  i >= 0 && i < String.length s && j >= 0 && j < String.length s
+
+(** [is_valid s i j] is true if and only if s.[i] and s.[j] form one of
+    the 4 combinations which form a valid RNA base pair.
 
     Raises: [Invalid_argument] if [i] or [j] do not lie between [0] and
     [String.length seq - 1] inclusive. *)
-let valid_pair (seq : string) i j =
-  if i >= 0 && i < String.length seq && j >= 0 && j < String.length seq
-  then
+let is_valid (seq : string) i j =
+  if valid_indices seq i j |> not then
+    Invalid_argument "Invalid string position" |> raise
+  else
     match (seq.[i], seq.[j]) with
     | 'A', 'U' -> true
     | 'U', 'A' -> true
@@ -60,7 +66,6 @@ let valid_pair (seq : string) i j =
     | 'U', 'G' -> true
     | 'G', 'U' -> true
     | _ -> false
-  else Invalid_argument "Invalid string position" |> raise
 
 (** [largest_lst l] is one of the lists in [l], a list of lists, which
     has maximum length. *)
@@ -71,13 +76,13 @@ let rec largest_lst = function
   | [] -> []
 
 (** [max_pairs seq start fin] is the largest list of tuples [(a,b)] such
-    that [valid_pair seq a b] is true, . *)
+    that [is_valid seq a b] is true. *)
 let rec max_pairs (seq : string) (start : int) (fin : int) =
   if start >= fin then []
   else
     ([
        (max_pairs seq (start + 1) (fin - 1)
-       @ if valid_pair seq start fin then [ (start, fin) ] else []);
+       @ if is_valid seq start fin then [ (start, fin) ] else []);
      ]
     @
     try
@@ -93,11 +98,13 @@ let rec max_pairs (seq : string) (start : int) (fin : int) =
     [(i,j)] in [pairs], the entry at position [i] is [j], the entry at
     position [j] is [i] and all other entries are.
 
-    Requires: No value is found in more than one entry of [pairs]. *)
+    Requires: No value is found in more than one entry of [pairs]. Every
+    vallue is a valid index of seq. *)
 let assoc_to_array seq (pairs : (int * int) list) =
   let arr = Array.make (String.length seq) ~-1 in
   List.iter
     (fun (a, b) ->
+      assert (valid_indices seq a b);
       Array.set arr a b;
       Array.set arr b a)
     pairs;
@@ -106,16 +113,14 @@ let assoc_to_array seq (pairs : (int * int) list) =
 (** [nussinov r] is a secondary structure for [r] which maximumizes the
     number of valid base pairs given by Nussinov's prediction algorithm. *)
 let nussinov (r : Rna.t) =
-  let pairs_assoc =
-    max_pairs (Rna.get_seq r) 0 (String.length (Rna.get_seq r) - 1)
-  in
+  let pairs_assoc = max_pairs r.seq 0 (String.length r.seq - 1) in
   rep_ok
     {
-      seq = Rna.get_seq r;
-      pairs = assoc_to_array (Rna.get_seq r) pairs_assoc;
-      name = Rna.get_name r ^ "-nussinov-sec-struct";
-      has_pseudoknot = false;
-      info = Rna.get_info r;
+      seq = r.seq;
+      pairs = assoc_to_array r.seq pairs_assoc;
+      name = r.name ^ "-nussinov-sec-struct";
+      has_pseudoknot = Some false;
+      info = r.info;
     }
 
 let predict r =
@@ -126,26 +131,4 @@ let predict r =
 let get_seq r = r.seq
 let get_info r = r.info
 let get_name r = r.name
-
-let to_dot_string r =
-  r.pairs
-  |> mapi (fun i j ->
-         if j = ~-1 then "." else if i < j then "(" else ")")
-  |> fold_left ( ^ ) ""
-
-let to_ct file r =
-  if Sys.file_exists file then
-    print_endline ("WARNING: Program overwriting file: " ^ file)
-  else ();
-  let oc = open_out file in
-
-  (* [print_ct_line i j] prints line [i] to output channel [oc] in .ct
-     format where [seq.[i+1]] is paired to [j+1]. The offset is due to
-     .ct format using 1-indexing. *)
-  let print_ct_line i j =
-    Printf.fprintf oc "%i %c %i %i %i %i\n" (i + 1) r.seq.[i] i (i + 2)
-      (j + 1) (i + 1)
-  in
-  Printf.fprintf oc "%i %s\n" (String.length r.seq) r.name;
-  iteri print_ct_line r.pairs;
-  close_out oc
+let get_pairs r = r.pairs |> copy

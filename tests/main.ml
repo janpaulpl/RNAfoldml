@@ -7,19 +7,19 @@ let get_seq_test
     (name : string)
     (input : Rna.t)
     (expected_output : string) : test =
-  name >:: fun _ -> assert_equal expected_output (Rna.get_seq input)
+  name >:: fun _ -> assert_equal expected_output input.seq
 
 let get_info_test
     (name : string)
     (input : Rna.t)
     (expected_output : string) : test =
-  name >:: fun _ -> assert_equal expected_output (Rna.get_info input)
+  name >:: fun _ -> assert_equal expected_output input.info
 
 let get_name_test
     (name : string)
     (input : Rna.t)
     (expected_output : string) : test =
-  name >:: fun _ -> assert_equal expected_output (Rna.get_name input)
+  name >:: fun _ -> assert_equal expected_output input.name
 
 (* ------------ Rna values used in testing. ------------ *)
 
@@ -30,13 +30,17 @@ let r1 =
 let r2 = Rna.rna_from_string "" "Empty Seq"
 
 let r3 =
-  match Rna.rna_from_fasta "test_data/test1.fasta" with
+  match Rna.rna_from_fasta "/test_data/test1.fasta" with
   | [ x ] -> x
   | _ -> failwith "test1 invalid"
 
-let s1 = Rna.rna_from_string "AAACCCUUU" "Test seq 1" |> Fold.predict
-let s2 = Rna.rna_from_string "AAAAUCUUU" "Test seq 2" |> Fold.predict
-let () = print_endline (Fold.to_dot_string s1)
+let s1 =
+  Rna.rna_from_string "AAACCCUUU" "Test seq 1" |> Secondary.predict
+
+let s2 =
+  Rna.rna_from_string "AAAAUCUUU" "Test seq 2" |> Secondary.predict
+
+let () = print_endline (Secondary_print.to_dot_string s1)
 
 let rna_tests =
   [
@@ -50,14 +54,16 @@ let rna_tests =
 
 let fold_tests =
   [
-    ( "Check Fold.predict retains sequence" >:: fun _ ->
-      assert_equal "AAACCCUUU" (Fold.get_seq s1) );
-    ( "Check Fold.predict retains info" >:: fun _ ->
-      assert_equal "" (Fold.get_info s1) );
-    ( "Check Fold.predict has correct folding structure" >:: fun _ ->
-      assert_equal "(((...)))" (Fold.to_dot_string s1) );
-    ( "Check Fold.predict has correct folding structure" >:: fun _ ->
-      assert_equal "(((().)))" (Fold.to_dot_string s2) );
+    ( "Check Secondary.predict retains sequence" >:: fun _ ->
+      assert_equal "AAACCCUUU" (Secondary.get_seq s1) );
+    ( "Check Secondary.predict retains info" >:: fun _ ->
+      assert_equal "" (Secondary.get_info s1) );
+    ( "Check Secondary.predict has correct folding structure"
+    >:: fun _ ->
+      assert_equal "(((...)))" (Secondary_print.to_dot_string s1) );
+    ( "Check Secondary.predict has correct folding structure"
+    >:: fun _ ->
+      assert_equal "(((().)))" (Secondary_print.to_dot_string s2) );
   ]
 
 let tests = "test suite" >::: List.flatten [ rna_tests; fold_tests ]
