@@ -1,10 +1,8 @@
 (** Representation of rna secondary structure predictions.
 
     This module represents the predicted secondary structure of rna
-    sequences and associated information such as the sequence name, the
-    nucleotide sequence, and any associated information. It also handles
-    functions for getting secondary structure predictions from rna
-    values. *)
+    sequences. It also contains functions for predicting secondary
+    structure predictions from rna values. *)
 
 type t
 (** The abstract type of values representing an RNA sequence and its
@@ -16,9 +14,6 @@ val predict : Rna.t -> t
 
 val get_seq : t -> string
 (** [get_seq r] is the string of bases stored in the sequence of [r]. *)
-
-val get_info : t -> string
-(** [get_info r] is a string containing information about [r]. *)
 
 val get_name : t -> string
 (** [get_name r] is the name of [r]. *)

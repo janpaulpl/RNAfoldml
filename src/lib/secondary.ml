@@ -5,13 +5,11 @@ type t = {
   pairs : int array;
   name : string;
   has_pseudoknot : bool option;
-  info : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. [r.pairs i] is the index of the predicted base pairing
     with index [i]. If no base pairing at [i], [get r.pairs i = -1]. The
-    string [r.name] represents the RNA sequence name. [r.attributes]
-    represents the RNA sequence information.
+    string [r.name] represents the RNA sequence name.
 
     Representation invariant: [r.seq] only consists of characters 'A',
     'G', 'C', or 'U'. Length of pairs is the length of [r.seq]. Pairs
@@ -120,7 +118,6 @@ let nussinov (r : Rna.t) =
       pairs = assoc_to_array r.seq pairs_assoc;
       name = r.name ^ "-nussinov-sec-struct";
       has_pseudoknot = Some false;
-      info = r.info;
     }
 
 let predict r =
@@ -129,6 +126,5 @@ let predict r =
     failwith "Invalidated RNA secondary struture rep invariant."
 
 let get_seq r = r.seq
-let get_info r = r.info
 let get_name r = r.name
 let get_pairs r = r.pairs |> copy

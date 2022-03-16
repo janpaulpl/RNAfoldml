@@ -1,7 +1,6 @@
 type t = {
   seq : string;
   name : string;
-  info : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. Representation invariant: [r.seq] only contains characters *)
@@ -26,14 +25,18 @@ let string_from_fasta filename =
 
 (** Remove trailing [\n] character *)
 let remove_trail = Str.global_replace (Str.regexp_string "\n") ""
+
 (** Remove whitespace in string *)
 let remove_whitespace = Str.global_replace (Str.regexp "[\r\n\t ]") ""
 
-(** [get_data s g] captures the necessary fields from a string [s] to build [t]. 
-    [g] is a field in [t] represented by a regex capture group. 
-    [Capture Group 1] : [\\(.*\n\\)] -> [name], 
-    [Capture Group 2] : [\\([AGCU ]+\n?[AGCU\n ]+\\)] -> [seq]. 
-    
+(** [get_rna_filds s g] captures the necessary fields from a
+    fasta-formatted string [s] to build [t]. [g] is a the index of field
+    in [t] represented by a regex capture group.
+
+    [Capture Group 1] : [\\(.*\n\\)] -> [name],
+
+    [Capture Group 2] : [\\(\[AGCU \]+\n?\[AGCU\n \]+\\)] -> [seq].
+
     [name] CANNOT start with whitespace.*)
 let get_rna_fields s g =
   let rgx = Str.regexp "\\(.*\n\\)\\([AGCU ]+\n?[AGCU\n ]+\\)" in
@@ -41,17 +44,14 @@ let get_rna_fields s g =
   | true -> Str.matched_group g s
   | false -> Invalid_argument "Invalid FASTA sequence" |> raise
 
-(** [rna_from_single_fasta s] is the rna of type [t] represented by the
+(** [from_single_fasta s] is the rna of type [t] represented by the
     single entry fasta style string [s]. *)
-let rna_from_single_fasta s =
-  { 
-  name = get_rna_fields s 1 |> remove_trail ; 
-  info = ""; 
-  seq = get_rna_fields s 2 |> remove_trail |> remove_whitespace }
+let from_single_fasta s =
+  {
+    name = get_rna_fields s 1 |> remove_trail;
+    seq = get_rna_fields s 2 |> remove_trail |> remove_whitespace;
+  }
 
-
-(** [from_fasta] is the [t list] with [i] sequence: name,
-    information, and sequence data). *)
 let from_fasta f =
   let s = string_from_fasta f in
   let sequences =
@@ -59,12 +59,12 @@ let from_fasta f =
     | [] -> []
     | h :: t -> if String.length h > 0 && h.[0] = ';' then t else h :: t
   in
-  let x : t list = List.map rna_from_single_fasta sequences in
+  let x : t list = List.map from_single_fasta sequences in
   x
   |> List.map (fun r -> try [ rep_ok r ] with Invalid_RI -> [])
   |> List.flatten
 
-let rna_from_string s name =
-  try rep_ok { seq = s; name; info = "" }
+let from_string s name =
+  try rep_ok { seq = s; name }
   with Invalid_RI ->
     Invalid_argument "Unable to parse RNA sequence" |> raise
