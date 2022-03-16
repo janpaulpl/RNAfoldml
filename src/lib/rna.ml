@@ -32,7 +32,7 @@ let remove_whitespace = Str.global_replace (Str.regexp "[\r\n\t ]") ""
 (** [get_data s g] captures the necessary fields from a string [s] to build [t]. 
     [g] is a field in [t] represented by a regex capture group. 
     [Capture Group 1] : [\\(.*\n\\)] -> [name], 
-    [Capture Group 2] : [\\([AGCU]+\n?[AGCU]+\\)] -> [seq]. 
+    [Capture Group 2] : [\\([AGCU ]+\n?[AGCU\n ]+\\)] -> [seq]. 
     
     [name] CANNOT start with whitespace.*)
 let get_rna_fields s g =
