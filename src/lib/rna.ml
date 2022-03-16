@@ -38,13 +38,16 @@ let remove_whitespace = Str.global_replace (Str.regexp "[\r\n\t ]") ""
 let get_rna_fields s g =
   let rgx = Str.regexp "\\(.*\n\\)\\([AGCU ]+\n?[AGCU\n ]+\\)" in
   match Str.string_match rgx s 0 with
-  | true -> Str.matched_group g s |> remove_trail |> remove_whitespace
+  | true -> Str.matched_group g s
   | false -> Invalid_argument "Invalid FASTA sequence" |> raise
 
 (** [rna_from_single_fasta s] is the rna of type [t] represented by the
     single entry fasta style string [s]. *)
 let rna_from_single_fasta s =
-  { name = get_rna_fields s 1 ; info = ""; seq = get_rna_fields s 2 }
+  { 
+  name = get_rna_fields s 1 |> remove_trail ; 
+  info = ""; 
+  seq = get_rna_fields s 2 |> remove_trail |> remove_whitespace }
 
 
 (** [from_fasta] is the [t list] with [i] sequence: name,
