@@ -14,8 +14,8 @@ type t = {
     (containing characters 'A', 'G', 'C', 'U'), the sequence name, and
     information about it.*)
 
-val rna_from_fasta : string -> t list
-(** [rna_from_fasta f] is the list of rna sequences and information
+val from_fasta : string -> t list
+(** [from_fasta f] is the list of rna sequences and information
     contained in fasta file [f]. If any sequences in [f] are invalid RNA
     sequences (containing characters other than 'A', 'G', 'C', 'U' or
     whitespace) these sequences are not included in [rna_from_fasta f].
