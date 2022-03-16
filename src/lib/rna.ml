@@ -24,22 +24,32 @@ let string_from_fasta filename =
   close_in ch;
   string_fasta
 
+(** Remove trailing [\n] character *)
+let remove_trail = Str.global_replace (Str.regexp_string "\n") ""
+(** Remove whitespace in string *)
+let remove_whitespace = Str.global_replace (Str.regexp "[\r\n\t ]") ""
+
+(** [get_data s g] captures the necessary fields from a string [s] to build [t]. 
+    [g] is a field in [t] represented by a regex capture group. 
+    [Capture Group 1] : [\\(.*\n\\)] -> [name], 
+    [Capture Group 2] : [\\([AGCU]+\n?[AGCU]+\\)] -> [seq]. 
+    
+    [name] CANNOT start with whitespace.*)
+let get_rna_fields s g =
+  let rgx = Str.regexp "\\(.*\n\\)\\([AGCU ]+\n?[AGCU\n ]+\\)" in
+  match Str.string_match rgx s 0 with
+  | true -> Str.matched_group g s |> remove_trail |> remove_whitespace
+  | false -> Invalid_argument "Invalid FASTA sequence" |> raise
+
 (** [rna_from_single_fasta s] is the rna of type [t] represented by the
-    single entry fasta style string [s].
-
-    ex) name\nAAAUUUAUAUUA ex) >name info1 info2 info3\nAAUAUAUAU
-    AUAUAUAUU\n AUAUAUAUAU AUAUAUAAUAUA\n*)
+    single entry fasta style string [s]. *)
 let rna_from_single_fasta s =
-  let name_len =
-    match String.index_opt s ' ' with
-    | None -> Invalid_argument "Fasta file without name" |> raise
-    | Some i -> i
-  in
-  { seq = s; name = String.sub s 0 name_len; info = "" }
+  { name = get_rna_fields s 1 ; info = ""; seq = get_rna_fields s 2 }
 
-(** [rna_from_fasta] is the [t list] with [i] sequence: name,
+
+(** [from_fasta] is the [t list] with [i] sequence: name,
     information, and sequence data). *)
-let rna_from_fasta f =
+let from_fasta f =
   let s = string_from_fasta f in
   let sequences =
     match String.split_on_char '>' s with
