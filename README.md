@@ -16,3 +16,14 @@ RNAfoldml is an OCaml package that enables users to input both RNA sequences in 
 - [Inle Bush](https://github.com/imbush)
 - [Jan-Paul Ramos](https://github.com/jpvinnie)
 - [Songyu Ye](https://github.com/s-ye)
+
+---
+
+# Getting started
+1. OCaml 4.0.0+ has to be installed to ensure nothing breaks. This library doesn't use any external dependencies except `OUnit2` for tests.
+2. Clone this repository using your preferred method or run in command line:
+```
+git clone https://github.com/jpVinnie/RNAfoldml.git
+```
+3. In the root directory, run `make` in your command line.
+4. **TO DO**
