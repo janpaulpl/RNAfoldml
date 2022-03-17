@@ -67,7 +67,7 @@ let fold_tests =
         "(((...)))" );
     ( "Check Nussinov to_dot AAUUGGCC" >:: fun _ ->
       assert_equal
-        (Rna.from_string "AAUUGGCC" "Simple Test"
+        (Rna.from_string "AAUUGGCC" "Simple_Test"
         |> Secondary.predict |> Secondary_print.to_dot_string)
         "(())(())" );
     ( "Check Nussinov to_dot Empty Seq" >:: fun _ ->

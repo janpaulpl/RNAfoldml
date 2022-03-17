@@ -29,6 +29,18 @@ let check pairs i j =
   && i = get pairs j
   && j = get pairs i
 
+let only_bases s =
+  String.map
+    (fun c ->
+      match c with
+      | 'U' -> ' '
+      | 'A' -> ' '
+      | 'G' -> ' '
+      | 'C' -> ' '
+      | _ -> 'a')
+    s
+  = String.make (String.length s) ' '
+
 (** [rep_ok r] is [r] if [r] satisfies the [t] representation invariant.
     Otherwise [rep_ok r] raises [Invalid_RI] *)
 let rep_ok r =
@@ -38,7 +50,7 @@ let rep_ok r =
          (mapi
             (fun i j -> if j = ~-1 then true else check r.pairs i j)
             r.pairs)
-    && not (Str.string_match (Str.regexp "[^AGCU]+") r.seq 0)
+    && only_bases r.seq
   then r
   else raise Invalid_RI
 

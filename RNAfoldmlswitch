@@ -14,7 +14,7 @@ installed: [
   "base-bytes.base"
   "base-threads.base"
   "base-unix.base"
-  "dune.3.0.2"
+  "dune.2.9.3"
   "ocaml.4.12.0"
   "ocaml-base-compiler.4.12.0"
   "ocaml-config.2"

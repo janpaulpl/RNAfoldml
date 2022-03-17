@@ -30,4 +30,4 @@ val from_string : string -> string -> t
     name [name] and base sequence [r_seq].
 
     Raises: [Invalid_argument] exception if [r_seq] contains characters
-    other than 'A', 'G', 'C', 'U'. *)
+    other than 'A', 'G', 'C', 'U' or if [name] contains whitespace. *)
