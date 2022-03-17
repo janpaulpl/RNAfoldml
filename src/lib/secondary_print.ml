@@ -6,7 +6,7 @@ let to_dot_string r =
 
 let to_dot file r =
   if Sys.file_exists file then
-    print_endline ("WARNING: Program overwriting file: " ^ file)
+    print_endline ("Program overwriting file: " ^ file)
   else ();
   let oc = open_out file in
   Printf.fprintf oc ">%s\n%s\n%s" (Secondary.get_name r)
@@ -15,7 +15,7 @@ let to_dot file r =
 
 let to_ct file r =
   if Sys.file_exists file then
-    print_endline ("WARNING: Program overwriting file: " ^ file)
+    print_endline ("Program overwriting file: " ^ file)
   else ();
   let oc = open_out file in
 
