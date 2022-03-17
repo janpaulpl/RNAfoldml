@@ -17,41 +17,35 @@ let get_name_test
 
 (* ------------ Rna values used in testing. ------------ *)
 
-let r1 =
-  Rna.from_string "AAAGCGGUUUGUUCCACUCGCGUUCAGUUAGCGUUUGCAGUUCUGGGCUC"
-    "seq 1"
+let fasta1 = Rna.from_fasta "test_data/test1.fasta"
+let fasta2 = Rna.from_fasta "test_data/test2.fasta"
+(* let fastnuss1 = Secondary.predict (List.hd fasta1) let fastnuss2 =
+   Secondary.predict (List.hd fasta2) *)
 
-let r2 = Rna.from_string "" "Empty Seq"
-
-let r3 =
-  match Rna.from_fasta "/test_data/test1.fasta" with
-  | [ x ] -> x
-  | _ -> failwith "test1 invalid"
-
-let s1 = Rna.from_string "AAACCCUUU" "Test seq 1" |> Secondary.predict
-let s2 = Rna.from_string "AAAAUCUUU" "Test seq 2" |> Secondary.predict
-let () = print_endline (Secondary_print.to_dot_string s1)
+(* ------------ Tests ------------ *)
 
 let rna_tests =
   [
-    get_seq_test "Sequence from_string r1" r1
-      "AAAGCGGUUUGUUCCACUCGCGUUCAGUUAGCGUUUGCAGUUCUGGGCUC";
-    get_name_test "Name from_string r1" r1 "seq 1";
-    get_seq_test "Empty sequence has empty string" r2 "";
-    get_name_test "Empty rna has name 'Empty Seq'" r2 "Empty Seq";
+    ( "Check Fasta1 to_fasta length" >:: fun _ ->
+      assert_equal (List.length fasta1) 1 );
+    ( "Check Fasta1 to_fasta name" >:: fun _ ->
+      assert_equal (List.hd fasta1).name "AAA" );
+    ( "Check Fasta1 to_fasta sequence" >:: fun _ ->
+      assert_equal (List.hd fasta1).seq "AAACCCUUU" );
+    ( "Check Fasta2 to_fasta length" >:: fun _ ->
+      assert_equal (List.length fasta2) 4 );
+    ( "Check Head Fasta2 to_fasta name" >:: fun _ ->
+      assert_equal (List.hd fasta2).name "Sequence_1" );
+    ( "Check Head Fasta2 to_fasta sequence" >:: fun _ ->
+      assert_equal (List.hd fasta2).seq
+        "AAAGCGGUUUGUUCCACUCGCGUUCAGUUAGCGUUUGCAGCGUUCAGUUAGCGUUUGCAGCGUUCAGUUAGCGUUUGCAGCGUUCAGUUAGCGUUUGCAGCGUUCAGUUAGCGUUUGCAGCGUUCAGUUAGCGUUUGCAGCGUUCAGUUAGCGU"
+    );
+    ( "Check Empty to_fasta length" >:: fun _ ->
+      assert_equal
+        ("test_data/empty.fasta" |> Rna.from_fasta |> List.length)
+        0 );
   ]
 
-let fold_tests =
-  [
-    ( "Check Secondary.predict retains sequence" >:: fun _ ->
-      assert_equal "AAACCCUUU" (Secondary.get_seq s1) );
-    ( "Check Secondary.predict has correct folding structure"
-    >:: fun _ ->
-      assert_equal "(((...)))" (Secondary_print.to_dot_string s1) );
-    ( "Check Secondary.predict has correct folding structure"
-    >:: fun _ ->
-      assert_equal "(((().)))" (Secondary_print.to_dot_string s2) );
-  ]
-
+let fold_tests = []
 let tests = "test suite" >::: List.flatten [ rna_tests; fold_tests ]
 let _ = run_test_tt_main tests
