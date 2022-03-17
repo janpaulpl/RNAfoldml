@@ -75,22 +75,33 @@ let rec largest_lst = function
 
 (** [max_pairs seq start fin] is the largest list of tuples [(a,b)] such
     that [is_valid seq a b] is true. *)
-let rec max_pairs (seq : string) (start : int) (fin : int) =
+let rec max_pairs
+    (seq : string)
+    (start : int)
+    (fin : int)
+    (computed : (int * int) list array array) =
   if start >= fin then []
   else
-    ([
-       (max_pairs seq (start + 1) (fin - 1)
-       @ if is_valid seq start fin then [ (start, fin) ] else []);
-     ]
-    @
-    try
-      List.init
-        (fin - start - 2)
-        (fun k ->
-          max_pairs seq start (start + k + 1)
-          @ max_pairs seq (start + k + 2) fin)
-    with Invalid_argument _ -> [])
-    |> largest_lst
+    let precomputed = Array.get (Array.get computed start) fin in
+    if precomputed <> [] then precomputed
+    else
+      let result =
+        ([
+           (max_pairs seq (start + 1) (fin - 1) computed
+           @ if is_valid seq start fin then [ (start, fin) ] else []);
+         ]
+        @
+        try
+          List.init
+            (fin - start - 2)
+            (fun k ->
+              max_pairs seq start (start + k + 1) computed
+              @ max_pairs seq (start + k + 2) fin computed)
+        with Invalid_argument _ -> [])
+        |> largest_lst
+      in
+      computed.(start).(fin) <- result;
+      result
 
 (** [assoc_to_array seq pairs] is the [Array.t] in which for each entry
     [(i,j)] in [pairs], the entry at position [i] is [j], the entry at
@@ -111,7 +122,13 @@ let assoc_to_array seq (pairs : (int * int) list) =
 (** [nussinov r] is a secondary structure for [r] which maximumizes the
     number of valid base pairs given by Nussinov's prediction algorithm. *)
 let nussinov (r : Rna.t) =
-  let pairs_assoc = max_pairs r.seq 0 (String.length r.seq - 1) in
+  let pair_matrix =
+    make_matrix (String.length r.seq) (String.length r.seq) []
+  in
+
+  let pairs_assoc =
+    max_pairs r.seq 0 (String.length r.seq - 1) pair_matrix
+  in
   rep_ok
     {
       seq = r.seq;
