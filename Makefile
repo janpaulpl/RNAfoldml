@@ -9,7 +9,11 @@ test:
 
 clean:
 	dune clean
-	rm -f adventure.zip
+	rm -f RNAfoldml.zip
 
 doc:
 	dune build @doc
+
+zip:
+	rm -f RNAfoldml.zip
+	zip -r RNAfoldml.zip . -x@exclude.lst

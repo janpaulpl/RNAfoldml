@@ -1,0 +1,5 @@
+_build/*
+_config.yml
+LICENSE
+.DS_Store
+*.zip
