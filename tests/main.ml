@@ -19,8 +19,20 @@ let get_name_test
 
 let fasta1 = Rna.from_fasta "test_data/test1.fasta"
 let fasta2 = Rna.from_fasta "test_data/test2.fasta"
-(* let fastnuss1 = Secondary.predict (List.hd fasta1) let fastnuss2 =
-   Secondary.predict (List.hd fasta2) *)
+
+let () =
+  fasta1 |> List.hd |> Secondary.predict
+  |> Secondary_print.to_ct "test_output/fasta1.ct"
+
+let () =
+  fasta1 |> List.hd |> Secondary.predict
+  |> Secondary_print.to_dot "test_output/fasta1.dot"
+
+let () =
+  fasta2 |> List.hd |> Secondary.predict
+  |> Secondary_print.to_ct "test_output/fasta2.ct"
+
+let fastanuss2 = Secondary.predict (List.hd fasta2)
 
 (* ------------ Tests ------------ *)
 
@@ -46,6 +58,25 @@ let rna_tests =
         0 );
   ]
 
-let fold_tests = []
+let fold_tests =
+  [
+    ( "Check Nussinov to_dot fasta1" >:: fun _ ->
+      assert_equal
+        (fasta1 |> List.hd |> Secondary.predict
+       |> Secondary_print.to_dot_string)
+        "(((...)))" );
+    ( "Check Nussinov to_dot AAUUGGCC" >:: fun _ ->
+      assert_equal
+        (Rna.from_string "AAUUGGCC" "Simple Test"
+        |> Secondary.predict |> Secondary_print.to_dot_string)
+        "(())(())" );
+    ( "Check Nussinov to_dot Empty Seq" >:: fun _ ->
+      assert_equal
+        ~printer:(fun s -> s)
+        (Rna.from_string "" "Empty"
+        |> Secondary.predict |> Secondary_print.to_dot_string)
+        "" );
+  ]
+
 let tests = "test suite" >::: List.flatten [ rna_tests; fold_tests ]
 let _ = run_test_tt_main tests

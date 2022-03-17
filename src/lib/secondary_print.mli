@@ -14,18 +14,11 @@ val to_dot : string -> Secondary.t -> unit
 (** [to_dot f r] saves [r] to file [f] in .dot format.
 
     Raises: [Invalid_argument] exception if [f] is not a valid .ct file
-    name.
-
-    Effects: Prints warning message to terminal if [f] already exists,
-    then replaces the contents of [f]. *)
+    name or does not exist. *)
 
 val to_ct : string -> Secondary.t -> unit
 (** [write_ct f r] saves the rna secondary structure [r] in connectivity
-    table (.ct) format in file [f]. If [f] already exists, then replaces
-    the contents of [f].
+    table (.ct) format in file [f].
 
     Raises: [Invalid_argument] exception if [f] is not a valid .ct file
-    name.
-
-    Effects: Prints warning message to terminal if [f] already exists,
-    then replaces the contents of [f]. *)
+    name or does not exist. *)
