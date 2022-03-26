@@ -12,6 +12,13 @@ val predict : Rna.t -> t
 (** [get_sec_str r] is the secondary structure predictions for the rna
     [r] *)
 
+val distance : t -> t -> int
+(** [distance r1 r2] is the smallest integer [i] such that for every
+    base pair [(a,b)] of [r1], there exists a base pair [(c,d)] in [r2]
+    such that [Int.abs(a-c)<=i] and [Int.abs(b-d)<=i]. If either
+    secondary structure has no base pairs, [distance r1 r2] is
+    [Int.max_int]. *)
+
 val get_seq : t -> string
 (** [get_seq r] is the string of bases stored in the sequence of [r]. *)
 

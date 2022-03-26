@@ -1,5 +1,3 @@
-open Array
-
 type t = {
   seq : string;
   pairs : int array;
@@ -8,8 +6,8 @@ type t = {
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. [r.pairs i] is the index of the predicted base pairing
-    with index [i]. If no base pairing at [i], [get r.pairs i = -1]. The
-    string [r.name] represents the RNA sequence name.
+    with index [i]. If no base pairing at [i], [get r.pairs i = -1].
+    [r.name] is the RNA sequence name.
 
     Representation invariant: [r.seq] only consists of characters 'A',
     'G', 'C', or 'U'. Length of pairs is the length of [r.seq]. Pairs
@@ -18,56 +16,30 @@ type t = {
 
 exception Invalid_RI
 
-(** [check p i j] is true if [i] is not [j], [i,j] in
-    [\[0..length pairs-1\]], [p.i = j] and [p.j = i]. Otherwise,
-    [check p i j] is false. *)
-let check pairs i j =
-  i <> j && 0 <= j
-  && j < length pairs
-  && 0 <= i
-  && i < length pairs
-  && i = get pairs j
-  && j = get pairs i
+(** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if
+    [(i,j)] or [(j,i)] in [pairs] and remaining entries are [-1].
 
-let only_bases s =
-  String.map
-    (fun c ->
-      match c with
-      | 'U' -> ' '
-      | 'A' -> ' '
-      | 'G' -> ' '
-      | 'C' -> ' '
-      | _ -> 'a')
-    s
-  = String.make (String.length s) ' '
+    Requires: For all [(i,j)] in [pairs], [i] and [j] are in
+    [0..size-1]. No value appears in more than one [pair]. *)
+let assoc_to_array size (pairs : (int * int) list) =
+  let arr = Array.make size ~-1 in
+  List.iter
+    (fun (a, b) ->
+      assert (0 <= a && 0 <= b && a < size && b < size);
+      assert (~-1 = Array.get arr a && ~-1 = Array.get arr b);
+      Array.set arr a b;
+      Array.set arr b a)
+    pairs;
+  arr
 
-(** [rep_ok r] is [r] if [r] satisfies the [t] representation invariant.
-    Otherwise [rep_ok r] raises [Invalid_RI] *)
-let rep_ok r =
-  if
-    length r.pairs = String.length r.seq
-    && fold_left ( && ) true
-         (mapi
-            (fun i j -> if j = ~-1 then true else check r.pairs i j)
-            r.pairs)
-    && only_bases r.seq
-  then r
-  else raise Invalid_RI
+(** [is_valid_base_pair s i j] is true if and only if [s.\[i\]] and
+    [s.\[j\]] form one of the 4 combinations which form a valid RNA base
+    pair.
 
-(** [valid_indices s i j] is true if and only if [i] and [j] are in the
-    range [0..String.length s - 1]. *)
-let valid_indices s i j =
-  i >= 0 && i < String.length s && j >= 0 && j < String.length s
-
-(** [is_valid s i j] is true if and only if s.[i] and s.[j] form one of
-    the 4 combinations which form a valid RNA base pair.
-
-    Raises: [Invalid_argument] if [i] or [j] do not lie between [0] and
-    [String.length seq - 1] inclusive. *)
-let is_valid (seq : string) i j =
-  if valid_indices seq i j |> not then
-    Invalid_argument "Invalid string position" |> raise
-  else
+    Raises: [Invalid_argument] if [i] or [j] are not in
+    [0,...,String.length seq - 1]. *)
+let is_valid_base_pair seq i j =
+  try
     match (seq.[i], seq.[j]) with
     | 'A', 'U' -> true
     | 'U', 'A' -> true
@@ -76,6 +48,41 @@ let is_valid (seq : string) i j =
     | 'U', 'G' -> true
     | 'G', 'U' -> true
     | _ -> false
+  with _ -> Invalid_argument "Invalid string position" |> raise
+
+(** [rep_ok r] is [r] if [r] satisfies the [t] representation invariant.
+    Otherwise [rep_ok r] raises [Invalid_RI] *)
+let rep_ok r =
+  let has_valid_pairs r =
+    Array.fold_left ( && ) true
+      (Array.mapi
+         (fun i j ->
+           if j + 1 = 0 then true
+           else
+             (String.length r.seq == Array.length r.pairs
+             && i <> j && 0 <= j
+             && j < String.length r.seq
+             && 0 <= i
+             && i < String.length r.seq
+             && i = Array.get r.pairs j
+             && j = Array.get r.pairs i)
+             && is_valid_base_pair r.seq i j)
+         r.pairs)
+  in
+
+  let is_rna_seq s =
+    String.map
+      (fun c ->
+        match c with
+        | 'U' -> ' '
+        | 'A' -> ' '
+        | 'G' -> ' '
+        | 'C' -> ' '
+        | _ -> 'a')
+      s
+    = String.make (String.length s) ' '
+  in
+  if has_valid_pairs r && is_rna_seq r.seq then r else raise Invalid_RI
 
 (** [largest_lst l] is one of the lists in [l], a list of lists, which
     has maximum length. *)
@@ -84,6 +91,8 @@ let rec largest_lst = function
       let lt = largest_lst t in
       if List.length h > List.length lt then h else lt
   | [] -> []
+
+(* ------------ Functions Suite for Nussinov Algorithm ------------ *)
 
 (** [max_pairs seq start fin] is the largest list of tuples [(a,b)] such
     that [is_valid seq a b] is true. *)
@@ -100,7 +109,9 @@ let rec max_pairs
       let result =
         ([
            (max_pairs seq (start + 1) (fin - 1) computed
-           @ if is_valid seq start fin then [ (start, fin) ] else []);
+           @
+           if is_valid_base_pair seq start fin then [ (start, fin) ]
+           else []);
          ]
         @
         try
@@ -115,45 +126,48 @@ let rec max_pairs
       computed.(start).(fin) <- result;
       result
 
-(** [assoc_to_array seq pairs] is the [Array.t] in which for each entry
-    [(i,j)] in [pairs], the entry at position [i] is [j], the entry at
-    position [j] is [i] and all other entries are.
-
-    Requires: No value is found in more than one entry of [pairs]. Every
-    vallue is a valid index of seq. *)
-let assoc_to_array seq (pairs : (int * int) list) =
-  let arr = Array.make (String.length seq) ~-1 in
-  List.iter
-    (fun (a, b) ->
-      assert (valid_indices seq a b);
-      Array.set arr a b;
-      Array.set arr b a)
-    pairs;
-  arr
-
 (** [nussinov r] is a secondary structure for [r] which maximumizes the
     number of valid base pairs given by Nussinov's prediction algorithm. *)
 let nussinov (r : Rna.t) =
-  let pair_matrix =
-    make_matrix (String.length r.seq) (String.length r.seq) []
+  let optimal_pair_matrix =
+    Array.make_matrix (String.length r.seq) (String.length r.seq) []
   in
 
   let pairs_assoc =
-    max_pairs r.seq 0 (String.length r.seq - 1) pair_matrix
+    max_pairs r.seq 0 (String.length r.seq - 1) optimal_pair_matrix
   in
   rep_ok
     {
       seq = r.seq;
-      pairs = assoc_to_array r.seq pairs_assoc;
+      pairs = assoc_to_array (String.length r.seq) pairs_assoc;
       name = r.name ^ "-nussinov-sec-struct";
       has_pseudoknot = Some false;
     }
+
+(* ------------ Functions Suite for Zuker Algorithm ------------ let
+   stacked_energy i j = 0 let hairpin_energy i j = 0 let loop_energy i j
+   i' j' = 0 let multi_energy i j internal_pairs = 0
+
+   let rec max_energy (r : Rna.t)
+
+   let zuker (r : Rna.t) = let *)
 
 let predict r =
   try nussinov r |> rep_ok
   with Invalid_RI ->
     failwith "Invalidated RNA secondary struture rep invariant."
 
+let distance r1 r2 =
+  let r1, r2 = (rep_ok r1, rep_ok r2) in
+  if Array.length r1.pairs = 0 || Array.length r2.pairs = 0 then
+    Int.max_int
+  else
+    let min_dist_r2 i1 j1 =
+      Array.mapi (fun i2 j2 -> max (abs i1 - i2) (abs j1 - j2)) r2.pairs
+      |> Array.fold_left min Int.max_int
+    in
+    r1.pairs |> Array.mapi min_dist_r2 |> Array.fold_left max 0
+
 let get_seq r = r.seq
 let get_name r = r.name
-let get_pairs r = r.pairs |> copy
+let get_pairs r = r.pairs |> Array.copy
