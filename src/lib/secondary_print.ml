@@ -1,3 +1,6 @@
+let create_file f : unit = 
+  Unix.openfile f [O_RDWR; O_TRUNC; O_CREAT] 0o666 |> Unix.close
+
 let to_dot_string r =
   r |> Secondary.get_pairs
   |> Array.mapi (fun i j ->
@@ -5,8 +8,8 @@ let to_dot_string r =
   |> Array.fold_left ( ^ ) ""
 
 let to_dot file r =
-  if Sys.file_exists file then
-    print_endline ("Program overwriting file: " ^ file)
+  if not (Sys.file_exists file) then
+    create_file file
   else ();
   let oc = open_out file in
   Printf.fprintf oc ">%s\n%s\n%s" (Secondary.get_name r)
@@ -14,8 +17,8 @@ let to_dot file r =
   close_out oc
 
 let to_ct file r =
-  if Sys.file_exists file then
-    print_endline ("Program overwriting file: " ^ file)
+  if not (Sys.file_exists file) then
+    create_file file
   else ();
   let oc = open_out file in
 
