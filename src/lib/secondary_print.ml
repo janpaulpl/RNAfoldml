@@ -21,7 +21,7 @@ let to_ct file r =
 
   (* [print_ct_line i j] prints line [i] to output channel [oc] in .ct
      format where [seq.[i+1]] is paired to [j+1]. The offset is due to
-     .ct format using 1-indexing *)
+     .ct format using 1-indexing. *)
   let print_ct_line i j =
     Printf.fprintf oc "%i %c %i %i %i %i\n" (i + 1)
       (Secondary.get_seq r).[i]
