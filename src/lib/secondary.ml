@@ -171,3 +171,11 @@ let distance r1 r2 =
 let get_seq r = r.seq
 let get_name r = r.name
 let get_pairs r = r.pairs |> Array.copy
+
+let make_t seq pairs name has_pseudoknot = 
+  {
+    seq = seq;
+    pairs = pairs;
+    name = name;
+    has_pseudoknot = has_pseudoknot;
+  }

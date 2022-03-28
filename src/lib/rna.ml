@@ -89,3 +89,7 @@ let from_string seq name =
   try rep_ok { seq; name }
   with Invalid_RI ->
     Invalid_argument "Unable to parse RNA sequence" |> raise
+
+let get_seq r = r.seq
+
+let get_name r = r.name

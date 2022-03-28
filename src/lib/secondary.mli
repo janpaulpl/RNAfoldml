@@ -33,3 +33,6 @@ val get_pairs : t -> int array
 (** [get_pairs r] is an array of base pairs in [r]. The value at index
     [i] is the index of the base pairing with [i] or -1 if [i] does not
     pair. *)
+
+val make_t : string -> int array -> string -> bool option -> t
+(** [make t] creates Secondary.t (dirty) *)

@@ -31,3 +31,9 @@ val from_string : string -> string -> t
 
     Raises: [Invalid_argument] exception if [r_seq] contains characters
     other than 'A', 'G', 'C', 'U' or if [name] contains whitespace. *)
+
+val get_seq : t -> string
+(** [get_seq r] is an RNA sequence string. *)
+
+val get_name : t -> string
+(** [get_seq r] is the name of the RNA string.  *)
