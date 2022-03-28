@@ -19,6 +19,10 @@ val distance : t -> t -> int
     secondary structure has no base pairs, [distance r1 r2] is
     [Int.max_int]. *)
 
+val assoc_to_array : int -> (int * int) list -> int array
+(** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if
+    [(i,j)] or [(j,i)] in [pairs] and remaining entries are [-1]. *)
+
 val get_seq : t -> string
 (** [get_seq r] is the string of bases stored in the sequence of [r]. *)
 
