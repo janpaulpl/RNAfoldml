@@ -40,7 +40,8 @@ let string_from_fasta filename =
   let () = close_in ch in
   string_fasta
 
-(** Remove whitespace in string *)
+(** [remove_whitespace s] is the string [s] with any characters from
+    [\['\r';'\n';'\t';' '\]] removed. *)
 let remove_whitespace s =
   s
   |> String.split_on_char '\r'
@@ -89,7 +90,3 @@ let from_string seq name =
   try rep_ok { seq; name }
   with Invalid_RI ->
     Invalid_argument "Unable to parse RNA sequence" |> raise
-
-let get_seq r = r.seq
-
-let get_name r = r.name

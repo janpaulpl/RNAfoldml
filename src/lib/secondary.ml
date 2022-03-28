@@ -45,8 +45,6 @@ let is_valid_base_pair seq i j =
     | 'U', 'A' -> true
     | 'G', 'C' -> true
     | 'C', 'G' -> true
-    | 'U', 'G' -> true
-    | 'G', 'U' -> true
     | _ -> false
   with _ -> Invalid_argument "Invalid string position" |> raise
 
@@ -172,10 +170,50 @@ let get_seq r = r.seq
 let get_name r = r.name
 let get_pairs r = r.pairs |> Array.copy
 
-let make_t seq pairs name has_pseudoknot = 
-  {
-    seq = seq;
-    pairs = pairs;
-    name = name;
-    has_pseudoknot = has_pseudoknot;
-  }
+(** [dot_to_assoc d] is the association list of pairs represented by
+    [d], a [string] in dot format.
+
+    Raises: [Invalid_argument] if [d] is not in valid dot string format.
+
+    Example: [dot_to_assoc "(())..()"] is [\[(0,3);(1,2);(6,7)\]]*)
+let dot_to_assoc dot =
+  let pair, _, _ =
+    (* Algorithm iterates through the char list from the left,
+       accumulating a triple: (<list of completed pairs>, <positions of
+       unpaired left parentheses>, <current index>). *)
+    List.fold_left
+      (fun (pairs, left_parenths, index) c ->
+        match c with
+        | '(' -> (pairs, index :: left_parenths, index + 1)
+        | ')' -> (
+            match left_parenths with
+            | h :: t -> ((h, index) :: pairs, t, index + 1)
+            | _ -> Invalid_argument "Invalid dot string" |> raise)
+        | '.' -> (pairs, left_parenths, index + 1)
+        | _ -> Invalid_argument "Invalid char in dot string" |> raise)
+      ([], [], 0)
+      (List.init (String.length dot) (String.get dot))
+  in
+  pair
+
+let from_dot_string (rna : Rna.t) (dots : string) =
+  if String.length rna.seq <> String.length dots then
+    Invalid_argument "Unable to parse RNA sequence" |> raise
+  else
+    {
+      seq = rna.seq;
+      pairs =
+        dots |> dot_to_assoc |> assoc_to_array (String.length dots);
+      name = rna.name;
+      has_pseudoknot = None;
+    }
+
+let from_dot f : t =
+  (* let s = read_file f |> String.split_on_char '\n' in *)
+  if f = "" then raise (Failure "not implemented")
+  else failwith "nope still not"
+
+let from_ct f : t =
+  (* let s = read_file f |> String.split_on_char '\n' in *)
+  if f = "" then raise (Failure "not implemented")
+  else failwith "nope still not"
