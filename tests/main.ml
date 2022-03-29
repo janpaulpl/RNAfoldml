@@ -78,5 +78,49 @@ let fold_tests =
         "" );
   ]
 
-let tests = "test suite" >::: List.flatten [ rna_tests; fold_tests ]
+let pseudoknot_tests =
+  [
+    ( "Simple pseudoknot example 1" >:: fun _ ->
+      assert_equal
+        (Secondary.check_is_simple_pknot "          "
+           [| 6; 4; -1; -1; 1; 8; 0; -1; 5; -1 |]
+           3 7)
+        true );
+    ( "Simple pseudoknot example 2" >:: fun _ ->
+      assert_equal
+        (Secondary.check_is_simple_pknot "               "
+           [| 9; -1; 7; -1; 6; -1; 4; 2; 13; 0; 12; -1; 10; 8; -1 |]
+           5 11)
+        true );
+    ( "Has simple pseudoknot example 1" >:: fun _ ->
+      assert_equal
+        (Secondary.check_has_simple_pknot "          "
+           [| 6; 4; -1; -1; 1; 8; 0; -1; 5; -1 |])
+        true );
+    ( "Has simple pseudoknot example 2" >:: fun _ ->
+      assert_equal
+        (Secondary.check_has_simple_pknot "               "
+           [| 9; -1; 7; -1; 6; -1; 4; 2; 13; 0; 12; -1; 10; 8; -1 |])
+        true );
+    ( "Has simple pseudoknot example 3" >:: fun _ ->
+      assert_equal
+        (Secondary.check_has_simple_pknot "      "
+           [| 5; 2; 1; -1; -1; 0 |])
+        false );
+    ( "Has simple pseudoknot example 4" >:: fun _ ->
+      assert_equal
+        (Secondary.check_has_simple_pknot "          "
+           [| 4; 5; -1; -1; 0; 1; 8; -1; 6; -1 |])
+        false );
+    ( "Has simple pseudoknot example 5" >:: fun _ ->
+      assert_equal
+        (Secondary.check_has_simple_pknot "           "
+           [| 5; 6; 8; -1; 11; 0; 1; 9; 2; 7; -1; 4 |])
+        false );
+  ]
+
+let tests =
+  "test suite"
+  >::: List.flatten [ rna_tests; fold_tests; pseudoknot_tests ]
+
 let _ = run_test_tt_main tests

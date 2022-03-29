@@ -144,6 +144,89 @@ let nussinov (r : Rna.t) =
       has_pseudoknot = Some false;
     }
 
+let condition1 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
+    =
+  let rec check_index
+      (len : int)
+      (pairs : int array)
+      (cut1 : int)
+      (cut2 : int)
+      (index : int) =
+    let twin = Array.get pairs index in
+    if index = 0 && (twin = -1 || (twin > cut1 && twin <= cut2)) then
+      true
+    else if twin = -1 then check_index len pairs cut1 cut2 (index - 1)
+    else if index < cut1 && cut1 < twin && twin <= cut2 then
+      check_index len pairs cut1 cut2 (index - 1)
+    else if index = cut1 && twin > cut2 then
+      check_index len pairs cut1 cut2 (index - 1)
+    else if index > cut1 && index < cut2 && (twin < cut1 || twin > cut2)
+    then check_index len pairs cut1 cut2 (index - 1)
+    else if index = cut2 && twin < cut1 then
+      check_index len pairs cut1 cut2 (index - 1)
+    else if index > cut2 && twin >= cut1 && twin < cut2 then
+      check_index len pairs cut1 cut2 (index - 1)
+    else false
+  in
+  check_index len pairs cut1 cut2 len
+
+let condition2 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
+    =
+  let stack_pair = Stack.create () in
+  let rec process_pairs pairs cut fin index stack (left : bool) =
+    let twin = Array.get pairs index in
+    let () = print_endline ("The index is" ^ string_of_int index) in
+    if index >= fin then
+      Stack.length stack = 0 || Stack.pop stack = index
+    else if twin = -1 then
+      process_pairs pairs cut fin (index + 1) stack left
+    else if index < cut then (
+      if (not left) && twin < cut then
+        process_pairs pairs cut fin (index + 1) stack left
+      else
+        let () = Stack.push twin stack in
+        print_endline ("Pushing" ^ string_of_int twin);
+        process_pairs pairs cut fin (index + 1) stack left)
+    else if index = cut then false
+    else if index > cut then
+      if left && twin > cut then
+        process_pairs pairs cut fin (index + 1) stack left
+      else if Stack.is_empty stack then false
+      else if index <> Stack.pop stack then false
+      else
+        let () =
+          print_endline ("Successful pop" ^ string_of_int index)
+        in
+        process_pairs pairs cut fin (index + 1) stack left
+    else false
+  in
+  process_pairs pairs cut1 cut2 0 stack_pair true
+  && process_pairs pairs cut2 len cut1 stack_pair false
+
+let is_simple_pknot
+    (len : int)
+    (pairs : int array)
+    (cut1 : int)
+    (cut2 : int) =
+  if cut2 <= cut1 then false
+  else condition1 len pairs cut1 cut2 && condition2 len pairs cut1 cut2
+
+let has_simple_pknot len pairs =
+  let cartesian l l' =
+    List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l') l)
+  in
+  let y = List.init len (fun x -> x) in
+  let lst = cartesian y y in
+  let result =
+    List.map (fun (x, y) -> is_simple_pknot len pairs x y) lst
+  in
+  List.fold_left (fun s t -> s || t) false result
+
+(** [has pseudoknot secondary] is true if and only if the secondary
+    structure [secondary] has a pseudoknot*)
+(* let has_pseudoknot (secondary : t) = ignore secondary;
+   is_simple_pknot " " (Array.make 3 7) 0 0 *)
+
 (* ------------ Functions Suite for Zuker Algorithm ------------ let
    stacked_energy i j = 0 let hairpin_energy i j = 0 let loop_energy i j
    i' j' = 0 let multi_energy i j internal_pairs = 0
