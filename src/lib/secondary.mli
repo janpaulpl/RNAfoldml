@@ -19,11 +19,6 @@ val distance : t -> t -> int
     secondary structure has no base pairs, [distance r1 r2] is
     [Int.max_int]. *)
 
-val is_simple_pknot : int array -> int -> int -> bool
-(** [is_simple_pknot pairs cut1 cut2] is [true] if and only if all of
-    the matchings in [pairs] along with (j_0,j_0') = (cut1, cut2)
-    satisfy the two conditions for a simple pseudoknot. *)
-
 val has_simple_pknot : int array -> bool
 (** [has_simple_pknot pairs ] is [true] if and only there exist two
     integers x,y in [1..n] so that [is_simple_pknot len pairs x y] is
