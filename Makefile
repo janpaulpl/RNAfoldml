@@ -17,3 +17,9 @@ doc:
 zip:
 	rm -f RNAfoldml.zip
 	zip -r RNAfoldml.zip . -x@exclude.lst
+
+cloc:
+	dune clean
+	rm -f RNAfoldml.zip
+	cloc --by-file --include-lang=OCaml .
+
