@@ -26,8 +26,8 @@ val is_simple_pknot : int -> int array -> int -> int -> bool
 
 val has_simple_pknot : int -> int array -> bool
 (** [has_simple_pknot len pairs ] is [true] if and only there exist two
-    integers x,y in [1..n] so that [is_simple_pknot len pairs x y] is
-    true*)
+    integers x,y in 1..n so that [is_simple_pknot len pairs x y] is true*)
+
 val assoc_to_array : int -> (int * int) list -> int array
 (** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if
     [(i,j)] or [(j,i)] in [pairs] and remaining entries are [-1]. *)

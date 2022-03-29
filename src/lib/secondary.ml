@@ -142,10 +142,18 @@ let nussinov (r : Rna.t) =
       has_pseudoknot = Some false;
     }
 
-let condition1 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
-    =
+(* let has_pseudoknot pairs = let rec has_pseudoknot_helper pairs index
+   stack = if index = Array.length pairs then Stack.length stack = 0 ||
+   Stack.pop stack = index else let twin = Array.get pairs index in if
+   twin = -1 then has_pseudoknot_helper pairs (index + 1) stack else if
+   twin > index then let () = Stack.push twin stack in
+   has_pseudoknot_helper pairs (index + 1) stack else if twin < index
+   then if index <> Stack.pop stack then true else has_pseudoknot_helper
+   pairs (index + 1) stack else true in let newstack = Stack.create ()
+   in has_pseudoknot_helper pairs 0 newstack *)
+
+let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   let rec check_index
-      (len : int)
       (pairs : int array)
       (cut1 : int)
       (cut2 : int)
@@ -153,20 +161,20 @@ let condition1 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
     let twin = Array.get pairs index in
     if index = 0 && (twin = -1 || (twin > cut1 && twin <= cut2)) then
       true
-    else if twin = -1 then check_index len pairs cut1 cut2 (index - 1)
+    else if twin = -1 then check_index pairs cut1 cut2 (index - 1)
     else if index < cut1 && cut1 < twin && twin <= cut2 then
-      check_index len pairs cut1 cut2 (index - 1)
+      check_index pairs cut1 cut2 (index - 1)
     else if index = cut1 && twin > cut2 then
-      check_index len pairs cut1 cut2 (index - 1)
+      check_index pairs cut1 cut2 (index - 1)
     else if index > cut1 && index < cut2 && (twin < cut1 || twin > cut2)
-    then check_index len pairs cut1 cut2 (index - 1)
+    then check_index pairs cut1 cut2 (index - 1)
     else if index = cut2 && twin < cut1 then
-      check_index len pairs cut1 cut2 (index - 1)
+      check_index pairs cut1 cut2 (index - 1)
     else if index > cut2 && twin >= cut1 && twin < cut2 then
-      check_index len pairs cut1 cut2 (index - 1)
+      check_index pairs cut1 cut2 (index - 1)
     else false
   in
-  check_index len pairs cut1 cut2 len
+  check_index pairs cut1 cut2 (Array.length pairs - 1)
 
 let condition2 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
     =
@@ -199,7 +207,7 @@ let condition2 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
     else false
   in
   process_pairs pairs cut1 cut2 0 stack_pair true
-  && process_pairs pairs cut2 len cut1 stack_pair false
+  && process_pairs pairs cut2 (len - 1) cut1 stack_pair false
 
 let is_simple_pknot
     (len : int)
@@ -207,7 +215,7 @@ let is_simple_pknot
     (cut1 : int)
     (cut2 : int) =
   if cut2 <= cut1 then false
-  else condition1 len pairs cut1 cut2 && condition2 len pairs cut1 cut2
+  else condition1 pairs cut1 cut2 && condition2 len pairs cut1 cut2
 
 let has_simple_pknot len pairs =
   let cartesian l l' =
