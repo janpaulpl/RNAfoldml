@@ -40,7 +40,8 @@ let string_from_fasta filename =
   let () = close_in ch in
   string_fasta
 
-(** Remove whitespace in string *)
+(** [remove_whitespace s] is the string [s] with any characters from
+    [\['\r';'\n';'\t';' '\]] removed. *)
 let remove_whitespace s =
   s
   |> String.split_on_char '\r'

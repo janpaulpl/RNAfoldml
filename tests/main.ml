@@ -58,7 +58,7 @@ let rna_tests =
         0 );
   ]
 
-let fold_tests =
+let secondary_tests =
   [
     ( "Check Nussinov to_dot fasta1" >:: fun _ ->
       assert_equal
@@ -121,6 +121,9 @@ let pseudoknot_tests =
 
 let tests =
   "test suite"
-  >::: List.flatten [ rna_tests; fold_tests; pseudoknot_tests ]
+  >::: List.flatten [ rna_tests; secondary_tests; pseudoknot_tests ]
+
+let tests =
+  "test suite" >::: List.flatten [ rna_tests; secondary_tests ]
 
 let _ = run_test_tt_main tests

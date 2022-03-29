@@ -13,9 +13,9 @@ val to_dot_string : Secondary.t -> string
 val to_dot : string -> Secondary.t -> unit
 (** [to_dot f r] saves [r] to file [f] in .dot format.
 
-    Raises: [Invalid_argument] exception if [f] cannot be created. *)
+		Effects: prints warning message to stdout if [f] is overwritten.*)
 
 val to_ct : string -> Secondary.t -> unit
 (** [to_ct f r] saves [r] to file [f] in .ct format.
 
-    Raises: [Invalid_argument] exception if [f] cannot be created. *)
+		Effects: prints warning message to stdout if [f] is overwritten. *)
