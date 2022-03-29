@@ -160,39 +160,35 @@ let rec check_index
   else false
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
-  check_index pairs cut1 cut2 (Array.length pairs)
+  check_index pairs cut1 cut2 (Array.length pairs - 1)
 
 let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
   let stack_pair = Stack.create () in
   let rec process_pairs pairs cut fin index stack (left : bool) =
     let twin = pairs.(index) in
-    let () = print_endline ("The index is" ^ string_of_int index) in
     if index >= fin then
       Stack.length stack = 0 || Stack.pop stack = index
     else if twin = -1 then
       process_pairs pairs cut fin (index + 1) stack left
-    else if index < cut then (
+    else if index < cut then
       if (not left) && twin < cut then
         process_pairs pairs cut fin (index + 1) stack left
       else
         let () = Stack.push twin stack in
-        print_endline ("Pushing" ^ string_of_int twin);
-        process_pairs pairs cut fin (index + 1) stack left)
+        process_pairs pairs cut fin (index + 1) stack left
     else if index = cut then false
     else if index > cut then
       if left && twin > cut then
         process_pairs pairs cut fin (index + 1) stack left
       else if Stack.is_empty stack then false
       else if index <> Stack.pop stack then false
-      else
-        let () =
-          print_endline ("Successful pop" ^ string_of_int index)
-        in
-        process_pairs pairs cut fin (index + 1) stack left
+      else process_pairs pairs cut fin (index + 1) stack left
     else false
   in
   process_pairs pairs cut1 cut2 0 stack_pair true
-  && process_pairs pairs cut2 (Array.length pairs) cut1 stack_pair false
+  && process_pairs pairs cut2
+       (Array.length pairs - 1)
+       cut1 stack_pair false
 
 let is_simple_pknot (pairs : int array) (cut1 : int) (cut2 : int) =
   if cut2 <= cut1 then false
@@ -202,7 +198,7 @@ let has_simple_pknot pairs =
   let cartesian l l' =
     List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l') l)
   in
-  let len = Array.length pairs in
+  let len = Array.length pairs - 1 in
   let y = List.init len (fun x -> x) in
   let lst = cartesian y y in
   let result = List.map (fun (x, y) -> is_simple_pknot pairs x y) lst in
