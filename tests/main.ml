@@ -82,9 +82,6 @@ let pseudoknot_tests =
   [
     ( "Simple pseudoknot example 1" >:: fun _ ->
       assert_equal
-<<<<<<< HEAD
-        (Secondary.is_simple_pknot 10
-=======
         (Secondary.is_simple_pknot
            [| 6; 4; -1; -1; 1; 8; 0; -1; 5; -1 |]
            3 7)
@@ -92,64 +89,47 @@ let pseudoknot_tests =
     ( "Simple pseudoknot example 1" >:: fun _ ->
       assert_equal
         (Secondary.is_simple_pknot
->>>>>>> 93d29c68ca512e293ea7330f0791114ae4fe8f75
            [| 6; 4; -1; -1; 1; 8; 0; -1; 5; -1 |]
            3 7)
         true );
     ( "Simple pseudoknot example 2" >:: fun _ ->
       assert_equal
-<<<<<<< HEAD
-        (Secondary.is_simple_pknot 15
-=======
         (Secondary.is_simple_pknot
->>>>>>> 93d29c68ca512e293ea7330f0791114ae4fe8f75
            [| 9; -1; 7; -1; 6; -1; 4; 2; 13; 0; 12; -1; 10; 8; -1 |]
            5 11)
         true );
     ( "Has simple pseudoknot example 1" >:: fun _ ->
       assert_equal
-<<<<<<< HEAD
-        (Secondary.has_simple_pknot 10
-=======
         (Secondary.has_simple_pknot
->>>>>>> 93d29c68ca512e293ea7330f0791114ae4fe8f75
            [| 6; 4; -1; -1; 1; 8; 0; -1; 5; -1 |])
         true );
     ( "Has simple pseudoknot example 2" >:: fun _ ->
       assert_equal
-<<<<<<< HEAD
-        (Secondary.has_simple_pknot 15
-=======
         (Secondary.has_simple_pknot
->>>>>>> 93d29c68ca512e293ea7330f0791114ae4fe8f75
            [| 9; -1; 7; -1; 6; -1; 4; 2; 13; 0; 12; -1; 10; 8; -1 |])
         true );
     ( "Has simple pseudoknot example 3" >:: fun _ ->
       assert_equal
-<<<<<<< HEAD
-        (Secondary.has_simple_pknot 6 [| 5; 2; 1; -1; -1; 0 |])
-        false );
-    ( "Has simple pseudoknot example 4" >:: fun _ ->
-      assert_equal
-        (Secondary.has_simple_pknot 10
-=======
         (Secondary.has_simple_pknot [| 5; 2; 1; -1; -1; 0 |])
         false );
     ( "Has simple pseudoknot example 4" >:: fun _ ->
       assert_equal
         (Secondary.has_simple_pknot
->>>>>>> 93d29c68ca512e293ea7330f0791114ae4fe8f75
            [| 4; 5; -1; -1; 0; 1; 8; -1; 6; -1 |])
         false );
     ( "Has simple pseudoknot example 5" >:: fun _ ->
       assert_equal
-<<<<<<< HEAD
-        (Secondary.has_simple_pknot 12
-=======
         (Secondary.has_simple_pknot
->>>>>>> 93d29c68ca512e293ea7330f0791114ae4fe8f75
            [| 5; 6; 8; -1; 11; 0; 1; 9; 2; 7; -1; 4 |])
         false );
+    ( "Has pseudoknot example 1" >:: fun _ ->
+      assert_equal
+        (Secondary.has_pseudoknot [| 7; 4; -1; -1; 1; 6; 5; 0 |])
+        false );
+    ( "Has pseudoknot example 2" >:: fun _ ->
+      assert_equal
+        (Secondary.has_pseudoknot [| 4; -1; 5; 6; 0; 2; 3 |])
+        true );
   ]
 
 let tests =

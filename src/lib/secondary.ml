@@ -142,15 +142,23 @@ let nussinov (r : Rna.t) =
       has_pseudoknot = Some false;
     }
 
-(* let has_pseudoknot pairs = let rec has_pseudoknot_helper pairs index
-   stack = if index = Array.length pairs then Stack.length stack = 0 ||
-   Stack.pop stack = index else let twin = Array.get pairs index in if
-   twin = -1 then has_pseudoknot_helper pairs (index + 1) stack else if
-   twin > index then let () = Stack.push twin stack in
-   has_pseudoknot_helper pairs (index + 1) stack else if twin < index
-   then if index <> Stack.pop stack then true else has_pseudoknot_helper
-   pairs (index + 1) stack else true in let newstack = Stack.create ()
-   in has_pseudoknot_helper pairs 0 newstack *)
+let has_pseudoknot pairs =
+  let rec has_pseudoknot_helper pairs index stack =
+    if index = Array.length pairs then
+      not (Stack.length stack = 0 || Stack.pop stack = index)
+    else
+      let twin = Array.get pairs index in
+      if twin = -1 then has_pseudoknot_helper pairs (index + 1) stack
+      else if twin > index then
+        let () = Stack.push twin stack in
+        has_pseudoknot_helper pairs (index + 1) stack
+      else if twin < index then
+        if index <> Stack.pop stack then true
+        else has_pseudoknot_helper pairs (index + 1) stack
+      else true
+  in
+  let newstack = Stack.create () in
+  has_pseudoknot_helper pairs 0 newstack
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   let rec check_index
@@ -176,8 +184,7 @@ let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   in
   check_index pairs cut1 cut2 (Array.length pairs - 1)
 
-let condition2 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
-    =
+let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
   let stack_pair = Stack.create () in
   let rec process_pairs pairs cut fin index stack (left : bool) =
     let twin = pairs.(index) in
@@ -205,24 +212,18 @@ let condition2 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
        (Array.length pairs - 1)
        cut1 stack_pair false
 
-let is_simple_pknot
-    (len : int)
-    (pairs : int array)
-    (cut1 : int)
-    (cut2 : int) =
+let is_simple_pknot (pairs : int array) (cut1 : int) (cut2 : int) =
   if cut2 <= cut1 then false
-  else condition1 pairs cut1 cut2 && condition2 len pairs cut1 cut2
+  else condition1 pairs cut1 cut2 && condition2 pairs cut1 cut2
 
-let has_simple_pknot len pairs =
+let has_simple_pknot pairs =
   let cartesian l l' =
     List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l') l)
   in
   let len = Array.length pairs - 1 in
   let y = List.init len (fun x -> x) in
   let lst = cartesian y y in
-  let result =
-    List.map (fun (x, y) -> is_simple_pknot len pairs x y) lst
-  in
+  let result = List.map (fun (x, y) -> is_simple_pknot pairs x y) lst in
   List.fold_left (fun s t -> s || t) false result
 
 (** [has pseudoknot secondary] is true if and only if the secondary
