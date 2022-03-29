@@ -200,13 +200,14 @@ let from_dot_string (rna : Rna.t) (dots : string) =
   if String.length rna.seq <> String.length dots then
     Invalid_argument "Unable to parse RNA sequence" |> raise
   else
-    {
-      seq = rna.seq;
-      pairs =
-        dots |> dot_to_assoc |> assoc_to_array (String.length dots);
-      name = rna.name;
-      has_pseudoknot = None;
-    }
+    rep_ok
+      {
+        seq = rna.seq;
+        pairs =
+          dots |> dot_to_assoc |> assoc_to_array (String.length dots);
+        name = rna.name;
+        has_pseudoknot = None;
+      }
 
 let from_dot f : t =
   (* let s = read_file f |> String.split_on_char '\n' in *)
