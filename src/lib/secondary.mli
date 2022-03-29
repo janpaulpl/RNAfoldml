@@ -26,7 +26,7 @@ val is_simple_pknot : int array -> int -> int -> bool
 
 val has_simple_pknot : int array -> bool
 (** [has_simple_pknot pairs ] is [true] if and only there exist two
-    integers x,y in 1..n so that [is_simple_pknot len pairs x y] is true*)
+    integers x,y in 1..n so that [is_simple_pknot pairs x y] is true*)
 
 val has_pseudoknot : int array -> bool
 (** [has_pseudoknot pairs] is true if there exists intersecting

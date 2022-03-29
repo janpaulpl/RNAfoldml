@@ -10,16 +10,19 @@ let to_dot_string r =
   |> Array.fold_left ( ^ ) ""
 
 let to_dot file r =
-  if not (Sys.file_exists file) then create_file file
-  else Printf.printf "%s is being ovewritten\n" file;
+  if Sys.file_exists file then
+    Printf.printf "%s is being ovewritten\n" file;
+  create_file file;
   let oc = open_out file in
   Printf.fprintf oc ">%s\n%s\n%s" (Secondary.get_name r)
     (Secondary.get_seq r) (to_dot_string r);
   close_out oc
 
 let to_ct file r =
-  if not (Sys.file_exists file) then create_file file
-  else Printf.printf "%s is being ovewritten\n" file;
+  if Sys.file_exists file then
+    Printf.printf "%s is being ovewritten\n" file;
+  create_file file;
+
   let oc = open_out file in
 
   (* [print_ct_line i j] prints line [i] to output channel [oc] in .ct
