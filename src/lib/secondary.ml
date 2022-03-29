@@ -2,7 +2,7 @@ type t = {
   seq : string;
   pairs : int array;
   name : string;
-  has_pseudoknot : bool option;
+  has_pknot : bool option;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. [r.pairs i] is the index of the predicted base pairing
@@ -135,7 +135,7 @@ let nussinov (r : Rna.t) =
       seq = r.seq;
       pairs = assoc_to_array (String.length r.seq) pairs_assoc;
       name = r.name ^ "-nussinov-sec-struct";
-      has_pseudoknot = Some false;
+      has_pknot = Some false;
     }
 
 let rec check_index
@@ -155,23 +155,23 @@ let rec check_index
   then check_index pairs cut1 cut2 (index - 1)
   else false
 
-let has_pseudoknot pairs =
-  let rec has_pseudoknot_helper pairs index stack =
+let has_pknot pairs =
+  let rec has_pknot_helper pairs index stack =
     if index = Array.length pairs then
       not (Stack.length stack = 0 || Stack.pop stack = index)
     else
       let twin = Array.get pairs index in
-      if twin = -1 then has_pseudoknot_helper pairs (index + 1) stack
+      if twin = -1 then has_pknot_helper pairs (index + 1) stack
       else if twin > index then
         let () = Stack.push twin stack in
-        has_pseudoknot_helper pairs (index + 1) stack
+        has_pknot_helper pairs (index + 1) stack
       else if twin < index then
         if index <> Stack.pop stack then true
-        else has_pseudoknot_helper pairs (index + 1) stack
+        else has_pknot_helper pairs (index + 1) stack
       else true
   in
   let newstack = Stack.create () in
-  has_pseudoknot_helper pairs 0 newstack
+  has_pknot_helper pairs 0 newstack
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   check_index pairs cut1 cut2 (Array.length pairs - 1)
@@ -204,24 +204,17 @@ let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
        (Array.length pairs - 1)
        cut1 stack_pair false
 
-let is_simple_pknot (pairs : int array) (cut1 : int) (cut2 : int) =
-  if cut2 <= cut1 then false
-  else condition1 pairs cut1 cut2 && condition2 pairs cut1 cut2
-
-let has_simple_pknot pairs =
+let is_simple_pknot pairs =
   let cartesian l l' =
     List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l') l)
   in
-  let len = Array.length pairs - 1 in
-  let y = List.init len (fun x -> x) in
+  let y = List.init (Array.length pairs - 1) (fun x -> x) in
   let lst = cartesian y y in
-  let result = List.map (fun (x, y) -> is_simple_pknot pairs x y) lst in
-  List.fold_left (fun s t -> s || t) false result
-
-(** [has pseudoknot secondary] is true if and only if the secondary
-    structure [secondary] has a pseudoknot*)
-(* let has_pseudoknot (secondary : t) = ignore secondary;
-   is_simple_pknot " " (Array.make 3 7) 0 0 *)
+  List.exists
+    (fun (x, y) ->
+      if y <= x then false
+      else condition1 pairs x y && condition2 pairs x y)
+    lst
 
 let predict r =
   try nussinov r |> rep_ok
@@ -277,7 +270,7 @@ let from_dot_string (rna : Rna.t) (dots : string) =
         pairs =
           dots |> dot_to_assoc |> assoc_to_array (String.length dots);
         name = rna.name;
-        has_pseudoknot = None;
+        has_pknot = None;
       }
 
 let from_dot f : t =

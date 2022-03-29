@@ -19,18 +19,13 @@ val distance : t -> t -> int
     secondary structure has no base pairs, [distance r1 r2] is
     [Int.max_int]. *)
 
-val is_simple_pknot : int array -> int -> int -> bool
-(** [is_simple_pknot pairs cut1 cut2] is [true] if and only if all of
-    the matchings in [pairs] along with (j_0,j_0') = (cut1, cut2)
-    satisfy the two conditions for a simple pseudoknot. *)
+val is_simple_pknot : int array -> bool
+(** [is_simple_pknot pairs] is [true] if and only there exist two
+    integers x,y in 1..n so that [is_simple_pknot pairs x y] is true. *)
 
-val has_simple_pknot : int array -> bool
-(** [has_simple_pknot pairs ] is [true] if and only there exist two
-    integers x,y in 1..n so that [is_simple_pknot pairs x y] is true*)
-
-val has_pseudoknot : int array -> bool
-(** [has_pseudoknot pairs] is true if there exists intersecting
-    matchings in [pairs]*)
+val has_pknot : int array -> bool
+(** [has_pknot pairs] is true if there exists intersecting matchings in
+    [pairs]. *)
 
 val assoc_to_array : int -> (int * int) list -> int array
 (** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if
