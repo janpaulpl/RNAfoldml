@@ -153,6 +153,7 @@ let nussinov (r : Rna.t) =
    in has_pseudoknot_helper pairs 0 newstack *)
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
+<<<<<<< HEAD
   let rec check_index
       (pairs : int array)
       (cut1 : int)
@@ -175,35 +176,42 @@ let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
     else false
   in
   check_index pairs cut1 cut2 (Array.length pairs - 1)
+=======
+  check_index pairs cut1 cut2 (Array.length pairs)
+>>>>>>> parent of 5cc3e41 (Refactor and remove off by one length error)
 
 let condition2 (len : int) (pairs : int array) (cut1 : int) (cut2 : int)
     =
   let stack_pair = Stack.create () in
   let rec process_pairs pairs cut fin index stack (left : bool) =
     let twin = pairs.(index) in
+    let () = print_endline ("The index is" ^ string_of_int index) in
     if index >= fin then
       Stack.length stack = 0 || Stack.pop stack = index
     else if twin = -1 then
       process_pairs pairs cut fin (index + 1) stack left
-    else if index < cut then
+    else if index < cut then (
       if (not left) && twin < cut then
         process_pairs pairs cut fin (index + 1) stack left
       else
         let () = Stack.push twin stack in
-        process_pairs pairs cut fin (index + 1) stack left
+        print_endline ("Pushing" ^ string_of_int twin);
+        process_pairs pairs cut fin (index + 1) stack left)
     else if index = cut then false
     else if index > cut then
       if left && twin > cut then
         process_pairs pairs cut fin (index + 1) stack left
       else if Stack.is_empty stack then false
       else if index <> Stack.pop stack then false
-      else process_pairs pairs cut fin (index + 1) stack left
+      else
+        let () =
+          print_endline ("Successful pop" ^ string_of_int index)
+        in
+        process_pairs pairs cut fin (index + 1) stack left
     else false
   in
   process_pairs pairs cut1 cut2 0 stack_pair true
-  && process_pairs pairs cut2
-       (Array.length pairs - 1)
-       cut1 stack_pair false
+  && process_pairs pairs cut2 (Array.length pairs) cut1 stack_pair false
 
 let is_simple_pknot
     (len : int)
@@ -217,7 +225,7 @@ let has_simple_pknot len pairs =
   let cartesian l l' =
     List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l') l)
   in
-  let len = Array.length pairs - 1 in
+  let len = Array.length pairs in
   let y = List.init len (fun x -> x) in
   let lst = cartesian y y in
   let result =
