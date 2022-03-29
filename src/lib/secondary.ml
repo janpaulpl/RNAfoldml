@@ -155,6 +155,24 @@ let rec check_index
   then check_index pairs cut1 cut2 (index - 1)
   else false
 
+let has_pseudoknot pairs =
+  let rec has_pseudoknot_helper pairs index stack =
+    if index = Array.length pairs then
+      not (Stack.length stack = 0 || Stack.pop stack = index)
+    else
+      let twin = Array.get pairs index in
+      if twin = -1 then has_pseudoknot_helper pairs (index + 1) stack
+      else if twin > index then
+        let () = Stack.push twin stack in
+        has_pseudoknot_helper pairs (index + 1) stack
+      else if twin < index then
+        if index <> Stack.pop stack then true
+        else has_pseudoknot_helper pairs (index + 1) stack
+      else true
+  in
+  let newstack = Stack.create () in
+  has_pseudoknot_helper pairs 0 newstack
+
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   check_index pairs cut1 cut2 (Array.length pairs - 1)
 
