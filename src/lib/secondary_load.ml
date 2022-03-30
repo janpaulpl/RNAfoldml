@@ -37,12 +37,10 @@ let from_dot f : Secondary.t =
       let ic = open_in f in
       let name = input_line ic in
       let seq = input_line ic in
-      let dot = input_line ic in 
-      assert (in_channel_length ic = 0);
+      let dot = input_line ic in
       let () = close_in ic in
         dot |> from_dot_string (Rna.from_string seq name)
     with Invalid_argument m -> Invalid_argument m |> raise
-    | _ -> Invalid_argument "Unable to convert dot file to structure" |> raise
 
 let from_ct f : Secondary.t =
   (* let s = read_file f |> String.split_on_char '\n' in *)
