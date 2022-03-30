@@ -25,7 +25,7 @@ let to_dot file r =
 
 let to_ct file r =
   if Sys.file_exists file then
-    Printf.printf "%s is being ovewritten\n" file;
+    Printf.printf "%s is being overwritten\n" file;
   create_file file;
 
   let oc = open_out file in
