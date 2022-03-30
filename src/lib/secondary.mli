@@ -20,12 +20,12 @@ val distance : t -> t -> int
     [Int.max_int]. *)
 
 val is_simple_pknot : int array -> bool
-(** [is_simple_pknot pairs] is [true] if and only there exist two
-    integers x,y in 1..n so that [is_simple_pknot pairs x y] is true. *)
+(** [is_simple_pknot r] is [true] if and only there exist two integers
+    x,y in 1..n so that [is_simple_pknot pairs x y] is true. *)
 
-val has_pknot : int array -> bool
-(** [has_pknot pairs] is true if there exists intersecting matchings in
-    [pairs]. *)
+val is_pknot : int array -> bool
+(** [has_pknot r] is true if the pairing represented by [pairs] is a
+    pseudoknot i.e. there exists [i,j] and [k.l] such that [pairs.(i)] *)
 
 val assoc_to_array : int -> (int * int) list -> int array
 (** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if

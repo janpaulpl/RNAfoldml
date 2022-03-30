@@ -106,10 +106,10 @@ let pseudoknot_tests =
         false );
     ( "Has pseudoknot example 1" >:: fun _ ->
       assert_equal
-        (Secondary.has_pknot [| 7; 4; -1; -1; 1; 6; 5; 0 |])
+        (Secondary.is_pknot [| 7; 4; -1; -1; 1; 6; 5; 0 |])
         false );
     ( "Has pseudoknot example 2" >:: fun _ ->
-      assert_equal (Secondary.has_pknot [| 4; -1; 5; 6; 0; 2; 3 |]) true
+      assert_equal (Secondary.is_pknot [| 4; -1; 5; 6; 0; 2; 3 |]) true
     );
   ]
 

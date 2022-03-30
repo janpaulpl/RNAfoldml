@@ -1,4 +1,4 @@
 (library
  (public_name RNAfoldml)
  (name RNAfoldml)
- (libraries unix camlimages))
+ (libraries unix))

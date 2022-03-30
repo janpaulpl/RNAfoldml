@@ -1,8 +1,7 @@
 type t = {
+  name : string;
   seq : string;
   pairs : int array;
-  name : string;
-  has_pknot : bool option;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
     sequence. [r.pairs i] is the index of the predicted base pairing
@@ -135,8 +134,24 @@ let nussinov (r : Rna.t) =
       seq = r.seq;
       pairs = assoc_to_array (String.length r.seq) pairs_assoc;
       name = r.name ^ "-nussinov-sec-struct";
-      has_pknot = Some false;
     }
+
+let is_pknot r =
+  let rec is_pknot_helper pairs index stack =
+    if index = Array.length pairs then (
+      assert (stack = []);
+      false)
+    else
+      match pairs.(index) with
+      | -1 -> is_pknot_helper pairs (index + 1) stack
+      | twin when twin > index ->
+          is_pknot_helper pairs (index + 1) (twin :: stack)
+      | twin when twin < index && List.hd stack <> index -> true
+      | twin when twin < index ->
+          is_pknot_helper pairs (index + 1) (List.tl stack)
+      | _ -> raise Invalid_RI
+  in
+  is_pknot_helper r 0 []
 
 let rec check_index
     (pairs : int array)
@@ -154,24 +169,6 @@ let rec check_index
     || (index > cut2 && twin >= cut1 && twin < cut2)
   then check_index pairs cut1 cut2 (index - 1)
   else false
-
-let has_pknot pairs =
-  let rec has_pknot_helper pairs index stack =
-    if index = Array.length pairs then
-      not (Stack.length stack = 0 || Stack.pop stack = index)
-    else
-      let twin = Array.get pairs index in
-      if twin = -1 then has_pknot_helper pairs (index + 1) stack
-      else if twin > index then
-        let () = Stack.push twin stack in
-        has_pknot_helper pairs (index + 1) stack
-      else if twin < index then
-        if index <> Stack.pop stack then true
-        else has_pknot_helper pairs (index + 1) stack
-      else true
-  in
-  let newstack = Stack.create () in
-  has_pknot_helper pairs 0 newstack
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   check_index pairs cut1 cut2 (Array.length pairs - 1)
@@ -270,7 +267,6 @@ let from_dot_string (rna : Rna.t) (dots : string) =
         pairs =
           dots |> dot_to_assoc |> assoc_to_array (String.length dots);
         name = rna.name;
-        has_pknot = None;
       }
 
 let from_dot f : t =

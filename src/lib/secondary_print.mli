@@ -5,7 +5,7 @@ val to_dot_string : Secondary.t -> string
     notation. A dot, ['.'], indicates an unpaired nucleotide, ['(']
     indicates a 5' nucleotide and [')'] represents a 3' nucleotide.
 
-    Requires: [r] contains no pseudo-knots
+    Raises: [Invalid_argument] if [r] is a pseudoknot.
 
     Example: ["((...))()"] is a possible secondary structure for the
     sequence AUGGGAUCG. *)
@@ -13,9 +13,11 @@ val to_dot_string : Secondary.t -> string
 val to_dot : string -> Secondary.t -> unit
 (** [to_dot f r] saves [r] to file [f] in .dot format.
 
-		Effects: prints warning message to stdout if [f] is overwritten.*)
+    Raises: [Invalid_argument] if [r] is a pseudoknot.
+
+    Effects: prints warning message to stdout if [f] is overwritten.*)
 
 val to_ct : string -> Secondary.t -> unit
 (** [to_ct f r] saves [r] to file [f] in .ct format.
 
-		Effects: prints warning message to stdout if [f] is overwritten. *)
+    Effects: prints warning message to stdout if [f] is overwritten. *)
