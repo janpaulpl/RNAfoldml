@@ -42,7 +42,25 @@ let from_dot f : Secondary.t =
         dot |> from_dot_string (Rna.from_string seq name)
     with Invalid_argument m -> Invalid_argument m |> raise
 
+let ct_rgxp = Str.regexp "[0-9]+ ([AGCU]) ([0-9]+) [0-9]+ ([0-9]+) [0-9]+"
+
+let kill _ = ()
+
 let from_ct f : Secondary.t =
-  (* let s = read_file f |> String.split_on_char '\n' in *)
-  if f = "" then raise (Failure "not implemented")
-  else failwith "nope still not"
+  if not (Sys.file_exists f) then
+    Invalid_argument ("Cannot find file: " ^ f) |> raise
+  else 
+    let ic = open_in f in
+    let file = really_input_string ic (in_channel_length ic) in
+    match String.split_on_char '\n' file with 
+    | [] ->  Invalid_argument "Empty File" |> raise
+    | name::t -> 
+    let name = name in 
+    let triples = List.map (fun s -> kill (Str.search_forward ct_rgxp s 0); 
+    (Str.matched_group 1 s, Str.matched_group 2 s, Str.matched_group 3 s)) t in 
+    let pairs = List.map 
+    (fun (_,b,c) -> int_of_string b, int_of_string c) triples in
+    let seq = List.map 
+    (fun (a,_,_) -> a) triples |> String.concat "" in
+    let () = close_in ic in 
+    Secondary.make (Rna.from_string seq name) pairs
