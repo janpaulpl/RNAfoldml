@@ -15,6 +15,7 @@ doc:
 	dune build @doc
 
 zip:
+	dune clean
 	rm -f RNAfoldml.zip
 	zip -r RNAfoldml.zip . -x@exclude.lst
 
