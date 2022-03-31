@@ -202,16 +202,14 @@ let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
        cut1 stack_pair false
 
 let is_simple_pknot pairs =
-  let cartesian l l' =
-    List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l') l)
+  let cartesian l =
+    List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l) l)
   in
-  let y = List.init (Array.length pairs - 1) (fun x -> x) in
-  let lst = cartesian y y in
-  List.exists
-    (fun (x, y) ->
-      if y <= x then false
-      else condition1 pairs x y && condition2 pairs x y)
-    lst
+  List.init (Array.length pairs - 1) (fun x -> x)
+  |> cartesian
+  |> List.exists (fun (x, y) ->
+         if y <= x then false
+         else condition1 pairs x y && condition2 pairs x y)
 
 let predict r =
   try nussinov r |> rep_ok
