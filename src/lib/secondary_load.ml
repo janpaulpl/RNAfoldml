@@ -56,7 +56,6 @@ let from_ct_string (name : string) (ct_lines : string list) =
     ct_lines
     |> List.filter (fun l -> l <> "")
     |> List.map (fun line ->
-           print_endline line;
            ignore
              (Str.search_forward
                 (Str.regexp
