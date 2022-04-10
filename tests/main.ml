@@ -21,18 +21,18 @@ let fasta1 = Rna.from_fasta "test_data/test1.fasta"
 let fasta2 = Rna.from_fasta "test_data/test2.fasta"
 
 let () =
-  fasta1 |> List.hd |> Secondary.predict
+  fasta1 |> List.hd |> Nussinov.predict
   |> Secondary_print.to_ct "test_output/fasta1.ct"
 
 let () =
-  fasta1 |> List.hd |> Secondary.predict
+  fasta1 |> List.hd |> Nussinov.predict
   |> Secondary_print.to_dot "test_output/fasta1.dot"
 
 let () =
-  fasta2 |> List.hd |> Secondary.predict
+  fasta2 |> List.hd |> Nussinov.predict
   |> Secondary_print.to_ct "test_output/fasta2.ct"
 
-let fastanuss2 = Secondary.predict (List.hd fasta2)
+let fastanuss2 = Nussinov.predict (List.hd fasta2)
 
 (* ------------ Tests ------------ *)
 
@@ -62,19 +62,19 @@ let secondary_tests =
   [
     ( "Check Nussinov to_dot fasta1" >:: fun _ ->
       assert_equal
-        (fasta1 |> List.hd |> Secondary.predict
+        (fasta1 |> List.hd |> Nussinov.predict
        |> Secondary_print.to_dot_string)
         "(((...)))" );
     ( "Check Nussinov to_dot AAUUGGCC" >:: fun _ ->
       assert_equal
         (Rna.from_string "AAUUGGCC" "Simple_Test"
-        |> Secondary.predict |> Secondary_print.to_dot_string)
+        |> Nussinov.predict |> Secondary_print.to_dot_string)
         "(())(())" );
     ( "Check Nussinov to_dot Empty Seq" >:: fun _ ->
       assert_equal
         ~printer:(fun s -> s)
         (Rna.from_string "" "Empty"
-        |> Secondary.predict |> Secondary_print.to_dot_string)
+        |> Nussinov.predict |> Secondary_print.to_dot_string)
         "" );
   ]
 

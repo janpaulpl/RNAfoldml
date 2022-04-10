@@ -3,11 +3,12 @@ type t = {
   name : string;
 }
 (** Abstraction function: The string [r.seq] represents a valid RNA
-    sequence. Representation invariant: [r.seq] only contains characters *)
+    sequence. Representation invariant: [r.seq] contains only characters
+    from ['A', 'G', 'C', 'U'] and [r.name] does not contain whitespace. *)
 
 exception Invalid_RI
 
-let only_bases s =
+let is_rna_seq s =
   String.map
     (fun c ->
       match c with
@@ -24,21 +25,13 @@ let only_bases s =
     Raises: [Invalid_RI] if [r] does not pass rep invariant. *)
 let rep_ok r =
   if
-    only_bases r.seq
+    is_rna_seq r.seq
     && (not (String.contains r.name '\r'))
     && (not (String.contains r.name '\n'))
     && (not (String.contains r.name '\t'))
     && not (String.contains r.name ' ')
   then r
   else raise Invalid_RI
-
-(** [string_from_fasta] is the parsed data from the fasta file as a
-    string. *)
-let string_from_fasta filename =
-  let ch = open_in filename in
-  let string_fasta = really_input_string ch (in_channel_length ch) in
-  let () = close_in ch in
-  string_fasta
 
 (** [remove_whitespace s] is the string [s] with any characters from
     [\['\r';'\n';'\t';' '\]] removed. *)
@@ -71,7 +64,9 @@ let from_fasta f =
   if not (Sys.file_exists f) then
     Invalid_argument ("Cannot find file: " ^ f) |> raise
   else
-    let s = string_from_fasta f in
+    let ch = open_in f in
+    let s = really_input_string ch (in_channel_length ch) in
+    close_in ch;
     let sequences =
       match String.split_on_char '>' s with
       | [] -> []

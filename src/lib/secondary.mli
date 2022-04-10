@@ -8,16 +8,29 @@ type t
 (** The abstract type of values representing an RNA sequence and its
     secondary structure. *)
 
-val predict : Rna.t -> t
-(** [get_sec_str r] is the secondary structure predictions for the rna
-    [r] *)
+val is_valid_pair : char -> char -> bool
+(** [is_valid_pair i j] is true if and only if characters [(i,j)] form
+    one of 2 Watson-Crick RNA pairs: 'A','U' or 'C','G'. Order does not
+    effect result. *)
 
 val distance : t -> t -> int
 (** [distance r1 r2] is the smallest integer [i] such that for every
     base pair [(a,b)] of [r1], there exists a base pair [(c,d)] in [r2]
     such that [Int.abs(a-c)<=i] and [Int.abs(b-d)<=i]. If either
     secondary structure has no base pairs, [distance r1 r2] is
-    [Int.max_int]. *)
+    [Int.max_int]. Does not require [get_seq r1 = get_seq r2].
+
+    Runs in O(nm) where [n] is the lenght of [get_seq r1] and [m] is the
+    length of [get_seq r2]. *)
+
+val similarity : t -> t -> float
+(** [similarity r1 r2] is the portion of the bases in [r1] and [r2] that
+    are paired to the same position.
+
+    Runs in O(n) where [n] is the length of the rna sequence of [r1].
+
+    Raises: [Invalid_argument] if r1 and r2 sequences do not have equal
+    length. *)
 
 val is_simple_pknot : int array -> bool
 (** [is_simple_pknot r] is [true] if and only there exist two integers
