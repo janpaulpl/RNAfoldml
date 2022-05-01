@@ -8,16 +8,21 @@ val predict :
 (** [predict ?(algorithm = Nussinov.predict) ?(dir = "") f] stores
     secondary structure .ct files in directory [dir] for each rna
     sequence in fasta file [f]. Uses [algorithm] to predict secondary
-    structures.
+    structures, if no algorithm provided uses [Nussinov.predict].
 
     Raises: [Invalid_argument] if [f] does not exist or is in incorrect
     fasta format.
 
-    Effects: prints warning message to stdout if any files are being
+    Effects: Prints warning message to stdout if any files are being
     overwritten. *)
 
 (* val compare_algorithms : Rna.t list -> (Rna.t -> Secondary.t) ->
-   (Rna.t -> Secondary.t) -> unit
+   (Rna.t -> Secondary.t) -> unit *)
 
-   val test_algorithm : Secondary.t list -> (Rna.t -> Secondary.t) ->
-   unit *)
+val test_algorithm :
+  Secondary.t list -> (Rna.t -> Secondary.t) -> float list
+(** [test_algorithm sl algo] outputs a is a list of percent similarities
+    between . predicts the secondary structure of RNA sequences
+    associated with [sl], uses []
+
+    Effects: Prints *)

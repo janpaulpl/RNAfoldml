@@ -175,6 +175,7 @@ let similarity r1 r2 =
 let get_seq r = r.seq
 let get_name r = r.name
 let get_pairs r = r.pairs |> Array.copy
+let get_rna r = Rna.from_string r.seq r.name
 
 let make (rna : Rna.t) (pairs : (int * int) list) =
   try
