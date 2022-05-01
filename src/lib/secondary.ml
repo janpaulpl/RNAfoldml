@@ -83,25 +83,26 @@ let is_pknot r =
   is_pknot_helper r 0 []
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
-  (** [check_index pairs cut1 cut2 index] is true if [pairs] with first
-    element up to [index] represents a simple pseudoknot given cuts at
-    [cut1] and [cut2].
+  (* [check_index pairs cut1 cut2 index] is true if [pairs] with first
+     element up to [index] represents a simple pseudoknot given cuts at
+     [cut1] and [cut2].
 
-    Requires: [cut1 < cut2] and [cut1,cut2] are between [0] and
-    [Array.length pairs-1] inclusive. *)
-let rec check_index pairs cut1 cut2 index =
-  if index < 0 then true
-  else
-    let twin = pairs.(index) in
-    if
-      twin = -1
-      || (index < cut1 && cut1 < twin && twin <= cut2)
-      || (index = cut1 && twin > cut2)
-      || (index > cut1 && index < cut2 && (twin < cut1 || twin > cut2))
-      || (index = cut2 && twin < cut1)
-      || (index > cut2 && twin >= cut1 && twin < cut2)
-    then check_index pairs cut1 cut2 (index - 1)
-    else false in
+     Requires: [cut1 < cut2] and [cut1,cut2] are between [0] and
+     [Array.length pairs-1] inclusive. *)
+  let rec check_index pairs cut1 cut2 index =
+    if index < 0 then true
+    else
+      let twin = pairs.(index) in
+      if
+        twin = -1
+        || (index < cut1 && cut1 < twin && twin <= cut2)
+        || (index = cut1 && twin > cut2)
+        || (index > cut1 && index < cut2 && (twin < cut1 || twin > cut2))
+        || (index = cut2 && twin < cut1)
+        || (index > cut2 && twin >= cut1 && twin < cut2)
+      then check_index pairs cut1 cut2 (index - 1)
+      else false
+  in
   check_index pairs cut1 cut2 (Array.length pairs - 1)
 
 let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =

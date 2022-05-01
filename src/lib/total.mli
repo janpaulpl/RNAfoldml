@@ -1,4 +1,4 @@
-(** Includes functionaliyu for structured output of secondary-structure
+(** Includes functionality for structured output of secondary-structure
     prediction and visualization from fasta files and structured output
     for testing of secondary structure prediction algorithms,
     constraints, and free-energy data. *)
