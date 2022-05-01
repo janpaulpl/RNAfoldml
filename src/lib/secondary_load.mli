@@ -1,3 +1,4 @@
+(** Input functions for secondary structures. *)
 
 val from_dot_string : Rna.t -> string -> Secondary.t
 (** [from_dot_string rna dots] is the secondary structure of RNA

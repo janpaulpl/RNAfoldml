@@ -15,9 +15,9 @@ val to_dot : string -> Secondary.t -> unit
 
     Raises: [Invalid_argument] if [r] is a pseudoknot.
 
-    Effects: prints warning message to stdout if [f] is overwritten.*)
+    Effects: Prints warning message to stdout if [f] is overwritten. *)
 
 val to_ct : string -> Secondary.t -> unit
 (** [to_ct f r] saves [r] to file [f] in .ct format.
 
-    Effects: prints warning message to stdout if [f] is overwritten. *)
+    Effects: Prints warning message to stdout if [f] is overwritten. *)

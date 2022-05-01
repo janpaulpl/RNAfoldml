@@ -10,14 +10,18 @@ type t = {
 }
 (** The abstract type of values representing a valid RNA sequence
     (containing characters 'A', 'G', 'C', 'U'), the sequence name, and
-    information about it.*)
+    information about it. *)
+
+val is_rna_seq : string -> bool
+(** [is_rna_seq s] is [true] if and only if [s] contains just the
+    characters 'A', 'G', 'C', 'U'. *)
 
 val from_fasta : string -> t list
 (** [from_fasta f] is the list of rna sequences and information
-    contained in fasta file [f]. If any sequences in [f] are invalid RNA
-    sequences (containing characters other than 'A', 'G', 'C', 'U' or
-    whitespace) these sequences are not included in [from_fasta f]. If
-    [f] is empty returns [\[\]].
+    contained in fasta file [f]. If any sequences in [f] are contain
+    characters other than 'A', 'G', 'C', 'U' or whitespace these
+    sequences are not included in [from_fasta f]. If [f] is empty
+    returns [\[\]].
 
     Raises: [Invalid_argument] exception if [f] is not a readable fasta
     file.
