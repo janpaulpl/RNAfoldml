@@ -16,13 +16,17 @@ val predict :
     Effects: Prints warning message to stdout if any files are being
     overwritten. *)
 
-(* val compare_algorithms : Rna.t list -> (Rna.t -> Secondary.t) ->
-   (Rna.t -> Secondary.t) -> unit *)
-
 val test_algorithm :
-  Secondary.t list -> (Rna.t -> Secondary.t) -> float list
-(** [test_algorithm sl algo] outputs a is a list of percent similarities
-    between . predicts the secondary structure of RNA sequences
-    associated with [sl], uses []
+  (Rna.t -> Secondary.t) -> Secondary.t list -> float list
+(** [test_algorithm sl algo] outputs a list of the percent similarities
+    between the secondary structure in [sl] and the secondary structures
+    predicted by [algo] on the same RNA sequences. *)
 
-    Effects: Prints *)
+val compare_algorithms :
+  (Rna.t -> Secondary.t) ->
+  (Rna.t -> Secondary.t) ->
+  Rna.t list ->
+  float list
+(** [compare_algorithms rl algo1 algo2] outputs a list of the percent
+    similarities between the secondary structures predicted by [algo1]
+    and [algo2] for the RNA sequences in [rl]. *)
