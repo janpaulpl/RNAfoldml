@@ -116,7 +116,8 @@ let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
       else
         let () = Stack.push twin stack in
         process_pairs pairs cut fin (index + 1) stack left
-    else if index = cut then false
+    else if index = cut then
+      process_pairs pairs cut fin (index + 1) stack left
     else if index > cut then
       if left && twin > cut then
         process_pairs pairs cut fin (index + 1) stack left

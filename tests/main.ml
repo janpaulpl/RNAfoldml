@@ -104,6 +104,17 @@ let pseudoknot_tests =
         (Secondary.is_simple_pknot
            [| 5; 6; 8; -1; 11; 0; 1; 9; 2; 7; -1; 4 |])
         false );
+    ( "Has simple pseudoknot example 6" >:: fun _ ->
+      assert_equal
+        (Secondary.is_simple_pknot [| 4; 3; 6; 1; 0; -1; 2; -1 |])
+        true );
+    ( "Has simple pseudoknot example 7" >:: fun _ ->
+      assert_equal
+        (Secondary.is_simple_pknot [| 5; 4; -1; 6; 0; 1; 8; 7 |])
+        false );
+    ( "Has simple pseudoknot example 8" >:: fun _ ->
+      assert_equal (Secondary.is_simple_pknot [| 3; 4; -1; 0; 1 |]) true
+    );
     ( "Has pseudoknot example 1" >:: fun _ ->
       assert_equal
         (Secondary.is_pknot [| 7; 4; -1; -1; 1; 6; 5; 0 |])
@@ -135,8 +146,28 @@ let pseudoknot_tests =
       assert_equal (Secondary.is_pknot [| 1; 0; 3; 2; 5; 4 |]) false );
   ]
 
+let akutsu_tests =
+  [
+    ( "Check Akutsu to_dot fasta1" >:: fun _ ->
+      assert_equal
+        (fasta1 |> List.hd |> Akutsu.predict
+       |> Secondary_print.to_dot_string)
+        "(((...)))" );
+    ( "Check Akutsu to_dot empty" >:: fun _ ->
+      assert_equal
+        ("" |> Rna.from_string "" |> Akutsu.predict
+       |> Secondary_print.to_dot_string)
+        "" );
+    ( "Check Akutsu GGACCU" >:: fun _ ->
+      assert_equal
+        (Rna.from_string "GGACCUUG" ""
+        |> Akutsu.predict |> Secondary.get_pairs)
+        [| 4; 3; 6; 1; 0; -1; 2; -1 |] );
+  ]
+
 let tests =
   "test suite"
-  >::: List.flatten [ rna_tests; secondary_tests; pseudoknot_tests ]
+  >::: List.flatten
+         [ rna_tests; secondary_tests; pseudoknot_tests; akutsu_tests ]
 
 let _ = run_test_tt_main tests
