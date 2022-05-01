@@ -140,6 +140,16 @@ let is_simple_pknot pairs =
          if y <= x then false
          else condition1 pairs x y && condition2 pairs x y)
 
+let is_simple_pknot_arr pairs =
+  let cartesian l =
+    List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l) l)
+  in
+  List.init (Array.length pairs - 1) (fun x -> x)
+  |> cartesian
+  |> List.filter (fun (x, y) ->
+         if y <= x then false
+         else condition1 pairs x y && condition2 pairs x y)
+
 let distance r1 r2 =
   let r1, r2 = (rep_ok r1, rep_ok r2) in
   let all_0 = Array.for_all (fun i -> i = 0) in

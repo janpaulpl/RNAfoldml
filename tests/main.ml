@@ -111,6 +111,28 @@ let pseudoknot_tests =
     ( "Has pseudoknot example 2" >:: fun _ ->
       assert_equal (Secondary.is_pknot [| 4; -1; 5; 6; 0; 2; 3 |]) true
     );
+    ( "Has pseudoknot example 3" >:: fun _ ->
+      assert_equal
+        (Secondary.is_pknot [| 3; 2; 1; 0; 6; 7; 4; 5 |])
+        true );
+    ( "Has pseudoknot example 4" >:: fun _ ->
+      assert_equal
+        (Secondary.is_pknot [| 1; 0; 3; 2; 7; -1; -1; 4 |])
+        false );
+    ( "Has pseudoknot example 5" >:: fun _ ->
+      assert_equal
+        (Secondary.is_pknot [| 5; 4; -1; -1; 1; 0; 7; 6 |])
+        false );
+    ( "Has pseudoknot example 6" >:: fun _ ->
+      assert_equal
+        (Secondary.is_pknot [| 3; -1; 6; 0; 5; 4; 2; -1 |])
+        true );
+    ( "Has pseudoknot example 7" >:: fun _ ->
+      assert_equal
+        (Secondary.is_pknot [| 5; 4; 6; 7; 1; 0; 2; 3; 9; 8 |])
+        true );
+    ( "Has pseudoknot example 8" >:: fun _ ->
+      assert_equal (Secondary.is_pknot [| 1; 0; 3; 2; 5; 4 |]) false );
   ]
 
 let tests =

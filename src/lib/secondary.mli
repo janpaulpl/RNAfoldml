@@ -36,6 +36,10 @@ val is_simple_pknot : int array -> bool
 (** [is_simple_pknot r] is [true] if and only there exist two integers
     x,y in 1..n so that [is_simple_pknot pairs x y] is true. *)
 
+val is_simple_pknot_arr : int array -> (int * int) list
+(** [is_simple_pknot_arr] is the exhaustive list of elements [(x_i,y_i)]
+    so that [is_simple_pknot pairs x_i y_i] is true for each i. *)
+
 val is_pknot : int array -> bool
 (** [has_pknot r] is true if the pairing represented by [pairs] is a
     pseudoknot i.e. there exists [i,j] and [k.l] such that [pairs.(i)] *)
