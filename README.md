@@ -9,7 +9,7 @@ RNAfoldml is an OCaml package that enables users to input both RNA sequences in 
 - Formatted output includes:
   - Description of parameters, algorithm, time, input sequence
   - Table describing RNA sequence pairing 
-  - ASCII and/or graphical representation of RNA secondary structures
+  - Graphical representation of RNA secondary structures
 
 
 ### Authors
