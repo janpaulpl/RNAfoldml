@@ -87,17 +87,20 @@ let rec check_index
     (cut1 : int)
     (cut2 : int)
     (index : int) =
-  let twin = pairs.(index) in
-  if index = 0 && (twin = -1 || (twin > cut1 && twin <= cut2)) then true
-  else if
-    twin = -1
-    || (index < cut1 && cut1 < twin && twin <= cut2)
-    || (index = cut1 && twin > cut2)
-    || (index > cut1 && index < cut2 && (twin < cut1 || twin > cut2))
-    || (index = cut2 && twin < cut1)
-    || (index > cut2 && twin >= cut1 && twin < cut2)
-  then check_index pairs cut1 cut2 (index - 1)
-  else false
+  if index = -1 then true
+  else
+    let twin = pairs.(index) in
+    if index = 0 && (twin = -1 || (twin > cut1 && twin <= cut2)) then
+      true
+    else if
+      twin = -1
+      || (index < cut1 && cut1 < twin && twin <= cut2)
+      || (index = cut1 && twin > cut2)
+      || (index > cut1 && index < cut2 && (twin < cut1 || twin > cut2))
+      || (index = cut2 && twin < cut1)
+      || (index > cut2 && twin >= cut1 && twin < cut2)
+    then check_index pairs cut1 cut2 (index - 1)
+    else false
 
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   check_index pairs cut1 cut2 (Array.length pairs - 1)

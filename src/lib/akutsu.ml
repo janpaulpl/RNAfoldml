@@ -4,7 +4,7 @@ let list_max lst =
     [] lst
 
 let pseudo_max seq start fin =
-  (* Memmoize is a 3-dimensional array storing values for
+  (* Memoize is a 3-dimensional array storing values for
      pseudo_max_left, pseudo_max_right, pseudo_max_mid *)
   let memoize =
     Array.init
@@ -15,9 +15,8 @@ let pseudo_max seq start fin =
           (fun _ ->
             Array.init (fin - start + 1) (fun _ -> ([], [], []))))
   in
-
   let rec pseudo_max_left (i, j, k) =
-    if k > fin || j > fin || k < j || k < start || i > fin || i < start
+    if k > fin || k < j || k < start || i > fin || i < start || i > j
     then []
     else
       let left, middle, right = memoize.(i).(j).(k) in
@@ -41,7 +40,7 @@ let pseudo_max seq start fin =
         memoize.(i).(j).(k) <- (ans, middle, right);
         ans
   and pseudo_max_right (i, j, k) =
-    if k > fin || j > fin || k < j || k < start || i > fin || i < start
+    if k > fin || k < j || k < start || i > fin || i < start || i > j
     then []
     else
       let left, middle, right = memoize.(i).(j).(k) in
@@ -49,29 +48,30 @@ let pseudo_max seq start fin =
       else
         let ans =
           if i = start - 1 && k = j + 1 then
-            if Secondary.is_valid_pair seq.[i] seq.[j] then [ (i, j) ]
+            if Secondary.is_valid_pair seq.[j] seq.[j + 1] then
+              [ (j, j + 1) ]
             else []
           else if
             (i = start - 1 && k = j)
-            || not (Secondary.is_valid_pair seq.[i] seq.[j])
+            || not (Secondary.is_valid_pair seq.[j] seq.[k])
           then []
           else
-            (i, j)
+            (j, k)
             :: list_max
                  [
-                   pseudo_max_left (i - 1, j + 1, k);
-                   pseudo_max_right (i - 1, j + 1, k);
-                   pseudo_max_mid (i - 1, j + 1, k);
+                   pseudo_max_left (i, j + 1, k - 1);
+                   pseudo_max_right (i, j + 1, k - 1);
+                   pseudo_max_mid (i, j + 1, k - 1);
                  ]
         in
         memoize.(i).(j).(k) <- (left, middle, ans);
         ans
   and pseudo_max_mid (i, j, k) =
-    if k > fin || j > fin || k < j || k < start || i > fin || i < start
+    if k > fin || k < j || k < start || i > fin || i < start || i > j
     then []
     else
       let left, middle, right = memoize.(i).(j).(k) in
-      if right <> [] then right
+      if middle <> [] then middle
       else
         let ans =
           if i = start - 1 && (k = j + 1 || k = j) then []
@@ -87,7 +87,7 @@ let pseudo_max seq start fin =
                 pseudo_max_right (i, j, k - 1);
               ]
         in
-        memoize.(i).(j).(k) <- (left, middle, ans);
+        memoize.(i).(j).(k) <- (left, ans, right);
         ans
   in
   for t = start to fin do
@@ -115,7 +115,7 @@ let predict (r : Rna.t) =
   in
   let nuss_filtered = nuss |> List.filter (fun x -> x <> -1) in
   if
-    List.length (pseudo_max seq 0 (String.length seq - 1))
+    2 * List.length (pseudo_max seq 0 (String.length seq - 1))
     >= List.length nuss - List.length nuss_filtered
   then Secondary.make r (pseudo_max seq 0 (String.length seq - 1))
   else Nussinov.predict r

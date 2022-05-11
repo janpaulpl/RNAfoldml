@@ -158,11 +158,16 @@ let akutsu_tests =
         ("" |> Rna.from_string "" |> Akutsu.predict
        |> Secondary_print.to_dot_string)
         "" );
-    ( "Check Akutsu GGACCU" >:: fun _ ->
+    ( "Check Akutsu GGACCUUG" >:: fun _ ->
       assert_equal
         (Rna.from_string "GGACCUUG" ""
         |> Akutsu.predict |> Secondary.get_pairs)
         [| 4; 3; 6; 1; 0; -1; 2; -1 |] );
+    ( "Check Akutsu AGAUC" >:: fun _ ->
+      assert_equal
+        (Rna.from_string "AGAUC" ""
+        |> Akutsu.predict |> Secondary.get_pairs)
+        [| 3; 4; -1; 0; -1 |] );
   ]
 
 let tests =
