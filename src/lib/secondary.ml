@@ -82,29 +82,6 @@ let is_pknot r =
   in
   is_pknot_helper r 0 []
 
-<<<<<<< HEAD
-let rec check_index
-    (pairs : int array)
-    (cut1 : int)
-    (cut2 : int)
-    (index : int) =
-  if index = -1 then true
-  else
-    let twin = pairs.(index) in
-    if index = 0 && (twin = -1 || (twin > cut1 && twin <= cut2)) then
-      true
-    else if
-      twin = -1
-      || (index < cut1 && cut1 < twin && twin <= cut2)
-      || (index = cut1 && twin > cut2)
-      || (index > cut1 && index < cut2 && (twin < cut1 || twin > cut2))
-      || (index = cut2 && twin < cut1)
-      || (index > cut2 && twin >= cut1 && twin < cut2)
-    then check_index pairs cut1 cut2 (index - 1)
-    else false
-
-=======
->>>>>>> 2ac17edf5f27e7101d6e26458d0718f80d60ec8f
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   (* [check_index pairs cut1 cut2 index] is true if [pairs] with first
      element up to [index] represents a simple pseudoknot given cuts at
