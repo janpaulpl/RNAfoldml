@@ -43,6 +43,14 @@ let akutsu_test
 let fasta1 = Rna.from_fasta "test_data/test1.fasta"
 let fasta2 = Rna.from_fasta "test_data/test2.fasta"
 
+let bigarr1 =
+  let arr =
+    Array.append
+      [| 9; 12; 11; 6; -1; 16; 15; 35; 30; -1; 23 |]
+      [| 22; 21; 20; -1; 27; -1; 25; 29; 28; 18; 32; 31; 34; 33; 17 |]
+  in
+  Array.append [| 2; -1; 0; 4; 3; -1; 13; -1; -1; 10 |] arr
+
 let () =
   fasta1 |> List.hd |> Nussinov.predict
   |> Secondary_print.to_ct "test_output/fasta1.ct"
@@ -184,45 +192,7 @@ let akutsu_tests =
     akutsu_test "Check Akutsu GGCUAUGUCA" "GGCUAUGUCA"
       [| 2; -1; 0; 4; 3; 9; 8; -1; 6; 5 |];
     akutsu_test "Check Akutsu GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA"
-      "GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA"
-      [|
-        2;
-        -1;
-        0;
-        4;
-        3;
-        -1;
-        13;
-        -1;
-        -1;
-        10;
-        9;
-        12;
-        11;
-        6;
-        -1;
-        16;
-        15;
-        35;
-        30;
-        -1;
-        23;
-        22;
-        21;
-        20;
-        -1;
-        27;
-        -1;
-        25;
-        29;
-        28;
-        18;
-        32;
-        31;
-        34;
-        33;
-        17;
-      |];
+      "GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA" bigarr1;
   ]
 
 let tests =
