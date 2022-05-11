@@ -109,7 +109,6 @@ let pseudoknot_tests =
     ( "Has pseudoknot example 2" >:: fun _ ->
       assert_equal (Secondary.is_pknot [| 4; -1; 5; 6; 0; 2; 3 |]) true
     );
-<<<<<<< HEAD
     ( "Has pseudoknot example 3" >:: fun _ ->
       assert_equal
         (Secondary.is_pknot [| 3; 2; 1; 0; 6; 7; 4; 5 |])
@@ -156,8 +155,6 @@ let akutsu_tests =
         (Rna.from_string "AGAUC" ""
         |> Akutsu.predict |> Secondary.get_pairs)
         [| 3; 4; -1; 0; -1 |] );
-=======
->>>>>>> 2ac17edf5f27e7101d6e26458d0718f80d60ec8f
   ]
 
 let tests =
