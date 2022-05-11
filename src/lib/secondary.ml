@@ -82,6 +82,7 @@ let is_pknot r =
   in
   is_pknot_helper r 0 []
 
+<<<<<<< HEAD
 let rec check_index
     (pairs : int array)
     (cut1 : int)
@@ -102,7 +103,29 @@ let rec check_index
     then check_index pairs cut1 cut2 (index - 1)
     else false
 
+=======
+>>>>>>> 2ac17edf5f27e7101d6e26458d0718f80d60ec8f
 let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
+  (* [check_index pairs cut1 cut2 index] is true if [pairs] with first
+     element up to [index] represents a simple pseudoknot given cuts at
+     [cut1] and [cut2].
+
+     Requires: [cut1 < cut2] and [cut1,cut2] are between [0] and
+     [Array.length pairs-1] inclusive. *)
+  let rec check_index pairs cut1 cut2 index =
+    if index < 0 then true
+    else
+      let twin = pairs.(index) in
+      if
+        twin = -1
+        || (index < cut1 && cut1 < twin && twin <= cut2)
+        || (index = cut1 && twin > cut2)
+        || (index > cut1 && index < cut2 && (twin < cut1 || twin > cut2))
+        || (index = cut2 && twin < cut1)
+        || (index > cut2 && twin >= cut1 && twin < cut2)
+      then check_index pairs cut1 cut2 (index - 1)
+      else false
+  in
   check_index pairs cut1 cut2 (Array.length pairs - 1)
 
 let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
@@ -179,6 +202,7 @@ let similarity r1 r2 =
 let get_seq r = r.seq
 let get_name r = r.name
 let get_pairs r = r.pairs |> Array.copy
+let get_rna r = Rna.from_string r.seq r.name
 
 let make (rna : Rna.t) (pairs : (int * int) list) =
   try

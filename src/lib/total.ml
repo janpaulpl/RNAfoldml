@@ -13,3 +13,11 @@ let predict ?(algorithm = Nussinov.predict) ?(dir = "") filename =
          |> Secondary_print.to_ct
               (Filename.concat dir
                  (string_of_int i ^ "-" ^ r.name ^ ".ct")))
+
+let test_algorithm algo secondaries =
+  secondaries
+  |> List.map (fun x ->
+         x |> Secondary.get_rna |> algo |> Secondary.similarity x)
+
+let compare_algorithms algo1 algo2 rnas =
+  rnas |> List.map algo1 |> test_algorithm algo2

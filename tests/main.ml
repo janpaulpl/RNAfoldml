@@ -1,3 +1,4 @@
+(* *)
 open OUnit2
 open RNAfoldml
 
@@ -35,7 +36,6 @@ let () =
 let fastanuss2 = Nussinov.predict (List.hd fasta2)
 
 (* ------------ Tests ------------ *)
-
 let rna_tests =
   [
     ( "Check Fasta1 to_fasta length" >:: fun _ ->
@@ -58,24 +58,22 @@ let rna_tests =
         0 );
   ]
 
-let secondary_tests =
+let algo_test name algo rna exp_dot =
+  name >:: fun _ ->
+  assert_equal (rna |> algo |> Secondary_print.to_dot_string) exp_dot
+
+let nussinov_tests =
   [
-    ( "Check Nussinov to_dot fasta1" >:: fun _ ->
-      assert_equal
-        (fasta1 |> List.hd |> Nussinov.predict
-       |> Secondary_print.to_dot_string)
-        "(((...)))" );
-    ( "Check Nussinov to_dot AAUUGGCC" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AAUUGGCC" "Simple_Test"
-        |> Nussinov.predict |> Secondary_print.to_dot_string)
-        "(())(())" );
-    ( "Check Nussinov to_dot Empty Seq" >:: fun _ ->
-      assert_equal
-        ~printer:(fun s -> s)
-        (Rna.from_string "" "Empty"
-        |> Nussinov.predict |> Secondary_print.to_dot_string)
-        "" );
+    algo_test "Check Nussinov to_dot fasta1" Nussinov.predict
+      (fasta1 |> List.hd) "(((...)))";
+    algo_test "Check Nussinov to_dot AAUUGGCC" Nussinov.predict
+      (Rna.from_string "AAUUGGCC" "Simple_Test")
+      "(())(())";
+    algo_test "Check Nussinov to_dot fasta1" Nussinov.predict
+      (fasta1 |> List.hd) "(((...)))";
+    algo_test "Check Nussinov to_dot Empty Seq" Nussinov.predict
+      (Rna.from_string "" "Empty")
+      "";
   ]
 
 let pseudoknot_tests =
@@ -104,17 +102,6 @@ let pseudoknot_tests =
         (Secondary.is_simple_pknot
            [| 5; 6; 8; -1; 11; 0; 1; 9; 2; 7; -1; 4 |])
         false );
-    ( "Has simple pseudoknot example 6" >:: fun _ ->
-      assert_equal
-        (Secondary.is_simple_pknot [| 4; 3; 6; 1; 0; -1; 2; -1 |])
-        true );
-    ( "Has simple pseudoknot example 7" >:: fun _ ->
-      assert_equal
-        (Secondary.is_simple_pknot [| 5; 4; -1; 6; 0; 1; 8; 7 |])
-        false );
-    ( "Has simple pseudoknot example 8" >:: fun _ ->
-      assert_equal (Secondary.is_simple_pknot [| 3; 4; -1; 0; 1 |]) true
-    );
     ( "Has pseudoknot example 1" >:: fun _ ->
       assert_equal
         (Secondary.is_pknot [| 7; 4; -1; -1; 1; 6; 5; 0 |])
@@ -122,6 +109,7 @@ let pseudoknot_tests =
     ( "Has pseudoknot example 2" >:: fun _ ->
       assert_equal (Secondary.is_pknot [| 4; -1; 5; 6; 0; 2; 3 |]) true
     );
+<<<<<<< HEAD
     ( "Has pseudoknot example 3" >:: fun _ ->
       assert_equal
         (Secondary.is_pknot [| 3; 2; 1; 0; 6; 7; 4; 5 |])
@@ -168,11 +156,12 @@ let akutsu_tests =
         (Rna.from_string "AGAUC" ""
         |> Akutsu.predict |> Secondary.get_pairs)
         [| 3; 4; -1; 0; -1 |] );
+=======
+>>>>>>> 2ac17edf5f27e7101d6e26458d0718f80d60ec8f
   ]
 
 let tests =
   "test suite"
-  >::: List.flatten
-         [ rna_tests; secondary_tests; pseudoknot_tests; akutsu_tests ]
+  >::: List.flatten [ rna_tests; nussinov_tests; pseudoknot_tests ]
 
 let _ = run_test_tt_main tests

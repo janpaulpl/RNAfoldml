@@ -59,6 +59,9 @@ val get_pairs : t -> int array
     [i] is the index of the base pairing with [i] or -1 if [i] does not
     pair. *)
 
+val get_rna : t -> Rna.t
+(** [get_rna r] is the rna of which [r] is a secondary structure. *)
+
 val make : Rna.t -> (int * int) list -> t
 (** [make rna pairs] is the secondary structure of [rna] with [pairs] as
     the base pairs.
