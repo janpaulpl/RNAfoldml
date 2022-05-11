@@ -23,6 +23,21 @@ let simple_pknot_test
   name >:: fun _ ->
   assert_equal (Secondary.is_simple_pknot input) expected_output
 
+let pknot_test
+    (name : string)
+    (input : int array)
+    (expected_output : bool) =
+  name >:: fun _ ->
+  assert_equal (Secondary.is_pknot input) expected_output
+
+let akutsu_test
+    (name : string)
+    (input : string)
+    (expected_output : int array) =
+  name >:: fun _ ->
+  assert_equal
+    (Rna.from_string input "" |> Akutsu.predict |> Secondary.get_pairs)
+    expected_output
 (* ------------ Rna values used in testing. ------------ *)
 
 let fasta1 = Rna.from_fasta "test_data/test1.fasta"
@@ -115,95 +130,99 @@ let pseudoknot_tests =
     simple_pknot_test "simple_pknot example 10"
       [| 8; 7; -1; -1; -1; 14; 9; 1; 0; 6; 11; 10; -1; -1; 5 |]
       false;
-    ( "Has pseudoknot example 1" >:: fun _ ->
-      assert_equal
-        (Secondary.is_pknot [| 7; 4; -1; -1; 1; 6; 5; 0 |])
-        false );
-    ( "Has pseudoknot example 2" >:: fun _ ->
-      assert_equal (Secondary.is_pknot [| 4; -1; 5; 6; 0; 2; 3 |]) true
-    );
-    ( "Has pseudoknot example 3" >:: fun _ ->
-      assert_equal
-        (Secondary.is_pknot [| 3; 2; 1; 0; 6; 7; 4; 5 |])
-        true );
-    ( "Has pseudoknot example 4" >:: fun _ ->
-      assert_equal
-        (Secondary.is_pknot [| 1; 0; 3; 2; 7; -1; -1; 4 |])
-        false );
-    ( "Has pseudoknot example 5" >:: fun _ ->
-      assert_equal
-        (Secondary.is_pknot [| 5; 4; -1; -1; 1; 0; 7; 6 |])
-        false );
-    ( "Has pseudoknot example 6" >:: fun _ ->
-      assert_equal
-        (Secondary.is_pknot [| 3; -1; 6; 0; 5; 4; 2; -1 |])
-        true );
-    ( "Has pseudoknot example 7" >:: fun _ ->
-      assert_equal
-        (Secondary.is_pknot [| 5; 4; 6; 7; 1; 0; 2; 3; 9; 8 |])
-        true );
-    ( "Has pseudoknot example 8" >:: fun _ ->
-      assert_equal (Secondary.is_pknot [| 1; 0; 3; 2; 5; 4 |]) false );
+    pknot_test "pseudoknot example 1"
+      [| 7; 4; -1; -1; 1; 6; 5; 0 |]
+      false;
+    pknot_test "pseudoknot example 2" [| 4; -1; 5; 6; 0; 2; 3 |] true;
+    pknot_test "pseudoknot example 3" [| 3; 2; 1; 0; 6; 7; 4; 5 |] true;
+    pknot_test "pseudoknot example 4"
+      [| 1; 0; 3; 2; 7; -1; -1; 4 |]
+      false;
+    pknot_test "pseudoknot example 5"
+      [| 5; 4; -1; -1; 1; 0; 7; 6 |]
+      false;
+    pknot_test "pseudoknot example 6"
+      [| 3; -1; 6; 0; 5; 4; 2; -1 |]
+      true;
+    pknot_test "pseudoknot example 7"
+      [| 5; 4; 6; 7; 1; 0; 2; 3; 9; 8 |]
+      true;
+    pknot_test "pseudoknot example 8" [| 1; 0; 3; 2; 5; 4 |] false;
+    pknot_test "pseudoknot example 9"
+      [| 4; -1; -1; 6; 0; -1; 3; 9; -1; 7 |]
+      true;
+    pknot_test "pseudoknot example 10"
+      [| 4; 2; 1; 6; 0; -1; 3; 9; -1; 7 |]
+      true;
+    pknot_test "pseudoknot example 11"
+      [| -1; -1; -1; -1; -1; -1; -1; 9; -1; 7 |]
+      false;
   ]
 
 let akutsu_tests =
   [
-    ( "Check Akutsu GGACCUUG" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "GGACCUUG" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 3; 4; -1; 0; 1; -1; -1; -1 |] );
-    ( "Check Akutsu AGAUC" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AGAUC" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| -1; 4; 3; 2; 1 |] );
-    ( "Check Akutsu AU" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AU" "" |> Akutsu.predict
-       |> Secondary.get_pairs)
-        [| 1; 0 |] );
-    ( "Check Akutsu AGU" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AGU" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 2; -1; 0 |] );
-    ( "Check Akutsu AGGU" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AGGU" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 3; -1; -1; 0 |] );
-    ( "Check Akutsu AAAGGGUUCCC" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AAAGGGUUCCC" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 6; -1; -1; 10; 9; 8; 0; -1; 5; 4; 3 |] );
-    ( "Check Akutsu AAACGGCUUUGAGCCUU" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AAACGGCUUUGAGCCUU" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 8; 16; 15; -1; 14; 13; 12; 11; 0; -1; -1; 7; 6; 5; 4; 2; 1 |]
-    );
-    ( "Check Akutsu AAGCUUGGCCAUG" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AAGCUUGGCCAUG" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 5; 4; 3; 2; 1; 0; 8; -1; 6; 12; 11; 10; 9 |] );
-    ( "Check Akutsu AAGGCUUUGAGCCUU" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AAGGCUUUGAGCCUU" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 6; 13; 12; 11; 10; 9; 0; -1; -1; 5; 4; 3; 2; 1; -1 |] );
-    ( "Check Akutsu AUU" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "AUU" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 1; 0; -1 |] );
-    ( "Check Akutsu GCC" >:: fun _ ->
-      assert_equal
-        (Rna.from_string "GCC" ""
-        |> Akutsu.predict |> Secondary.get_pairs)
-        [| 1; 0; -1 |] );
+    akutsu_test "Check Akutsu GGACCUUG" "GGACCUUG"
+      [| 3; 4; -1; 0; 1; -1; -1; -1 |];
+    akutsu_test "Check Akutsu AGAUC" "AGAUC" [| -1; 4; 3; 2; 1 |];
+    akutsu_test "Check Akutsu AU" "AU" [| 1; 0 |];
+    akutsu_test "Check Akutsu AGU" "AGU" [| 2; -1; 0 |];
+    akutsu_test "Check Akutsu AGGU" "AGGU" [| 3; -1; -1; 0 |];
+    akutsu_test "Check Akutsu AAAGGGUUCCC" "AAAGGGUUCCC"
+      [| 6; -1; -1; 10; 9; 8; 0; -1; 5; 4; 3 |];
+    akutsu_test "Check Akutsu AAACGGCUUUGAGCCUU" "AAACGGCUUUGAGCCUU"
+      [| 8; 16; 15; -1; 14; 13; 12; 11; 0; -1; -1; 7; 6; 5; 4; 2; 1 |];
+    akutsu_test "Check Akutsu AAGCUUGGCCAUG" "AAGCUUGGCCAUG"
+      [| 5; 4; 3; 2; 1; 0; 8; -1; 6; 12; 11; 10; 9 |];
+    akutsu_test "Check Akutsu AAGGCUUUGAGCCUU" "AAGGCUUUGAGCCUU"
+      [| 6; 13; 12; 11; 10; 9; 0; -1; -1; 5; 4; 3; 2; 1; -1 |];
+    akutsu_test "Check Akutsu AUU" "AUU" [| 1; 0; -1 |];
+    akutsu_test "Check Akutsu GCC" "GCC" [| 1; 0; -1 |];
+    akutsu_test "Check Akutsu AACUCUUCUAAGGUU" "AACUCUUCUAAGGUU"
+      [| 8; 13; 12; -1; 11; 10; 9; -1; 0; 6; 5; 4; 2; 1; -1 |];
+    akutsu_test "Check Akutsu AACUCUCUAGUGUU" "AACUCUCUAGUGUU"
+      [| 7; 12; 11; -1; 9; 8; -1; 0; 5; 4; -1; 2; 1; -1 |];
+    akutsu_test "Check Akutsu GGCUAUGUCA" "GGCUAUGUCA"
+      [| 2; -1; 0; 4; 3; 9; 8; -1; 6; 5 |];
+    akutsu_test "Check Akutsu GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA"
+      "GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA"
+      [|
+        2;
+        -1;
+        0;
+        4;
+        3;
+        -1;
+        13;
+        -1;
+        -1;
+        10;
+        9;
+        12;
+        11;
+        6;
+        -1;
+        16;
+        15;
+        35;
+        30;
+        -1;
+        23;
+        22;
+        21;
+        20;
+        -1;
+        27;
+        -1;
+        25;
+        29;
+        28;
+        18;
+        32;
+        31;
+        34;
+        33;
+        17;
+      |];
   ]
 
 let tests =
