@@ -111,6 +111,8 @@ let condition1 (pairs : int array) (cut1 : int) (cut2 : int) =
   in
   check_index pairs cut1 cut2 (Array.length pairs - 1)
 
+(* [condition2 pairs cut1 cut2] is true if and only if the two cuts
+   satisfy the nesting property as specified in Akutsu's paper*)
 let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
   let stack_pair = Stack.create () in
   let rec process_pairs pairs cut fin index stack (left : bool) =
@@ -140,6 +142,9 @@ let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
        (Array.length pairs - 1)
        cut1 stack_pair false
 
+(* [is_simple_pknot pairs] is true if and only if [pairs] forms a simple
+   pseudoknot, that is there exist two cuts which make conditions 1 and
+   2 true*)
 let is_simple_pknot pairs =
   let cartesian l =
     List.concat (List.map (fun e -> List.map (fun e' -> (e, e')) l) l)
