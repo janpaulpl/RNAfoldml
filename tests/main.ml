@@ -108,6 +108,7 @@ let nussinov_tests =
 
 let pseudoknot_tests =
   [
+    simple_pknot_test "simple_pknot example 1" [||] false;
     simple_pknot_test "simple_pknot example 1"
       [| 6; 4; -1; -1; 1; 8; 0; -1; 5; -1 |]
       true;

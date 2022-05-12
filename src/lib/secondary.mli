@@ -33,16 +33,12 @@ val similarity : t -> t -> float
     length. *)
 
 val is_simple_pknot : int array -> bool
-(** [is_simple_pknot r] is [true] if and only there exist two integers
-    x,y in 1..n so that [is_simple_pknot pairs x y] is true. *)
-
-val is_simple_pknot_arr : int array -> (int * int) list
-(** [is_simple_pknot_arr] is the exhaustive list of elements [(x_i,y_i)]
-    so that [is_simple_pknot pairs x_i y_i] is true for each i. *)
+(** [is_simple_pknot pairs] is true if the pairing represented by
+    [pairs] is a simple pseudoknot. *)
 
 val is_pknot : int array -> bool
-(** [has_pknot r] is true if the pairing represented by [pairs] is a
-    pseudoknot i.e. there exists [i,j] and [k.l] such that [pairs.(i)] *)
+(** [is_pknot r] is true if the pairing represented by [pairs] is a
+    pseudoknot. *)
 
 val assoc_to_array : int -> (int * int) list -> int array
 (** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if

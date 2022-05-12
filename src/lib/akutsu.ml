@@ -5,7 +5,7 @@ let list_max lst =
 
 (* [pseudo_max seq start fin] is the association list [(i,j)] in which
    seq.[i] and seq.[j] predicted to be bound given the existence of
-   pseudoknots*)
+   pseudoknots. *)
 let pseudo_max seq start fin =
   (* Memoize is a 3-dimensional array storing values for
      pseudo_max_left, pseudo_max_right, pseudo_max_mid *)
@@ -18,9 +18,13 @@ let pseudo_max seq start fin =
           (fun _ ->
             Array.init (fin - start + 1) (fun _ -> ([], [], []))))
   in
+  (* [ok_boundary i j k] is true if [start<=i<=j<=k<=fin] and false
+     otherwise. *)
   let ok_boundary (i, j, k) =
     not (k > fin || k < j || k < start || i > fin || i < start || i > j)
   in
+  (* [ok_lst lst (a,b)] is true if [a] or [b] are not elements of any
+     tuple in [lst]. *)
   let ok_lst lst (a, b) =
     List.filter (fun (x, y) -> x = a || y = a || x = b || y = b) lst
     = []
