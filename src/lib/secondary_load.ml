@@ -28,8 +28,7 @@ let from_dot_string (rna : Rna.t) (dots : string) =
   else dots |> dot_to_assoc |> Secondary.make rna
 
 let from_dot f : Secondary.t =
-  if not (Sys.file_exists f) then
-    Invalid_argument ("Cannot find file: " ^ f) |> raise
+  if not (Sys.file_exists f) then raise Not_found
   else
     try
       let ic = open_in f in
@@ -75,8 +74,7 @@ let from_ct_string (name : string) (ct_lines : string list) =
           name)
 
 let from_ct f : Secondary.t =
-  if not (Sys.file_exists f) then
-    Invalid_argument ("Cannot find file: " ^ f) |> raise
+  if not (Sys.file_exists f) then raise Not_found
   else
     try
       let ic = open_in f in

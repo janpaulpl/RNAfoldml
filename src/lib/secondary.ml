@@ -158,29 +158,39 @@ let is_simple_pknot pairs =
 let distance r1 r2 =
   let r1, r2 = (rep_ok r1, rep_ok r2) in
   let all_0 = Array.for_all (fun i -> i = 0) in
-  if all_0 r1.pairs || all_0 r2.pairs then Int.max_int
+  if all_0 r1.pairs || all_0 r2.pairs then 0
   else
     let min_dist_r2 i1 j1 =
-      Array.mapi (fun i2 j2 -> max (abs i1 - i2) (abs j1 - j2)) r2.pairs
+      Array.mapi
+        (fun i2 j2 -> max (abs (i1 - i2)) (abs (j1 - j2)))
+        r2.pairs
       |> Array.fold_left min Int.max_int
     in
     r1.pairs |> Array.mapi min_dist_r2 |> Array.fold_left max 0
 
 let similarity r1 r2 =
-  if String.length r1.seq != String.length r2.seq then
-    Invalid_argument
-      "Cannot calculate similarity of different length rna structures"
-    |> raise
-  else
-    r1.pairs
-    |> Array.map2 (fun i j -> if i = j then 1. else 0.) r2.pairs
-    |> Array.fold_left ( +. ) 0.
-    |> ( /. ) (r1.pairs |> Array.length |> float_of_int)
+  match (String.length r1.seq, String.length r2.seq) with
+  | l1, l2 when l1 <> l2 ->
+      Invalid_argument
+        "Cannot calculate similarity of different length rna structures"
+      |> raise
+  | 0, 0 -> 1.
+  | x, _ ->
+      r1.pairs
+      |> Array.map2 (fun i j -> if i = j then 1. else 0.) r2.pairs
+      |> Array.fold_left ( +. ) 0.
+      |> ( /. ) (x |> float_of_int)
 
 let get_seq r = r.seq
 let get_name r = r.name
 let get_pairs r = r.pairs |> Array.copy
 let get_rna r = Rna.from_string r.seq r.name
+
+let num_pairs r =
+  Array.fold_left
+    (fun acc x -> if x = ~-1 then acc else acc + 1)
+    0 r.pairs
+  / 2
 
 let make (rna : Rna.t) (pairs : (int * int) list) =
   try

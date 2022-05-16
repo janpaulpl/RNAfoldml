@@ -6,12 +6,13 @@
 val predict :
   ?algorithm:(Rna.t -> Secondary.t) -> ?dir:string -> string -> unit
 (** [predict ?(algorithm = Nussinov.predict) ?(dir = "") f] stores
-    secondary structure .ct files in directory [dir] for each rna
+    secondary structure .ct files in directory [dir] for each valid rna
     sequence in fasta file [f]. Uses [algorithm] to predict secondary
     structures, if no algorithm provided uses [Nussinov.predict].
+    Invalid rna sequences ignored.
 
-    Raises: [Invalid_argument] if [f] does not exist or is in incorrect
-    fasta format.
+    Raises: [Not_found] if [f] does not exist. [Invalid_argument] if [f]
+    is in incorrect fasta format.
 
     Effects: Prints warning message to stdout if any files are being
     overwritten. *)

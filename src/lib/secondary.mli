@@ -16,16 +16,19 @@ val is_valid_pair : char -> char -> bool
 val distance : t -> t -> int
 (** [distance r1 r2] is the smallest integer [i] such that for every
     base pair [(a,b)] of [r1], there exists a base pair [(c,d)] in [r2]
-    such that [Int.abs(a-c)<=i] and [Int.abs(b-d)<=i]. If either
-    secondary structure has no base pairs, [distance r1 r2] is
-    [Int.max_int]. Does not require [get_seq r1 = get_seq r2].
+    such that [Int.abs(a-c)<=i] and [Int.abs(b-d)<=i]. If both
+    structures have no base pairs, [distance r1 r2] is 0. If only one of
+    [r1,r2] has no base pairs, [distance r1 r2] is [Int.max_int]. Does
+    not require [get_seq r1 = get_seq r2].
 
-    Runs in O(nm) where [n] is the lenght of [get_seq r1] and [m] is the
+    Runs in O(nm) where [n] is the length of [get_seq r1] and [m] is the
     length of [get_seq r2]. *)
 
 val similarity : t -> t -> float
-(** [similarity r1 r2] is the portion of the bases in [r1] and [r2] that
-    are paired to the same position.
+(** [similarity r1 r2] is the portion of the bases with same index in
+    [r1] and [r2] that are paired to the same position or both unpaired.
+    If the length of both sequences is [0] then [similarity r1 r2] is
+    [1.0]. Does not require [get_seq r1 = get_seq r2].
 
     Runs in O(n) where [n] is the length of the rna sequence of [r1].
 
@@ -39,6 +42,10 @@ val is_simple_pknot : int array -> bool
 val is_pknot : int array -> bool
 (** [is_pknot r] is true if the pairing represented by [pairs] is a
     pseudoknot. *)
+
+val num_pairs : t -> int
+(** [num_pairs r] is the number of base pairs in secondary structure
+    [r]. *)
 
 val assoc_to_array : int -> (int * int) list -> int array
 (** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if

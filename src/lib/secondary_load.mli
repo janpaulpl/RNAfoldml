@@ -12,11 +12,11 @@ val from_dot_string : Rna.t -> string -> Secondary.t
 val from_dot : string -> Secondary.t
 (** [from_dot f] is the secondary structure contained in dot file [f].
 
-    Raises: [Invalid_argument] exception if [f] does not exist or if [f]
-    is not in a valid dot format. *)
+    Raises: [Not_found] if [f] [f] does not exist and [Invalid_argument]
+    exception if [f] is not in a valid dot format. *)
 
 val from_ct : string -> Secondary.t
 (** [from_ct f] is the secondary structure contained in ct file [f].
 
-    Raises: [Invalid_argument] exception if [f] does not exist or if [f]
-    is not in a valid ct format. *)
+    Raises: [Not_found] if [f] [f] does not exist and [Invalid_argument]
+    exception if [f] is not in a valid ct format. *)

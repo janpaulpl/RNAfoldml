@@ -1,7 +1,7 @@
-let list_max lst =
+let list_max =
   List.fold_left
     (fun x y -> if List.length y > List.length x then y else x)
-    [] lst
+    []
 
 (* [pseudo_max seq start fin] is the association list [(i,j)] in which
    seq.[i] and seq.[j] predicted to be bound given the existence of
@@ -119,13 +119,7 @@ let pseudo_max seq start fin =
   |> List.flatten
   |> List.map (fun x -> Array.to_list x)
   |> List.flatten
-  |> List.fold_left
-       (fun acc (x, y, z) ->
-         let lst = [ x; y; z ] in
-         if List.length (list_max lst) > List.length acc then
-           list_max lst
-         else acc)
-       []
+  |> List.fold_left (fun acc (x, y, z) -> list_max [ acc; x; y; z ]) []
 
 (* [predict r] is the predicted secondary structure of the Rna sequence
    [r] provided the existence of pseudoknots. If Akutsu's algorithm
@@ -134,12 +128,8 @@ let pseudo_max seq start fin =
    used. *)
 let predict (r : Rna.t) =
   let seq = r.seq in
-  let nuss =
-    Nussinov.predict r |> Secondary.get_pairs |> Array.to_list
-  in
-  let nuss_filtered = nuss |> List.filter (fun x -> x <> -1) in
-  if
-    2 * List.length (pseudo_max seq 0 (String.length seq - 1))
-    >= List.length nuss_filtered
-  then Secondary.make r (pseudo_max seq 0 (String.length seq - 1))
-  else Nussinov.predict r
+  let nuss = Nussinov.predict r in
+  let akutsu = pseudo_max seq 0 (String.length seq - 1) in
+  if List.length akutsu >= Secondary.num_pairs nuss then
+    Secondary.make r akutsu
+  else nuss
