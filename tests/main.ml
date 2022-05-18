@@ -156,6 +156,8 @@ let akutsu_test
 let fasta1 = Rna.from_fasta "test_data/test1.fasta"
 let fasta2 = Rna.from_fasta "test_data/test2.fasta"
 
+let rna1 = fasta1 |> List.hd |> Nussinov.predict
+
 let bigarr1 =
   let arr =
     Array.append
@@ -301,7 +303,10 @@ let akutsu_tests =
         "GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA" bigarr1;
     ]
 
-let tests =
+let () = 
+  Secondary_vis.circle_graph "test_output/rna1" rna1
+
+  let tests =
   "test suite"
   >::: List.flatten
          [ rna_tests; nussinov_tests; pseudoknot_tests; akutsu_tests ]
