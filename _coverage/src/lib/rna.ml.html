@@ -216,58 +216,33 @@
 exception Invalid_RI
 
 let is_rna_seq s =
-<<<<<<< HEAD
-  <span data-count="1179">S</span>tring.ma<span data-count="1179">p</span>
+  <span data-count="1181">S</span>tring.ma<span data-count="1181">p</span>
     (fun c -&gt;
-      <span data-count="21448">m</span>atch c with
-      | <span data-count="7110">'</span>U' -&gt; ' '
-      | <span data-count="4739">'</span>A' -&gt; ' '
-      | <span data-count="4780">'</span>G' -&gt; ' '
-      | <span data-count="4574">'</span>C' -&gt; ' '
+      <span data-count="21504">m</span>atch c with
+      | <span data-count="7136">'</span>U' -&gt; ' '
+      | <span data-count="4755">'</span>A' -&gt; ' '
+      | <span data-count="4788">'</span>G' -&gt; ' '
+      | <span data-count="4580">'</span>C' -&gt; ' '
       | <span data-count="245">_</span> -&gt; 'a')
     s
-  = String.mak<span data-count="1179">e</span> (String.lengt<span data-count="1179">h</span> s) ' '
-=======
-  <span data-count="989">S</span>tring.ma<span data-count="989">p</span>
-    (fun c -&gt;
-      <span data-count="15195">m</span>atch c with
-      | <span data-count="4976">'</span>U' -&gt; ' '
-      | <span data-count="3278">'</span>A' -&gt; ' '
-      | <span data-count="3537">'</span>G' -&gt; ' '
-      | <span data-count="3061">'</span>C' -&gt; ' '
-      | <span data-count="343">_</span> -&gt; 'a')
-    s
-  = String.mak<span data-count="989">e</span> (String.lengt<span data-count="989">h</span> s) ' '
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
+  = String.mak<span data-count="1181">e</span> (String.lengt<span data-count="1181">h</span> s) ' '
 
 (** [rep_ok r] is [r] if [r] passes the rep invariant.
 
     Raises: [Invalid_RI] if [r] does not pass rep invariant. *)
 let rep_ok r =
-<<<<<<< HEAD
-  <span data-count="451">i</span>f
-    is_rna_se<span data-count="451">q</span> r.seq
-    &amp;&amp; <span data-count="446">(</span>not (String.contain<span data-count="446">s</span> r.name '\r'))
-    &amp;&amp; <span data-count="446">(</span>not (String.contain<span data-count="446">s</span> r.name '\n'))
-    &amp;&amp; <span data-count="446">(</span>not (String.contain<span data-count="446">s</span> r.name '\t'))
-    &amp;&amp; <span data-count="446">n</span>ot (String.contain<span data-count="446">s</span> r.name ' ')
-  then <span data-count="446">r</span>
+  <span data-count="452">i</span>f
+    is_rna_se<span data-count="452">q</span> r.seq
+    &amp;&amp; <span data-count="447">(</span>not (String.contain<span data-count="447">s</span> r.name '\r'))
+    &amp;&amp; <span data-count="447">(</span>not (String.contain<span data-count="447">s</span> r.name '\n'))
+    &amp;&amp; <span data-count="447">(</span>not (String.contain<span data-count="447">s</span> r.name '\t'))
+    &amp;&amp; <span data-count="447">n</span>ot (String.contain<span data-count="447">s</span> r.name ' ')
+  then <span data-count="447">r</span>
   else <span data-count="5">r</span>aise Invalid_RI
-=======
-  <span data-count="392">i</span>f
-    is_rna_se<span data-count="392">q</span> r.seq
-    &amp;&amp; <span data-count="385">(</span>not (String.contain<span data-count="385">s</span> r.name '\r'))
-    &amp;&amp; <span data-count="385">(</span>not (String.contain<span data-count="385">s</span> r.name '\n'))
-    &amp;&amp; <span data-count="385">(</span>not (String.contain<span data-count="385">s</span> r.name '\t'))
-    &amp;&amp; <span data-count="385">n</span>ot (String.contain<span data-count="385">s</span> r.name ' ')
-  then <span data-count="385">r</span>
-  else <span data-count="7">r</span>aise Invalid_RI
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 
 (** [remove_whitespace s] is the string [s] with any characters from
     [\['\r';'\n';'\t';' '\]] removed. *)
 let remove_whitespace s =
-<<<<<<< HEAD
   <span data-count="30">s</span>
   |&gt; String.split_on_char '\r'
   |&gt; <span data-count="30">S</span>tring.concat ""
@@ -277,22 +252,10 @@ let remove_whitespace s =
   |&gt; <span data-count="30">S</span>tring.concat ""
   |&gt; <span data-count="30">S</span>tring.split_on_char ' '
   |&gt; <span data-count="30">S</span>tring.concat ""
-=======
-  <span data-count="42">s</span>
-  |&gt; String.split_on_char '\r'
-  |&gt; <span data-count="42">S</span>tring.concat ""
-  |&gt; <span data-count="42">S</span>tring.split_on_char '\n'
-  |&gt; <span data-count="42">S</span>tring.concat ""
-  |&gt; <span data-count="42">S</span>tring.split_on_char '\t'
-  |&gt; <span data-count="42">S</span>tring.concat ""
-  |&gt; <span data-count="42">S</span>tring.split_on_char ' '
-  |&gt; <span data-count="42">S</span>tring.concat ""
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 
 (** [from_single_fasta s] is the rna of type [t] represented by the
     single entry fasta style string [s]. *)
 let from_single_fasta s =
-<<<<<<< HEAD
   <span data-count="30">t</span>ry
     rep_o<span data-count="25">k</span>
       {
@@ -321,46 +284,12 @@ let from_fasta f =
       List.ma<span data-count="11">p</span>
         (fun r -&gt;
           <span data-count="30">t</span>ry [ from_single_fast<span data-count="25">a</span> r ] with <span data-count="5">I</span>nvalid_argument _ -&gt; [])
-=======
-  <span data-count="42">t</span>ry
-    rep_o<span data-count="35">k</span>
-      {
-        name = String.su<span data-count="42">b</span> s 0 (String.inde<span data-count="42">x</span> s '\n');
-        seq =
-          String.sub s (String.inde<span data-count="42">x</span> s '\n')
-            (String.lengt<span data-count="42">h</span> s - String.inde<span data-count="42">x</span> s '\n')
-          |&gt; <span data-count="42">S</span>tring.trim |&gt; <span data-count="42">r</span>emove_whitespac<span data-count="42">e</span>;
-      }
-  with <span data-count="7">_</span> -&gt; Invalid_argument "Invalid Single Fasta" |&gt; raise
-
-let from_fasta f =
-  <span data-count="15">i</span>f not (Sys.file_exist<span data-count="15">s</span> f) then
-    <span data-count="0">I</span>nvalid_argument ("Cannot find file: " ^ f) |&gt; raise
-  else
-    <span data-count="15">l</span>et ch = open_in f in
-    <span data-count="15">l</span>et s = really_input_string ch (in_channel_lengt<span data-count="15">h</span> ch) in
-    <span data-count="15">c</span>lose_in ch;
-    <span data-count="15">l</span>et sequences =
-      match String.split_on_char '&gt;' s with
-      | <span data-count="0">[</span>] -&gt; []
-      | <span data-count="15">"</span>" :: t -&gt; t
-      | <span data-count="0">h</span> :: t -&gt; if h.[0] = ';' then <span data-count="0">t</span> else <span data-count="0">h</span> :: t
-    in
-    let x : t list list =
-      List.ma<span data-count="15">p</span>
-        (fun r -&gt;
-          <span data-count="42">t</span>ry [ from_single_fast<span data-count="35">a</span> r ] with <span data-count="7">I</span>nvalid_argument _ -&gt; [])
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
         sequences
     in
     x |&gt; List.concat
 
 let from_string seq name =
-<<<<<<< HEAD
-  <span data-count="421">t</span>ry rep_o<span data-count="421">k</span> { seq; name }
-=======
-  <span data-count="350">t</span>ry rep_o<span data-count="350">k</span> { seq; name }
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
+  <span data-count="422">t</span>ry rep_o<span data-count="422">k</span> { seq; name }
   with <span data-count="0">I</span>nvalid_RI -&gt;
     Invalid_argument "Unable to parse RNA sequence" |&gt; raise
 </code></pre>

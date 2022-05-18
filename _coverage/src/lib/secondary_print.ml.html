@@ -122,7 +122,6 @@
 <pre><code class="ocaml">(* [create_file f] creates empty file with name [f] if [f] does not
    exist. Otherwise, clears file [f]. *)
 let create_file f : unit =
-<<<<<<< HEAD
   <span data-count="280">U</span>nix.openfile f [ O_RDWR; O_TRUNC; O_CREAT ] 0o666 |&gt; <span data-count="280">U</span>nix.close
 
 let to_dot_string r =
@@ -151,41 +150,10 @@ let to_ct file r =
   <span data-count="160">c</span>reate_file file;
 
   <span data-count="160">l</span>et oc = open_out file in
-=======
-  <span data-count="245">U</span>nix.openfile f [ O_RDWR; O_TRUNC; O_CREAT ] 0o666 |&gt; <span data-count="245">U</span>nix.close
-
-let to_dot_string r =
-  <span data-count="102">i</span>f r |&gt; Secondary.get_pairs |&gt; <span data-count="102">S</span>econdary.is_pknot then
-    <span data-count="0">I</span>nvalid_argument "Cannot convert pseudoknot to dot" |&gt; raise
-  else
-    <span data-count="102">r</span> |&gt; Secondary.get_pairs
-    |&gt; <span data-count="102">A</span>rray.mapi (fun i j -&gt;
-           <span data-count="824">i</span>f j = ~<span data-count="824">-</span>1 then <span data-count="188">"</span>." else <span data-count="636">i</span>f i &lt; j then <span data-count="318">"</span>(" else <span data-count="318">"</span>)")
-    |&gt; <span data-count="102">A</span>rray.fold_left ( ^ ) ""
-
-let to_dot file r =
-  <span data-count="98">i</span>f r |&gt; Secondary.get_pairs |&gt; <span data-count="98">S</span>econdary.is_pknot then
-    Invalid_argument "Cannot convert pseudoknot to dot" |&gt; <span data-count="0">r</span>ais<span data-count="0">e</span>
-  else <span data-count="98">i</span>f Sys.file_exists file then
-    <span data-count="98">P</span>rintf.print<span data-count="98">f</span> "%s is being ovewritten\n" file;
-  create_file file;
-  <span data-count="98">l</span>et oc = open_out file in
-  <span data-count="98">P</span>rintf.fprintf oc "&gt;%s\n%s\n%s" (Secondary.get_nam<span data-count="98">e</span> r)
-    (Secondary.get_se<span data-count="98">q</span> r) (to_dot_strin<span data-count="98">g</span> r);
-  <span data-count="98">c</span>lose_out oc
-
-let to_ct file r =
-  <span data-count="147">i</span>f Sys.file_exists file then
-    <span data-count="147">P</span>rintf.print<span data-count="147">f</span> "%s is being overwritten\n" file;
-  <span data-count="147">c</span>reate_file file;
-
-  <span data-count="147">l</span>et oc = open_out file in
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 
   (* [print_ct_line i j] prints line [i] to output channel [oc] in .ct
      format where [seq.[i+1]] is paired to [j+1]. The offset is due to
      .ct format using 1-indexing. *)
-<<<<<<< HEAD
   <span data-count="160">l</span>et print_ct_line i j =
     <span data-count="3050">P</span>rintf.fprintf oc "%i %c %i %i %i %i\n" (i + 1)
       (Secondary.get_se<span data-count="3050">q</span> r).[i]
@@ -196,18 +164,6 @@ let to_ct file r =
     (Secondary.get_nam<span data-count="160">e</span> r);
   <span data-count="160">r</span> |&gt; Secondary.get_pairs |&gt; <span data-count="160">A</span>rray.iteri print_ct_line;
   <span data-count="160">c</span>lose_out oc
-=======
-  <span data-count="147">l</span>et print_ct_line i j =
-    <span data-count="2436">P</span>rintf.fprintf oc "%i %c %i %i %i %i\n" (i + 1)
-      (Secondary.get_se<span data-count="2436">q</span> r).[i]
-      i (i + 2) (j + 1) (i + 1)
-  in
-  Printf.fprintf oc "%i %s\n"
-    (r |&gt; Secondary.get_seq |&gt; <span data-count="147">S</span>tring.lengt<span data-count="147">h</span>)
-    (Secondary.get_nam<span data-count="147">e</span> r);
-  <span data-count="147">r</span> |&gt; Secondary.get_pairs |&gt; <span data-count="147">A</span>rray.iteri print_ct_line;
-  <span data-count="147">c</span>lose_out oc
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 </code></pre>
       </div>
     </div>

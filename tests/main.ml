@@ -1,12 +1,13 @@
 open OUnit2
 open RNAfoldml
 
-(** Testing Doc: 
-    Every function except those in [secondary_vis.ml] is automatically tested.
-    This is due to the fact that [secondary_vis.ml] generates a PDF file which can't be 
-    verified for correctness. All the test cases are developed using glass-box testing.
-    Our suite proves system correctness when verified with the bisect tool; every file is at least
-    90% covered. More information can be found in [_coverage/index.html].*)
+(** Testing Doc: Every function except those in [secondary_vis.ml] is
+    automatically tested. This is due to the fact that
+    [secondary_vis.ml] generates a PDF file which can't be verified for
+    correctness. All the test cases are developed using glass-box
+    testing. Our suite proves system correctness when verified with the
+    bisect tool; every file is at least 90% covered. More information
+    can be found in [_coverage/index.html].*)
 
 (* ------------ Helper functions used in testing. ------------ *)
 
@@ -284,6 +285,11 @@ let bigarr19 =
     [| 6; 5; -1; 4; 3; 1; 0; 8; 7; -1; 26; -1; -1; 14; 13; 23; -1 |]
     [| -1; -1; -1; -1; -1; -1; 15; -1; -1; 10 |]
 
+let bigarr20 =
+  Array.append
+    [| 6; 5; -1; 4; 3; 1; 0; 8; 7; -1; 27; 26; 17; -1; 15; 14; -1; 12 |]
+    [| -1; 20; 19; 24; 23; 22; 21; -1; 11; 10 |]
+
 let () =
   fasta1 |> List.hd |> Nussinov.predict
   |> Secondary_print.to_ct "test_output/fasta1.ct"
@@ -334,7 +340,7 @@ let exception_tests =
          "Unable to load secondary structure from dot file: _config.yml")
       (fun _ -> Secondary_load.from_dot "_config.yml");
     assert_raises Not_found (fun _ ->
-      Secondary_load.from_ct "nonsense!");
+        Secondary_load.from_ct "nonsense!");
   ]
 
 let nussinov_tests =
@@ -349,6 +355,8 @@ let nussinov_tests =
     ]
   @ [
       nuss_pair_test "nuss_empty" "" [||];
+      nuss_pair_test "nuss_GGACCCUAUGUUG" "GGACCCUAUGUUG"
+        [| -1; 3; -1; 1; 12; 9; -1; 8; 7; 5; -1; -1; 4 |];
       nuss_pair_test "nuss_ACUAUGUUCAU" "ACUAUGUUCAU"
         [| 10; -1; 9; 4; 3; 8; -1; -1; 5; 2; 0 |];
       nuss_pair_test "nuss_AACUGUUCAUCAUUGUAUCAUGUACUAUGU"
@@ -369,6 +377,8 @@ let nussinov_tests =
         "AACUAUCUGUAUGUAGUACCCCCCCUAUUGUA" bigarr18;
       nuss_pair_test "nuss_ACUAUGUAUUGUUAUCGUGGGGGGGUC"
         "ACUAUGUAUUGUUAUCGUGGGGGGGUC" bigarr19;
+      nuss_pair_test "nuss_ACUAUGUAUGUAGUUAUCUAUGUACUUA"
+        "ACUAUGUAUGUAGUUAUCUAUGUACUUA" bigarr20;
     ]
 
 let pseudoknot_tests =

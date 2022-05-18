@@ -307,13 +307,8 @@
 <a href="#L135">135</a>
 </pre>
 <pre><code class="ocaml">let list_max =
-<<<<<<< HEAD
   List.fold_lef<span data-count="5">t</span>
     (fun x y -&gt; <span data-count="10041255">i</span>f List.lengt<span data-count="10041255">h</span> y &gt; List.lengt<span data-count="10041255">h</span> x then <span data-count="1413300">y</span> else <span data-count="8627955">x</span>)
-=======
-  List.fold_lef<span data-count="7">t</span>
-    (fun x y -&gt; <span data-count="2163189">i</span>f List.lengt<span data-count="2163189">h</span> y &gt; List.lengt<span data-count="2163189">h</span> x then <span data-count="485380">y</span> else <span data-count="1677809">x</span>)
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
     []
 
 (* [pseudo_max seq start fin] is the association list [(i,j)] in which
@@ -322,7 +317,6 @@
 let pseudo_max seq start fin =
   (* Memoize is a 3-dimensional array storing values for
      pseudo_max_left, pseudo_max_right, pseudo_max_mid *)
-<<<<<<< HEAD
   <span data-count="130">l</span>et memoize =
     Array.init
       (fin - start + 1)
@@ -336,26 +330,10 @@ let pseudo_max seq start fin =
      otherwise. *)
   <span data-count="130">l</span>et ok_boundary (i, j, k) =
     <span data-count="4627750">n</span>ot (k &gt; fi<span data-count="0">n</span> || k &lt; <span data-count="2198640">j</span> || k &lt; star<span data-count="0">t</span> || i &gt; fi<span data-count="0">n</span> || i &lt; star<span data-count="1234745">t</span> || i &gt; <span data-count="0">j</span>)
-=======
-  <span data-count="105">l</span>et memoize =
-    Array.init
-      (fin - start + 1)
-      (fun _ -&gt;
-        <span data-count="1113">A</span>rray.init
-          (fin - start + 1)
-          (fun _ -&gt;
-            <span data-count="19299">A</span>rray.init (fin - start + 1) (fun _ -&gt; <span data-count="464667">(</span>[], [], []))))
-  in
-  (* [ok_boundary i j k] is true if [start&lt;=i&lt;=j&lt;=k&lt;=fin] and false
-     otherwise. *)
-  <span data-count="105">l</span>et ok_boundary (i, j, k) =
-    <span data-count="307860">n</span>ot (k &gt; fi<span data-count="0">n</span> || k &lt; <span data-count="105287">j</span> || k &lt; star<span data-count="0">t</span> || i &gt; fi<span data-count="0">n</span> || i &lt; star<span data-count="99939">t</span> || i &gt; <span data-count="0">j</span>)
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
   in
   (* [ok_lst lst (a,b)] is true if [a] or [b] are not elements of any
      tuple in [lst]. *)
   let ok_lst lst (a, b) =
-<<<<<<< HEAD
     <span data-count="11565">L</span>ist.filte<span data-count="11565">r</span> (fun (x, y) -&gt; <span data-count="16435">x</span> = <span data-count="310">a</span> || y = <span data-count="0">a</span> || x = <span data-count="0">b</span> || y = <span data-count="0">b</span>) lst
     = []
   in
@@ -394,51 +372,10 @@ let pseudo_max seq start fin =
       <span data-count="459650">i</span>f right &lt;&gt; [] then <span data-count="34945">r</span>ight
       else
         <span data-count="424705">l</span>et ans =
-=======
-    <span data-count="4060">L</span>ist.filte<span data-count="4060">r</span> (fun (x, y) -&gt; <span data-count="6237">x</span> = <span data-count="126">a</span> || y = <span data-count="0">a</span> || x = <span data-count="0">b</span> || y = <span data-count="0">b</span>) lst
-    = []
-  in
-  let rec pseudo_max_left (i, j, k) =
-    <span data-count="94227">i</span>f not (ok_boundar<span data-count="94227">y</span> (i, j, k)) then <span data-count="69181">[</span>]
-    else
-      <span data-count="25046">l</span>et left, middle, right = memoize.(i).(j).(k) in
-      <span data-count="25046">i</span>f left &lt;&gt; [] then <span data-count="1897">l</span>eft
-      else
-        <span data-count="23149">l</span>et ans =
-          if j = k &amp;&amp; <span data-count="6622">i</span> &gt;= start &amp;&amp; <span data-count="6622">i</span> &lt; j then
-            <span data-count="6622">i</span>f Secondary.is_valid_pair seq.[i] seq.[j] then <span data-count="308">[</span> (i, j) ]
-            else <span data-count="6314">[</span>]
-          else <span data-count="16527">i</span>f i = start - 1 &amp;&amp; <span data-count="0">(</span>k = <span data-count="0">j</span> || k = j + <span data-count="0">1</span>) then <span data-count="0">[</span>]
-          else
-            <span data-count="16527">l</span>et lst =
-              list_max
-                [
-                  pseudo_max_lef<span data-count="16527">t</span> (i - 1, j + 1, k);
-                  pseudo_max_righ<span data-count="16527">t</span> (i - 1, j + 1, k);
-                  pseudo_max_mi<span data-count="16527">d</span> (i - 1, j + 1, k);
-                ]
-            in
-            <span data-count="16527">i</span>f
-              Secondary.is_valid_pai<span data-count="16527">r</span> seq.[i] seq.[j]
-              &amp;&amp; <span data-count="1589">o</span>k_ls<span data-count="1589">t</span> lst (i, j)
-            then <span data-count="1589">(</span>i, j) :: lst
-            else <span data-count="14938">l</span>st
-        in
-        memoize.(i).(j).(k) &lt;- (ans, middle, right);
-        <span data-count="23149">a</span>ns
-  and pseudo_max_right (i, j, k) =
-    <span data-count="94227">i</span>f not (ok_boundar<span data-count="94227">y</span> (i, j, k)) then <span data-count="55433">[</span>]
-    else
-      <span data-count="38794">l</span>et left, middle, right = memoize.(i).(j).(k) in
-      <span data-count="38794">i</span>f right &lt;&gt; [] then <span data-count="12565">r</span>ight
-      else
-        <span data-count="26229">l</span>et ans =
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
           if i = start - 1 &amp;&amp; <span data-count="0">k</span> = j + 1 then
             <span data-count="0">i</span>f Secondary.is_valid_pair seq.[j] seq.[j + 1] then
               <span data-count="0">[</span> (j, j + 1) ]
             else <span data-count="0">[</span>]
-<<<<<<< HEAD
           else <span data-count="424705">i</span>f i = start - 1 &amp;&amp; <span data-count="0">k</span> = j then <span data-count="0">[</span>]
           else
             <span data-count="424705">l</span>et lst =
@@ -491,60 +428,6 @@ let pseudo_max seq start fin =
   |&gt; <span data-count="130">L</span>ist.map (fun x -&gt; <span data-count="49695">A</span>rray.to_list x)
   |&gt; <span data-count="130">L</span>ist.flatten
   |&gt; <span data-count="130">L</span>ist.fold_left (fun acc (x, y, z) -&gt; <span data-count="1354955">l</span>ist_max [ acc; x; y; z ]) []
-=======
-          else <span data-count="26229">i</span>f i = start - 1 &amp;&amp; <span data-count="0">k</span> = j then <span data-count="0">[</span>]
-          else
-            <span data-count="26229">l</span>et lst =
-              list_max
-                [
-                  pseudo_max_lef<span data-count="26229">t</span> (i, j + 1, k - 1);
-                  pseudo_max_righ<span data-count="26229">t</span> (i, j + 1, k - 1);
-                  pseudo_max_mi<span data-count="26229">d</span> (i, j + 1, k - 1);
-                ]
-            in
-            <span data-count="26229">i</span>f
-              Secondary.is_valid_pai<span data-count="26229">r</span> seq.[j] seq.[k]
-              &amp;&amp; <span data-count="2471">o</span>k_ls<span data-count="2471">t</span> lst (j, k)
-            then <span data-count="2345">(</span>j, k) :: lst
-            else <span data-count="23884">l</span>st
-        in
-        memoize.(i).(j).(k) &lt;- (left, middle, ans);
-        <span data-count="26229">a</span>ns
-  and pseudo_max_mid (i, j, k) =
-    <span data-count="119406">i</span>f not (ok_boundar<span data-count="119406">y</span> (i, j, k)) then <span data-count="80612">[</span>]
-    else
-      <span data-count="38794">l</span>et left, middle, right = memoize.(i).(j).(k) in
-      <span data-count="38794">i</span>f middle &lt;&gt; [] then <span data-count="13615">m</span>iddle
-      else
-        <span data-count="25179">l</span>et ans =
-          if i = start - 1 &amp;&amp; <span data-count="0">(</span>k = j + <span data-count="0">1</span> || k = <span data-count="0">j</span>) then <span data-count="0">[</span>]
-          else
-            <span data-count="25179">l</span>ist_ma<span data-count="25179">x</span>
-              [
-                pseudo_max_lef<span data-count="25179">t</span> (i - 1, j, k);
-                pseudo_max_lef<span data-count="25179">t</span> (i, j + 1, k);
-                pseudo_max_mi<span data-count="25179">d</span> (i - 1, j, k);
-                pseudo_max_mi<span data-count="25179">d</span> (i, j + 1, k);
-                pseudo_max_mi<span data-count="25179">d</span> (i, j, k - 1);
-                pseudo_max_righ<span data-count="25179">t</span> (i, j + 1, k);
-                pseudo_max_righ<span data-count="25179">t</span> (i, j, k - 1);
-              ]
-        in
-        memoize.(i).(j).(k) &lt;- (left, ans, right);
-        <span data-count="25179">a</span>ns
-  in
-  for t = start to fin do
-    <span data-count="1113">i</span>gnore (pseudo_max_lef<span data-count="1113">t</span> (start, t, fin));
-    ignore (pseudo_max_righ<span data-count="1113">t</span> (start, t, fin));
-    ignore (pseudo_max_mi<span data-count="1113">d</span> (start, t, fin))
-  done;
-  memoize |&gt; Array.to_list
-  |&gt; <span data-count="105">L</span>ist.map (fun x -&gt; <span data-count="1113">A</span>rray.to_list x)
-  |&gt; <span data-count="105">L</span>ist.flatten
-  |&gt; <span data-count="105">L</span>ist.map (fun x -&gt; <span data-count="19299">A</span>rray.to_list x)
-  |&gt; <span data-count="105">L</span>ist.flatten
-  |&gt; <span data-count="105">L</span>ist.fold_left (fun acc (x, y, z) -&gt; <span data-count="464667">l</span>ist_max [ acc; x; y; z ]) []
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 
 (* [predict r] is the predicted secondary structure of the Rna sequence
    [r] provided the existence of pseudoknots. If Akutsu's algorithm
@@ -552,21 +435,12 @@ let pseudo_max seq start fin =
    Akutsu prediction is used. Otherwise, the Nussinov predictino is
    used. *)
 let predict (r : Rna.t) =
-<<<<<<< HEAD
   <span data-count="130">l</span>et seq = r.seq in
   let nuss = Nussinov.predict r in
   <span data-count="130">l</span>et akutsu = pseudo_max seq 0 (String.lengt<span data-count="130">h</span> seq - 1) in
   <span data-count="130">i</span>f List.lengt<span data-count="130">h</span> akutsu &gt;= Secondary.num_pair<span data-count="130">s</span> nuss then
     <span data-count="70">S</span>econdary.make r akutsu
   else <span data-count="60">n</span>uss
-=======
-  <span data-count="105">l</span>et seq = r.seq in
-  let nuss = Nussinov.predict r in
-  <span data-count="105">l</span>et akutsu = pseudo_max seq 0 (String.lengt<span data-count="105">h</span> seq - 1) in
-  <span data-count="105">i</span>f List.lengt<span data-count="105">h</span> akutsu &gt;= Secondary.num_pair<span data-count="105">s</span> nuss then
-    <span data-count="84">S</span>econdary.make r akutsu
-  else <span data-count="21">n</span>uss
->>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 </code></pre>
       </div>
     </div>
