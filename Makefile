@@ -5,9 +5,13 @@ utop:
 	OCAMLRUNPARAM=b dune utop src
 
 test:
-	OCAMLRUNPARAM=b dune exec --instrument-with bisect_ppx tests/main.exe
+	rm -rf _coverage bisect*.coverage
+	-dune exec --instrument-with bisect_ppx --force tests/main.exe
+	bisect-ppx-report html
+	rm bisect*.coverage
 
 clean:
+	rm -rf _coverage bisect*.coverage
 	dune clean
 	rm -f RNAfoldml.zip
 
@@ -23,6 +27,3 @@ cloc:
 	dune clean
 	rm -f RNAfoldml.zip
 	cloc --by-file --include-lang=OCaml .
-
-bisect:
-	bisect-ppx-report html
