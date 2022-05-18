@@ -9,6 +9,7 @@ compiler: [
   "ocaml-options-vanilla.1"
 ]
 roots: [
+	"cairo2.0.6.2"
   "camlpdf.2.5"
   "ocaml-base-compiler.4.12.0"
   "ocaml-lsp-server.1.9.0"
@@ -21,7 +22,9 @@ installed: [
   "base-threads.base"
   "base-unix.base"
   "biniou.1.2.1"
+	"cairo2.0.6.2"
   "camlpdf.2.5"
+	"conf-cairo.1"
   "conf-libX11.1"
   "conf-pkg-config.2"
   "conf-sdl-image.1"
