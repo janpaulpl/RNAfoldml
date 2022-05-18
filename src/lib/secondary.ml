@@ -123,16 +123,13 @@ let condition2 (pairs : int array) (cut1 : int) (cut2 : int) =
       twin = -1
       || (index < cut && (not left) && twin <= cut)
       || index = cut
+      || (index > cut && left && twin > cut)
+      || index > cut
+         && not (Stack.is_empty stack || index <> Stack.pop stack)
     then process_pairs pairs cut fin (index + 1) stack left
     else if index < cut then
       let () = Stack.push twin stack in
       process_pairs pairs cut fin (index + 1) stack left
-    else if index > cut then
-      if left && twin > cut then
-        process_pairs pairs cut fin (index + 1) stack left
-      else if Stack.is_empty stack then false
-      else if index <> Stack.pop stack then false
-      else process_pairs pairs cut fin (index + 1) stack left
     else false
   in
   process_pairs pairs cut1 cut2 0 stack_pair true
