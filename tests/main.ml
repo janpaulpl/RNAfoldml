@@ -1,7 +1,7 @@
 open OUnit2
-(** Testing Doc: *)
-
 open RNAfoldml
+
+(** Testing Doc: *)
 
 (* ------------ Helper functions used in testing. ------------ *)
 
@@ -155,8 +155,8 @@ let akutsu_test
 
 let fasta1 = Rna.from_fasta "test_data/test1.fasta"
 let fasta2 = Rna.from_fasta "test_data/test2.fasta"
-
 let rna1 = fasta1 |> List.hd |> Nussinov.predict
+let rna2 = Rna.from_string "AGU" "small_rna"
 
 let bigarr1 =
   let arr =
@@ -199,6 +199,22 @@ let rna_tests =
       assert_equal
         ("test_data/empty.fasta" |> Rna.from_fasta |> List.length)
         0 );
+  ]
+
+let exception_tests =
+  [
+    assert_raises (Invalid_argument "Invalid dot string") (fun _ ->
+        Secondary_load.from_dot_string rna2 ")))");
+    assert_raises (Invalid_argument "Unable to parse RNA sequence")
+      (fun _ -> Secondary_load.from_dot_string rna2 "))))");
+    assert_raises (Invalid_argument "Invalid char in dot string")
+      (fun _ -> Secondary_load.from_dot_string rna2 "(.A");
+    assert_raises Not_found (fun _ ->
+        Secondary_load.from_dot "doesnotexist");
+    assert_raises
+      (Invalid_argument
+         "Unable to load secondary structure from dot file: _config.yml")
+      (fun _ -> Secondary_load.from_dot "_config.yml");
   ]
 
 let nussinov_tests =
@@ -303,10 +319,9 @@ let akutsu_tests =
         "GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA" bigarr1;
     ]
 
-let () = 
-  Secondary_vis.circle_graph "test_output/rna1" rna1
+let () = Secondary_vis.circle_graph "test_output/rna1" rna1
 
-  let tests =
+let tests =
   "test suite"
   >::: List.flatten
          [ rna_tests; nussinov_tests; pseudoknot_tests; akutsu_tests ]

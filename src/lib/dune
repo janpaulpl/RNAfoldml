@@ -1,4 +1,6 @@
 (library
  (public_name RNAfoldml)
  (name RNAfoldml)
- (libraries unix str cairo2))
+ (libraries unix str cairo2)
+ (instrumentation
+  (backend bisect_ppx)))
