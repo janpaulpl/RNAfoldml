@@ -113,6 +113,7 @@
 <pre><code class="ocaml">(** [largest_lst l] is one of the lists in [l : 'a list list] which has
     maximum length. *)
 let largest_lst lst =
+<<<<<<< HEAD
   <span data-count="68962192">L</span>ist.fold_left
     (fun x y -&gt; <span data-count="172139400">i</span>f List.lengt<span data-count="172139400">h</span> y &gt; List.lengt<span data-count="172139400">h</span> x then <span data-count="119355">y</span> else <span data-count="172020045">x</span>)
     [] lst
@@ -121,6 +122,16 @@ let max_pairs seq : (int * int) list =
   <span data-count="181">l</span>et size = String.length seq in
   <span data-count="181">l</span>et memo : (int * int) list array array =
     Array.make_matri<span data-count="181">x</span> size size []
+=======
+  <span data-count="3171441">L</span>ist.fold_left
+    (fun x y -&gt; <span data-count="11881205">i</span>f List.lengt<span data-count="11881205">h</span> y &gt; List.lengt<span data-count="11881205">h</span> x then <span data-count="131880">y</span> else <span data-count="11749325">x</span>)
+    [] lst
+
+let max_pairs seq : (int * int) list =
+  <span data-count="161">l</span>et size = String.length seq in
+  <span data-count="161">l</span>et memo : (int * int) list array array =
+    Array.make_matri<span data-count="161">x</span> size size []
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
   in
   (* [max_pairs_rec (start, fin)] is [memo.(start).(fin)] if
      [memo.(start).(fin) &lt;&gt; ~-1], else returns the maximum number of
@@ -130,6 +141,7 @@ let max_pairs seq : (int * int) list =
      Effects: Fills in [memo.(x).(y)] for all recursive calls
      [max_pairs_rec (x, y)]. *)
   let rec max_pairs_rec : int * int -&gt; (int * int) list = function
+<<<<<<< HEAD
     | <span data-count="275316789">s</span>tart, fin when start &gt;= fin -&gt; <span data-count="200169343">[</span>]
     | <span data-count="75147446">s</span>tart, fin when memo.(start).(fin) &lt;&gt; [] -&gt; <span data-count="6185254">m</span>emo.(start).(fin)
     | <span data-count="68962192">s</span>tart, fin -&gt;
@@ -151,6 +163,29 @@ let max_pairs seq : (int * int) list =
   max_pairs_rec (0, size - 1)
 
 let predict (r : Rna.t) = <span data-count="181">m</span>ax_pairs r.seq |&gt; <span data-count="181">S</span>econdary.make r
+=======
+    | <span data-count="20591130">s</span>tart, fin when start &gt;= fin -&gt; <span data-count="9158898">[</span>]
+    | <span data-count="11432232">s</span>tart, fin when memo.(start).(fin) &lt;&gt; [] -&gt; <span data-count="8260791">m</span>emo.(start).(fin)
+    | <span data-count="3171441">s</span>tart, fin -&gt;
+        memo.(start).(fin) &lt;-
+          ([
+             (if Secondary.is_valid_pair seq.[start] seq.[fin] then
+              <span data-count="21826">(</span>start, fin) :: max_pairs_re<span data-count="21826">c</span> (start + 1, fin - 1)
+             else <span data-count="3149615">m</span>ax_pairs_re<span data-count="3149615">c</span> (start + 1, fin - 1));
+           ]
+          @
+          try
+            List.ini<span data-count="3171441">t</span> (fin - start) (fun k -&gt;
+                <span data-count="8709764">m</span>ax_pairs_re<span data-count="8709764">c</span> (start, start + k)
+                @ max_pairs_re<span data-count="8709764">c</span> (start + k + 1, fin))
+          with <span data-count="0">I</span>nvalid_argument _ -&gt; [])
+          |&gt; largest_ls<span data-count="3171441">t</span>;
+        <span data-count="3171441">m</span>emo.(start).(fin)
+  in
+  max_pairs_rec (0, size - 1)
+
+let predict (r : Rna.t) = <span data-count="161">m</span>ax_pairs r.seq |&gt; <span data-count="161">S</span>econdary.make r
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 </code></pre>
       </div>
     </div>

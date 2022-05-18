@@ -1,7 +1,12 @@
 open OUnit2
 open RNAfoldml
 
-(** Testing Doc: *)
+(** Testing Doc: 
+    Every function except those in [secondary_vis.ml] is automatically tested.
+    This is due to the fact that [secondary_vis.ml] generates a PDF file which can't be 
+    verified for correctness. The rest of the test cases are developed using glass-box testing.
+    Our suite proves system correctness when the verified with bisect; every file is at least
+    90% covered. More information can be found in [_coverage/index.html].*)
 
 (* ------------ Helper functions used in testing. ------------ *)
 
@@ -328,6 +333,8 @@ let exception_tests =
       (Invalid_argument
          "Unable to load secondary structure from dot file: _config.yml")
       (fun _ -> Secondary_load.from_dot "_config.yml");
+    assert_raises Not_found (fun _ ->
+      Secondary_load.from_ct "nonsense!");
   ]
 
 let nussinov_tests =

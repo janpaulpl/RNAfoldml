@@ -461,6 +461,7 @@ exception Invalid_RI
     Requires: For all [(i,j)] in [pairs], [i] and [j] are in
     [0..size-1]. No value appears in more than one [pair]. *)
 let assoc_to_array size (pairs : (int * int) list) =
+<<<<<<< HEAD
   <span data-count="516">l</span>et arr = Array.make size ~<span data-count="516">-</span>1 in
   <span data-count="516">L</span>ist.iter
     (fun (a, b) -&gt;
@@ -470,22 +471,43 @@ let assoc_to_array size (pairs : (int * int) list) =
       <span data-count="2998">A</span>rray.set arr b a)
     pairs;
   <span data-count="516">a</span>rr
+=======
+  <span data-count="469">l</span>et arr = Array.make size ~<span data-count="469">-</span>1 in
+  <span data-count="469">L</span>ist.iter
+    (fun (a, b) -&gt;
+      <span data-count="1988">a</span>ssert <span data-count="1988">(</span>0 &lt;= a &amp;&amp; <span data-count="1988">0</span> &lt;= b &amp;&amp; <span data-count="1988">a</span> &lt; size &amp;&amp; <span data-count="1988">b</span> &lt; size);
+      assert <span data-count="1988">(</span>~<span data-count="1988">-</span>1 = arr.(a) &amp;&amp; <span data-count="1988">~</span><span data-count="1988">-</span>1 = arr.(b));
+      Array.set arr a b;
+      <span data-count="1988">A</span>rray.set arr b a)
+    pairs;
+  <span data-count="469">a</span>rr
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 
 (** [is_valid_pair i j] is true if and only if characters [(i,j)] form
     one of 2 Watson-Crick RNA pairs: 'A','U' or 'C','G'. Order does not
     effect result. *)
 let is_valid_pair i j =
+<<<<<<< HEAD
   <span data-count="69664433">m</span>atch (i, j) with
   | <span data-count="13777">'</span>A', 'U' -&gt; true
   | <span data-count="9600">'</span>U', 'A' -&gt; true
   | <span data-count="9462">'</span>G', 'C' -&gt; true
   | <span data-count="8493">'</span>C', 'G' -&gt; true
   | <span data-count="69623101">_</span> -&gt; false
+=======
+  <span data-count="3225691">m</span>atch (i, j) with
+  | <span data-count="9523">'</span>A', 'U' -&gt; true
+  | <span data-count="7143">'</span>U', 'A' -&gt; true
+  | <span data-count="7487">'</span>G', 'C' -&gt; true
+  | <span data-count="6913">'</span>C', 'G' -&gt; true
+  | <span data-count="3194625">_</span> -&gt; false
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
 
 (** [rep_ok r] is [r] if [r] satisfies the [t] representation invariant,
     otherwise raises [Invalid_RI]. Runs in O(n) where
     [n = String.length r.seq]. *)
 let rep_ok r =
+<<<<<<< HEAD
   <span data-count="728">l</span>et has_valid_pairs r =
     <span data-count="728">A</span>rray.fold_left ( &amp;&amp; ) true
       (Array.map<span data-count="728">i</span>
@@ -520,6 +542,42 @@ let is_pknot r =
       | <span data-count="2117">t</span>win when twin &lt; index &amp;&amp; <span data-count="2117">L</span>ist.h<span data-count="2117">d</span> stack &lt;&gt; index -&gt; <span data-count="41">t</span>rue
       | <span data-count="2076">t</span>win when twin &lt; index -&gt;
           <span data-count="2076">i</span>s_pknot_helper pairs (index + 1) (List.t<span data-count="2076">l</span> stack)
+=======
+  <span data-count="597">l</span>et has_valid_pairs r =
+    <span data-count="597">A</span>rray.fold_left ( &amp;&amp; ) true
+      (Array.map<span data-count="597">i</span>
+         (fun i j -&gt;
+           <span data-count="6452">i</span>f j + 1 = 0 then <span data-count="1580">t</span>rue
+           else
+             <span data-count="4872">i</span> &lt;&gt; j &amp;&amp; <span data-count="4872">0</span> &lt;= j
+             &amp;&amp; <span data-count="4872">j</span> &lt; String.lengt<span data-count="4872">h</span> r.seq
+             &amp;&amp; <span data-count="4872">0</span> &lt;= i
+             &amp;&amp; <span data-count="4872">i</span> &lt; String.lengt<span data-count="4872">h</span> r.seq
+             &amp;&amp; <span data-count="4872">i</span> = r.pairs.(j)
+             &amp;&amp; <span data-count="4872">j</span> = r.pairs.(i)
+             &amp;&amp; <span data-count="4872">i</span>s_valid_pair r.seq.[i] r.seq.[j])
+         r.pairs)
+  in
+  if
+    String.lengt<span data-count="597">h</span> r.seq == Array.lengt<span data-count="597">h</span> r.pairs
+    &amp;&amp; <span data-count="597">h</span>as_valid_pair<span data-count="597">s</span> r &amp;&amp; <span data-count="597">R</span>na.is_rna_se<span data-count="597">q</span> r.seq
+  then <span data-count="597">r</span>
+  else <span data-count="0">r</span>aise Invalid_RI
+
+let is_pknot r =
+  <span data-count="348">l</span>et rec is_pknot_helper pairs index stack =
+    <span data-count="3062">i</span>f index = Array.lengt<span data-count="3062">h</span> pairs then <span data-count="300">(</span>
+      assert <span data-count="300">(</span>stack = []);
+      false)
+    else
+      <span data-count="2762">m</span>atch pairs.(index) with
+      | <span data-count="611">-</span>1 -&gt; is_pknot_helper pairs (index + 1) stack
+      | <span data-count="2151">t</span>win when twin &gt; index -&gt;
+          <span data-count="1164">i</span>s_pknot_helper pairs (index + 1) (twin :: stack)
+      | <span data-count="987">t</span>win when twin &lt; index &amp;&amp; <span data-count="987">L</span>ist.h<span data-count="987">d</span> stack &lt;&gt; index -&gt; <span data-count="48">t</span>rue
+      | <span data-count="939">t</span>win when twin &lt; index -&gt;
+          <span data-count="939">i</span>s_pknot_helper pairs (index + 1) (List.t<span data-count="939">l</span> stack)
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
       | <span data-count="0">_</span> -&gt; raise Invalid_RI
   in
   is_pknot_helper r 0 []
@@ -595,6 +653,7 @@ let is_simple_pknot pairs =
            else <span data-count="467">c</span>ondition<span data-count="467">1</span> pairs x y &amp;&amp; <span data-count="15">c</span>ondition2 pairs x y)
 
 let distance r1 r2 =
+<<<<<<< HEAD
   <span data-count="106">l</span>et r1, r2 = (rep_o<span data-count="106">k</span> r1, rep_o<span data-count="106">k</span> r2) in
   let all_0 = Array.for_all (fun i -&gt; <span data-count="196">i</span> = 0) in
   <span data-count="106">i</span>f all_<span data-count="106">0</span> r1.pair<span data-count="8">s</span> || all_<span data-count="98">0</span> r2.pair<span data-count="0">s</span> then <span data-count="8">0</span>
@@ -628,16 +687,60 @@ let get_rna r = <span data-count="0">R</span>na.from_string r.seq r.name
 let num_pairs r =
   <span data-count="130">A</span>rray.fold_lef<span data-count="130">t</span>
     (fun acc x -&gt; <span data-count="2105">i</span>f x = ~<span data-count="2105">-</span>1 then <span data-count="515">a</span>cc else <span data-count="1590">a</span>cc + 1)
+=======
+  <span data-count="64">l</span>et r1, r2 = (rep_o<span data-count="64">k</span> r1, rep_o<span data-count="64">k</span> r2) in
+  let all_0 = Array.for_all (fun i -&gt; <span data-count="120">i</span> = 0) in
+  <span data-count="64">i</span>f all_<span data-count="64">0</span> r1.pair<span data-count="4">s</span> || all_<span data-count="60">0</span> r2.pair<span data-count="0">s</span> then <span data-count="4">0</span>
+  else
+    <span data-count="60">l</span>et min_dist_r2 i1 j1 =
+      <span data-count="580">A</span>rray.mapi
+        (fun i2 j2 -&gt; <span data-count="9692">m</span>ax (ab<span data-count="9692">s</span> (i1 - i2)) (ab<span data-count="9692">s</span> (j1 - j2)))
+        r2.pairs
+      |&gt; <span data-count="580">A</span>rray.fold_left min Int.max_int
+    in
+    r1.pairs |&gt; Array.mapi min_dist_r2 |&gt; <span data-count="60">A</span>rray.fold_left max 0
+
+let similarity r1 r2 =
+  <span data-count="64">m</span>atch (String.lengt<span data-count="64">h</span> r1.seq, String.lengt<span data-count="64">h</span> r2.seq) with
+  | <span data-count="64">l</span>1, l2 when l1 &lt;&gt; l2 -&gt;
+      <span data-count="0">I</span>nvalid_argument
+        "Cannot calculate similarity of different length rna structures"
+      |&gt; raise
+  | <span data-count="4">0</span>, 0 -&gt; 1.
+  | <span data-count="60">x</span>, _ -&gt;
+      r1.pairs
+      |&gt; Array.map2 (fun i j -&gt; <span data-count="580">i</span>f i = j then <span data-count="580">1</span>. else <span data-count="0">0</span>.) r2.pairs
+      |&gt; <span data-count="60">A</span>rray.fold_left ( +. ) 0.
+      |&gt; <span data-count="60">(</span> /. ) (x |&gt; float_of_in<span data-count="60">t</span>)
+
+let get_seq r = <span data-count="2696">r</span>.seq
+let get_name r = <span data-count="2177">r</span>.name
+let get_pairs r = <span data-count="605">r</span>.pairs |&gt; Array.copy
+let get_rna r = <span data-count="0">R</span>na.from_string r.seq r.name
+
+let num_pairs r =
+  <span data-count="105">A</span>rray.fold_lef<span data-count="105">t</span>
+    (fun acc x -&gt; <span data-count="1113">i</span>f x = ~<span data-count="1113">-</span>1 then <span data-count="273">a</span>cc else <span data-count="840">a</span>cc + 1)
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
     0 r.pairs
   / 2
 
 let make (rna : Rna.t) (pairs : (int * int) list) =
+<<<<<<< HEAD
   <span data-count="516">t</span>ry
     rep_o<span data-count="516">k</span>
       {
         name = rna.name;
         seq = rna.seq;
         pairs = assoc_to_arra<span data-count="516">y</span> (String.lengt<span data-count="516">h</span> rna.seq) pairs;
+=======
+  <span data-count="469">t</span>ry
+    rep_o<span data-count="469">k</span>
+      {
+        name = rna.name;
+        seq = rna.seq;
+        pairs = assoc_to_arra<span data-count="469">y</span> (String.lengt<span data-count="469">h</span> rna.seq) pairs;
+>>>>>>> c28959bf2aa7ae3c12cb5a0cf8983c2ac67a1b8c
       }
   with <span data-count="0">I</span>nvalid_RI -&gt;
     Invalid_argument "Pairing is not valid for Rna.t" |&gt; raise
