@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>secondary_load.ml &mdash; Coverage report</title>
+    <meta name="description" content="90.14% coverage in src/lib/secondary_load.ml">
+    <link rel="stylesheet" href="../../coverage.css"/>
+    <script src="../../highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>
+        <a href="../../index.html">
+          <span class="dirname">src/lib/</span>secondary_load.ml
+        </a>
+      </h1>
+      <h2>90.14%</h2>
+    </div>
+    <div id="navbar">
+      <span class="unvisited" style="top:45.45%"></span>
+      <span class="unvisited" style="bottom:10.10%"></span>
+      <span class="unvisited" style="bottom:6.06%"></span>
+      <span class="unvisited" style="bottom:5.05%"></span>
+      <span class="unvisited" style="bottom:3.03%"></span>
+      <span class="unvisited" style="bottom:2.02%"></span>
+    </div>
+    <div id="report">
+      <div id="lines-layer">
+        <pre>
+<a id="L1"></a><span > </span>
+<a id="L2"></a><span > </span>
+<a id="L3"></a><span > </span>
+<a id="L4"></a><span > </span>
+<a id="L5"></a><span > </span>
+<a id="L6"></a><span class="visited"> </span>
+<a id="L7"></a><span > </span>
+<a id="L8"></a><span > </span>
+<a id="L9"></a><span > </span>
+<a id="L10"></a><span > </span>
+<a id="L11"></a><span > </span>
+<a id="L12"></a><span class="visited"> </span>
+<a id="L13"></a><span class="visited"> </span>
+<a id="L14"></a><span class="visited"> </span>
+<a id="L15"></a><span > </span>
+<a id="L16"></a><span class="visited"> </span>
+<a id="L17"></a><span class="visited"> </span>
+<a id="L18"></a><span class="visited"> </span>
+<a id="L19"></a><span class="visited"> </span>
+<a id="L20"></a><span > </span>
+<a id="L21"></a><span class="visited"> </span>
+<a id="L22"></a><span > </span>
+<a id="L23"></a><span class="visited"> </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span > </span>
+<a id="L26"></a><span class="visited"> </span>
+<a id="L27"></a><span class="visited"> </span>
+<a id="L28"></a><span class="visited"> </span>
+<a id="L29"></a><span > </span>
+<a id="L30"></a><span > </span>
+<a id="L31"></a><span class="visited"> </span>
+<a id="L32"></a><span > </span>
+<a id="L33"></a><span class="visited"> </span>
+<a id="L34"></a><span > </span>
+<a id="L35"></a><span class="visited"> </span>
+<a id="L36"></a><span class="visited"> </span>
+<a id="L37"></a><span class="visited"> </span>
+<a id="L38"></a><span > </span>
+<a id="L39"></a><span class="visited"> </span>
+<a id="L40"></a><span > </span>
+<a id="L41"></a><span > </span>
+<a id="L42"></a><span class="visited"> </span>
+<a id="L43"></a><span class="visited"> </span>
+<a id="L44"></a><span > </span>
+<a id="L45"></a><span class="unvisited"> </span>
+<a id="L46"></a><span class="visited"> </span>
+<a id="L47"></a><span > </span>
+<a id="L48"></a><span > </span>
+<a id="L49"></a><span > </span>
+<a id="L50"></a><span > </span>
+<a id="L51"></a><span > </span>
+<a id="L52"></a><span > </span>
+<a id="L53"></a><span > </span>
+<a id="L54"></a><span > </span>
+<a id="L55"></a><span > </span>
+<a id="L56"></a><span > </span>
+<a id="L57"></a><span > </span>
+<a id="L58"></a><span > </span>
+<a id="L59"></a><span class="visited"> </span>
+<a id="L60"></a><span > </span>
+<a id="L61"></a><span class="visited"> </span>
+<a id="L62"></a><span class="visited"> </span>
+<a id="L63"></a><span class="visited"> </span>
+<a id="L64"></a><span class="visited"> </span>
+<a id="L65"></a><span class="visited"> </span>
+<a id="L66"></a><span > </span>
+<a id="L67"></a><span > </span>
+<a id="L68"></a><span > </span>
+<a id="L69"></a><span class="visited"> </span>
+<a id="L70"></a><span class="visited"> </span>
+<a id="L71"></a><span class="visited"> </span>
+<a id="L72"></a><span > </span>
+<a id="L73"></a><span class="visited"> </span>
+<a id="L74"></a><span class="visited"> </span>
+<a id="L75"></a><span class="visited"> </span>
+<a id="L76"></a><span class="visited"> </span>
+<a id="L77"></a><span class="visited"> </span>
+<a id="L78"></a><span class="visited"> </span>
+<a id="L79"></a><span > </span>
+<a id="L80"></a><span > </span>
+<a id="L81"></a><span > </span>
+<a id="L82"></a><span class="visited"> </span>
+<a id="L83"></a><span > </span>
+<a id="L84"></a><span class="visited"> </span>
+<a id="L85"></a><span > </span>
+<a id="L86"></a><span class="visited"> </span>
+<a id="L87"></a><span class="visited"> </span>
+<a id="L88"></a><span class="visited"> </span>
+<a id="L89"></a><span class="unvisited"> </span>
+<a id="L90"></a><span class="visited"> </span>
+<a id="L91"></a><span > </span>
+<a id="L92"></a><span class="visited"> </span>
+<a id="L93"></a><span class="unvisited"> </span>
+<a id="L94"></a><span class="unvisited"> </span>
+<a id="L95"></a><span > </span>
+<a id="L96"></a><span class="unvisited"> </span>
+<a id="L97"></a><span class="unvisited"> </span>
+<a id="L98"></a><span > </span>
+<a id="L99"></a><span > </span>
+</pre>
+      </div>
+      <div id="text-layer">
+        <pre id="line-numbers">
+<a href="#L1"> 1</a>
+<a href="#L2"> 2</a>
+<a href="#L3"> 3</a>
+<a href="#L4"> 4</a>
+<a href="#L5"> 5</a>
+<a href="#L6"> 6</a>
+<a href="#L7"> 7</a>
+<a href="#L8"> 8</a>
+<a href="#L9"> 9</a>
+<a href="#L10">10</a>
+<a href="#L11">11</a>
+<a href="#L12">12</a>
+<a href="#L13">13</a>
+<a href="#L14">14</a>
+<a href="#L15">15</a>
+<a href="#L16">16</a>
+<a href="#L17">17</a>
+<a href="#L18">18</a>
+<a href="#L19">19</a>
+<a href="#L20">20</a>
+<a href="#L21">21</a>
+<a href="#L22">22</a>
+<a href="#L23">23</a>
+<a href="#L24">24</a>
+<a href="#L25">25</a>
+<a href="#L26">26</a>
+<a href="#L27">27</a>
+<a href="#L28">28</a>
+<a href="#L29">29</a>
+<a href="#L30">30</a>
+<a href="#L31">31</a>
+<a href="#L32">32</a>
+<a href="#L33">33</a>
+<a href="#L34">34</a>
+<a href="#L35">35</a>
+<a href="#L36">36</a>
+<a href="#L37">37</a>
+<a href="#L38">38</a>
+<a href="#L39">39</a>
+<a href="#L40">40</a>
+<a href="#L41">41</a>
+<a href="#L42">42</a>
+<a href="#L43">43</a>
+<a href="#L44">44</a>
+<a href="#L45">45</a>
+<a href="#L46">46</a>
+<a href="#L47">47</a>
+<a href="#L48">48</a>
+<a href="#L49">49</a>
+<a href="#L50">50</a>
+<a href="#L51">51</a>
+<a href="#L52">52</a>
+<a href="#L53">53</a>
+<a href="#L54">54</a>
+<a href="#L55">55</a>
+<a href="#L56">56</a>
+<a href="#L57">57</a>
+<a href="#L58">58</a>
+<a href="#L59">59</a>
+<a href="#L60">60</a>
+<a href="#L61">61</a>
+<a href="#L62">62</a>
+<a href="#L63">63</a>
+<a href="#L64">64</a>
+<a href="#L65">65</a>
+<a href="#L66">66</a>
+<a href="#L67">67</a>
+<a href="#L68">68</a>
+<a href="#L69">69</a>
+<a href="#L70">70</a>
+<a href="#L71">71</a>
+<a href="#L72">72</a>
+<a href="#L73">73</a>
+<a href="#L74">74</a>
+<a href="#L75">75</a>
+<a href="#L76">76</a>
+<a href="#L77">77</a>
+<a href="#L78">78</a>
+<a href="#L79">79</a>
+<a href="#L80">80</a>
+<a href="#L81">81</a>
+<a href="#L82">82</a>
+<a href="#L83">83</a>
+<a href="#L84">84</a>
+<a href="#L85">85</a>
+<a href="#L86">86</a>
+<a href="#L87">87</a>
+<a href="#L88">88</a>
+<a href="#L89">89</a>
+<a href="#L90">90</a>
+<a href="#L91">91</a>
+<a href="#L92">92</a>
+<a href="#L93">93</a>
+<a href="#L94">94</a>
+<a href="#L95">95</a>
+<a href="#L96">96</a>
+<a href="#L97">97</a>
+<a href="#L98">98</a>
+<a href="#L99">99</a>
+</pre>
+<pre><code class="ocaml">(** [dot_to_assoc d] is the association list of pairs represented by
+    [d], a [string] in dot format. Raises: [Invalid_argument] if [d] is
+    not in valid dot string format. Example: [dot_to_assoc "(())..()"]
+    is [\[(0,3);(1,2);(6,7)\]]*)
+let dot_to_assoc dot =
+  <span data-count="125">l</span>et pair, _, _ =
+    (* Algorithm iterates through the char list from the left,
+       accumulating a triple: (&lt;list of completed pairs&gt;, &lt;positions of
+       unpaired left parentheses&gt;, &lt;current index&gt;). *)
+    List.fold_left
+      (fun (pairs, left_parenths, index) c -&gt;
+        <span data-count="1750">m</span>atch c with
+        | <span data-count="675">'</span>(' -&gt; (pairs, index :: left_parenths, index + 1)
+        | <span data-count="675">'</span>)' -&gt; (
+            match left_parenths with
+            | <span data-count="670">h</span> :: t -&gt; ((h, index) :: pairs, t, index + 1)
+            | <span data-count="5">_</span> -&gt; Invalid_argument "Invalid dot string" |&gt; raise)
+        | <span data-count="395">'</span>.' -&gt; (pairs, left_parenths, index + 1)
+        | <span data-count="5">_</span> -&gt; Invalid_argument "Invalid char in dot string" |&gt; raise)
+      ([], [], 0)
+      (List.ini<span data-count="125">t</span> (String.lengt<span data-count="125">h</span> dot) (String.ge<span data-count="125">t</span> dot))
+  in
+  <span data-count="115">p</span>air
+
+let from_dot_string (rna : Rna.t) (dots : string) =
+  <span data-count="130">i</span>f String.lengt<span data-count="130">h</span> rna.seq &lt;&gt; String.lengt<span data-count="130">h</span> dots then
+    <span data-count="5">I</span>nvalid_argument "Unable to parse RNA sequence" |&gt; raise
+  else <span data-count="125">d</span>ots |&gt; dot_to_assoc |&gt; <span data-count="115">S</span>econdary.make rna
+
+let from_dot f : Secondary.t =
+  <span data-count="125">i</span>f not (Sys.file_exist<span data-count="125">s</span> f) then <span data-count="5">r</span>aise Not_found
+  else
+    <span data-count="120">t</span>ry
+      let ic = open_in f in
+      <span data-count="120">l</span>et name = input_line ic in
+      <span data-count="120">l</span>et seq = input_line ic in
+      <span data-count="115">l</span>et dot =
+        really_input_string ic
+          (in_channel_lengt<span data-count="115">h</span> ic - String.lengt<span data-count="115">h</span> name - String.lengt<span data-count="115">h</span> seq
+         - 2)
+      in
+      <span data-count="115">c</span>lose_in ic;
+      dot |&gt; <span data-count="115">f</span>rom_dot_strin<span data-count="115">g</span> (Rna.from_strin<span data-count="115">g</span> seq name)
+    with
+    | <span data-count="0">I</span>nvalid_argument m -&gt; Invalid_argument m |&gt; raise
+    | <span data-count="5">_</span> -&gt;
+        Invalid_argument
+          ("Unable to load secondary structure from dot file: " ^ f)
+        |&gt; raise
+
+(** [from_ct_string name ct_lines] is the rna secondary structure with
+    name [name] and sequence and base pairs determined by the
+    connectivity table whose lines are elements of [ct_lines].
+
+    Raises: [Invalid_argument] if [ct_lines] is not a valid formatted ct
+    table. *)
+let from_ct_string (name : string) (ct_lines : string list) =
+  (* Stores first 3 entries of each line in triple list. *)
+  <span data-count="150">l</span>et triples =
+    ct_lines
+    |&gt; List.filter (fun l -&gt; <span data-count="2385">l</span> &lt;&gt; "")
+    |&gt; <span data-count="150">L</span>ist.map (fun line -&gt;
+           <span data-count="2235">i</span>gnore
+             (Str.search_forwar<span data-count="2235">d</span>
+                (Str.regex<span data-count="2235">p</span>
+                   "[0-9]+ \\([AGCU]\\) \\([0-9]+\\) [0-9]+ \
+                    \\([0-9]+\\) [0-9]+")
+                line 0);
+           ( Str.matched_grou<span data-count="2235">p</span> 1 line,
+             Str.matched_grou<span data-count="2235">p</span> 2 line,
+             Str.matched_grou<span data-count="2235">p</span> 3 line ))
+  in
+  <span data-count="150">t</span>riples
+  |&gt; List.map (fun (_, b, c) -&gt; <span data-count="2235">(</span>int_of_strin<span data-count="2235">g</span> b, int_of_strin<span data-count="2235">g</span> c - 1))
+  |&gt; <span data-count="150">L</span>ist.filter (fun (i, j) -&gt; <span data-count="2235">i</span> &lt;= j)
+  |&gt; <span data-count="150">S</span>econdary.make
+       (Rna.from_strin<span data-count="150">g</span>
+          (List.map (fun (a, _, _) -&gt; <span data-count="2235">a</span>) triples |&gt; <span data-count="150">S</span>tring.conca<span data-count="150">t</span> "")
+          name)
+
+let from_ct f : Secondary.t =
+  <span data-count="155">i</span>f not (Sys.file_exist<span data-count="155">s</span> f) then <span data-count="5">r</span>aise Not_found
+  else
+    <span data-count="150">t</span>ry
+      let ic = open_in f in
+      <span data-count="150">l</span>et file = really_input_string ic (in_channel_lengt<span data-count="150">h</span> ic) in
+      <span data-count="150">c</span>lose_in ic;
+      <span data-count="150">m</span>atch String.split_on_char '\n' file with
+      | <span data-count="0">[</span>] -&gt; Invalid_argument "Empty File" |&gt; rais<span data-count="0">e</span>
+      | <span data-count="150">n</span>ame_line :: ct_lines -&gt; (
+          match String.split_on_char ' ' name_line with
+          | <span data-count="150">[</span> _; name ] -&gt; from_ct_strin<span data-count="150">g</span> name ct_lines
+          | <span data-count="0">_</span> -&gt;
+              Invalid_argument "First line in invalid format" |&gt; rais<span data-count="0">e</span>)
+    with
+    | <span data-count="0">I</span>nvalid_argument m -&gt; Invalid_argument m |&gt; raise
+    | <span data-count="0">_</span> -&gt;
+        Invalid_argument
+          "Unable to load secondary structure in from ct file" |&gt; raise
+</code></pre>
+      </div>
+    </div>
+    <script src="../../coverage.js"></script>
+  </body>
+</html>
