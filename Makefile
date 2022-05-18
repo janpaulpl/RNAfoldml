@@ -11,7 +11,7 @@ clean:
 	dune clean
 	rm -f RNAfoldml.zip
 
-doc:
+docs:
 	dune build @doc
 
 zip:
