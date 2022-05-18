@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>nussinov.ml &mdash; Coverage report</title>
+    <meta name="description" content="96.30% coverage in src/lib/nussinov.ml">
+    <link rel="stylesheet" href="../../coverage.css"/>
+    <script src="../../highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div id="header">
+      <h1>
+        <a href="../../index.html">
+          <span class="dirname">src/lib/</span>nussinov.ml
+        </a>
+      </h1>
+      <h2>96.30%</h2>
+    </div>
+    <div id="navbar">
+      <span class="unvisited" style="bottom:14.63%"></span>
+    </div>
+    <div id="report">
+      <div id="lines-layer">
+        <pre>
+<a id="L1"></a><span > </span>
+<a id="L2"></a><span > </span>
+<a id="L3"></a><span > </span>
+<a id="L4"></a><span class="visited"> </span>
+<a id="L5"></a><span class="visited"> </span>
+<a id="L6"></a><span > </span>
+<a id="L7"></a><span > </span>
+<a id="L8"></a><span > </span>
+<a id="L9"></a><span class="visited"> </span>
+<a id="L10"></a><span class="visited"> </span>
+<a id="L11"></a><span class="visited"> </span>
+<a id="L12"></a><span > </span>
+<a id="L13"></a><span > </span>
+<a id="L14"></a><span > </span>
+<a id="L15"></a><span > </span>
+<a id="L16"></a><span > </span>
+<a id="L17"></a><span > </span>
+<a id="L18"></a><span > </span>
+<a id="L19"></a><span > </span>
+<a id="L20"></a><span > </span>
+<a id="L21"></a><span class="visited"> </span>
+<a id="L22"></a><span class="visited"> </span>
+<a id="L23"></a><span class="visited"> </span>
+<a id="L24"></a><span > </span>
+<a id="L25"></a><span > </span>
+<a id="L26"></a><span > </span>
+<a id="L27"></a><span class="visited"> </span>
+<a id="L28"></a><span class="visited"> </span>
+<a id="L29"></a><span > </span>
+<a id="L30"></a><span > </span>
+<a id="L31"></a><span > </span>
+<a id="L32"></a><span class="visited"> </span>
+<a id="L33"></a><span class="visited"> </span>
+<a id="L34"></a><span class="visited"> </span>
+<a id="L35"></a><span class="unvisited"> </span>
+<a id="L36"></a><span class="visited"> </span>
+<a id="L37"></a><span class="visited"> </span>
+<a id="L38"></a><span > </span>
+<a id="L39"></a><span > </span>
+<a id="L40"></a><span > </span>
+<a id="L41"></a><span class="visited"> </span>
+</pre>
+      </div>
+      <div id="text-layer">
+        <pre id="line-numbers">
+<a href="#L1"> 1</a>
+<a href="#L2"> 2</a>
+<a href="#L3"> 3</a>
+<a href="#L4"> 4</a>
+<a href="#L5"> 5</a>
+<a href="#L6"> 6</a>
+<a href="#L7"> 7</a>
+<a href="#L8"> 8</a>
+<a href="#L9"> 9</a>
+<a href="#L10">10</a>
+<a href="#L11">11</a>
+<a href="#L12">12</a>
+<a href="#L13">13</a>
+<a href="#L14">14</a>
+<a href="#L15">15</a>
+<a href="#L16">16</a>
+<a href="#L17">17</a>
+<a href="#L18">18</a>
+<a href="#L19">19</a>
+<a href="#L20">20</a>
+<a href="#L21">21</a>
+<a href="#L22">22</a>
+<a href="#L23">23</a>
+<a href="#L24">24</a>
+<a href="#L25">25</a>
+<a href="#L26">26</a>
+<a href="#L27">27</a>
+<a href="#L28">28</a>
+<a href="#L29">29</a>
+<a href="#L30">30</a>
+<a href="#L31">31</a>
+<a href="#L32">32</a>
+<a href="#L33">33</a>
+<a href="#L34">34</a>
+<a href="#L35">35</a>
+<a href="#L36">36</a>
+<a href="#L37">37</a>
+<a href="#L38">38</a>
+<a href="#L39">39</a>
+<a href="#L40">40</a>
+<a href="#L41">41</a>
+</pre>
+<pre><code class="ocaml">(** [largest_lst l] is one of the lists in [l : 'a list list] which has
+    maximum length. *)
+let largest_lst lst =
+  <span data-count="68962192">L</span>ist.fold_left
+    (fun x y -&gt; <span data-count="172139400">i</span>f List.lengt<span data-count="172139400">h</span> y &gt; List.lengt<span data-count="172139400">h</span> x then <span data-count="119355">y</span> else <span data-count="172020045">x</span>)
+    [] lst
+
+let max_pairs seq : (int * int) list =
+  <span data-count="181">l</span>et size = String.length seq in
+  <span data-count="181">l</span>et memo : (int * int) list array array =
+    Array.make_matri<span data-count="181">x</span> size size []
+  in
+  (* [max_pairs_rec (start, fin)] is [memo.(start).(fin)] if
+     [memo.(start).(fin) &lt;&gt; ~-1], else returns the maximum number of
+     tuples [(a,b)] such that for all [a,b], [start &lt;= a &lt; b &lt;= fin] and
+     [(seq.\[a\], seq.\[b\])] is a valid RNA pair.
+
+     Effects: Fills in [memo.(x).(y)] for all recursive calls
+     [max_pairs_rec (x, y)]. *)
+  let rec max_pairs_rec : int * int -&gt; (int * int) list = function
+    | <span data-count="275316789">s</span>tart, fin when start &gt;= fin -&gt; <span data-count="200169343">[</span>]
+    | <span data-count="75147446">s</span>tart, fin when memo.(start).(fin) &lt;&gt; [] -&gt; <span data-count="6185254">m</span>emo.(start).(fin)
+    | <span data-count="68962192">s</span>tart, fin -&gt;
+        memo.(start).(fin) &lt;-
+          ([
+             (if Secondary.is_valid_pair seq.[start] seq.[fin] then
+              <span data-count="20771">(</span>start, fin) :: max_pairs_re<span data-count="20771">c</span> (start + 1, fin - 1)
+             else <span data-count="68941421">m</span>ax_pairs_re<span data-count="68941421">c</span> (start + 1, fin - 1));
+           ]
+          @
+          try
+            List.ini<span data-count="68962192">t</span> (fin - start) (fun k -&gt;
+                <span data-count="103177208">m</span>ax_pairs_re<span data-count="103177208">c</span> (start, start + k)
+                @ max_pairs_re<span data-count="103177208">c</span> (start + k + 1, fin))
+          with <span data-count="0">I</span>nvalid_argument _ -&gt; [])
+          |&gt; largest_ls<span data-count="68962192">t</span>;
+        <span data-count="68962192">m</span>emo.(start).(fin)
+  in
+  max_pairs_rec (0, size - 1)
+
+let predict (r : Rna.t) = <span data-count="181">m</span>ax_pairs r.seq |&gt; <span data-count="181">S</span>econdary.make r
+</code></pre>
+      </div>
+    </div>
+    <script src="../../coverage.js"></script>
+  </body>
+</html>

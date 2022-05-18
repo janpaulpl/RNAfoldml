@@ -131,6 +131,19 @@ let nussinov_tests rna exp_dot =
       );
     ]
 
+(** [nuss_pair_test name input expected_output] is a OUnit test which
+    passes if and only if the Nussinov algorithm predicts the bindings
+    which agree with [expected_output]*)
+let nuss_pair_test
+    (name : string)
+    (input : string)
+    (expected_output : int array) =
+  name >:: fun _ ->
+  assert_equal
+    (Rna.from_string input name
+    |> Nussinov.predict |> Secondary.get_pairs)
+    expected_output
+
 (** [akutsu_test rna exp_pairs] is a list of Ounit test cases asserting
     that [Akutsu.predict] applied to an rna with sequence [rna] passes
     all of the tests in [secondary_tests] and has structure given by
@@ -158,6 +171,11 @@ let fasta2 = Rna.from_fasta "test_data/test2.fasta"
 let rna1 = fasta1 |> List.hd |> Nussinov.predict
 let rna2 = Rna.from_string "AGU" "small_rna"
 
+(** These arrays are for the purpose of testing Akutsu and Nussinov
+    algorithmns. They are created like this because when the arrays get
+    too long, OCaml autoformatting puts 1 number on each line. We wanted
+    to avoid this because it artificially inflates lines, so we resorted
+    to appending smaller arrays together/*)
 let bigarr1 =
   let arr =
     Array.append
@@ -203,6 +221,63 @@ let bigarr8 =
   Array.append
     [| 10; 9; -1; 6; 5; 4; 3; -1; -1; 1; 0; -1; 25 |]
     [| -1; -1; 23; 22; 18; 17; -1; 21; 20; 16; 15; -1; 12; -1 |]
+
+let bigarr9 =
+  Array.append
+    [| -1; 4; -1; -1; 1; 23; 22; 11; 10; -1; 8; 7; 21; 14 |]
+    [| 13; 20; 19; 18; 17; 16; 15; 12; 6; 5; 27; 26; 25; 24 |]
+
+let bigarr10 =
+  Array.append
+    [| -1; 5; 4; -1; 2; 1; 8; -1; 6; 30; 29; 28; -1; 14; 13; 16; 15 |]
+    [| -1; 22; 21; -1; 19; 18; 26; 25; 24; 23; -1; 11; 10; 9 |]
+
+let bigarr11 =
+  Array.append
+    [| 29; 3; -1; 1; 7; -1; -1; 4; 9; 8; 28; 27; 26 |]
+    [|
+      -1; 24; 23; 22; -1; 21; 20; 19; 18; 16; 15; 14; -1; 12; 11; 10; 0;
+    |]
+
+let bigarr12 =
+  Array.append
+    [| 1; 0; -1; 4; 3; 27; -1; 25; 24; 13; -1; 12; 11; 9 |]
+    [| -1; -1; 17; 16; -1; 22; 21; 20; 19; -1; 8; 7; -1; 5 |]
+
+let bigarr13 =
+  Array.append
+    [| -1; -1; -1; 19; -1; -1; -1; 17; -1; 16; 13; 12; 11 |]
+    [| 10; 15; 14; 9; 7; -1; 3; -1; -1 |]
+
+let bigarr14 =
+  Array.append
+    [| 1; 0; -1; -1; -1; 18; 9; 8; 7; 6; 17; 16 |]
+    [| 15; -1; -1; 12; 11; 10; 5; 21; -1; 19 |]
+
+let bigarr15 =
+  Array.append
+    [| -1; 14; 9; 8; 7; 6; 5; 4; 3; 2; 13 |]
+    [| 12; 11; 10; 1; -1; -1; -1; -1; -1; -1 |]
+
+let bigarr16 =
+  Array.append
+    [| 26; -1; -1; 17; 16; 8; -1; -1; 5; 15; 14; 13; -1; 11; 10 |]
+    [| 9; 4; 3; -1; 22; -1; -1; 19; -1; -1; -1; 0 |]
+
+let bigarr17 =
+  Array.append
+    [| -1; 2; 1; 4; 3; 8; 7; 6; 5; 26; -1; 24; -1; -1 |]
+    [| 21; 20; -1; 19; -1; 17; 15; 14; -1; -1; 11; -1; 9; -1 |]
+
+let bigarr18 =
+  Array.append
+    [| 7; 3; -1; 1; 5; 4; -1; 0; 20; -1; 11; 10; 19; 14; 13; 18; 17 |]
+    [| 16; 15; 12; 8; -1; -1; -1; 29; -1; 27; 26; -1; 24; 31; 30 |]
+
+let bigarr19 =
+  Array.append
+    [| 6; 5; -1; 4; 3; 1; 0; 8; 7; -1; 26; -1; -1; 14; 13; 23; -1 |]
+    [| -1; -1; -1; -1; -1; -1; 15; -1; -1; 10 |]
 
 let () =
   fasta1 |> List.hd |> Nussinov.predict
@@ -264,6 +339,29 @@ let nussinov_tests =
         "(())(())";
       nussinov_tests (fasta1 |> List.hd) "(((...)))";
       nussinov_tests (Rna.from_string "" "Empty") "";
+    ]
+  @ [
+      nuss_pair_test "nuss_empty" "" [||];
+      nuss_pair_test "nuss_ACUAUGUUCAU" "ACUAUGUUCAU"
+        [| 10; -1; 9; 4; 3; 8; -1; -1; 5; 2; 0 |];
+      nuss_pair_test "nuss_AACUGUUCAUCAUUGUAUCAUGUACUAUGU"
+        "AACUGUUCAUCAUUGUAUCAUGUACUAUGU" bigarr11;
+      nuss_pair_test "nuss_AUCAUGUAUCUAUGUUAUUGAUCUAUUC"
+        "AUCAUGUAUCUAUGUUAUUGAUCUAUUC" bigarr12;
+      nuss_pair_test "nuss_UUGUGUUGUAGUACUAUCUAGU"
+        "UUGUGUUGUAGUACUAUCUAGU" bigarr13;
+      nuss_pair_test "nuss_AUUUUUUGCAGUAUCUACAGUC"
+        "AUUUUUUGCAGUAUCUACAGUC" bigarr14;
+      nuss_pair_test "nuss_UUUGGGCCCAGUACAGGGGGG"
+        "UUUGGGCCCAGUACAGGGGGG" bigarr15;
+      nuss_pair_test "nuss_GUUCUGUUCUACUGUAAGUAUUUUGGC"
+        "GUUCUGUUCUACUGUAAGUAUUUUGGC" bigarr16;
+      nuss_pair_test "nuss_CCGGCCUAGUAUCAUUGUGAAAAAAAAA"
+        "CCGGCCUAGUAUCAUUGUGAAAAAAAAA" bigarr17;
+      nuss_pair_test "nuss_AACUAUCUGUAUGUAGUACCCCCCCUAUUGUA"
+        "AACUAUCUGUAUGUAGUACCCCCCCUAUUGUA" bigarr18;
+      nuss_pair_test "nuss_ACUAUGUAUUGUUAUCGUGGGGGGGUC"
+        "ACUAUGUAUUGUUAUCGUGGGGGGGUC" bigarr19;
     ]
 
 let pseudoknot_tests =
@@ -372,6 +470,10 @@ let akutsu_tests =
         bigarr7;
       akutsu_test "akutsu_CAUCAUGUUUGUGUGUGGCUAUCAUCU"
         "CAUCAUGUUUGUGUGUGGCUAUCAUCU" bigarr8;
+      akutsu_test "akutsu_AACCUUGGUCACUAUGUAUACACACAUG"
+        "AACCUUGGUCACUAUGUAUACACACAUG" bigarr9;
+      akutsu_test "akutsu_UUGUCAGUCCUGUGCAUUUUCAACCGGUCAG"
+        "UUGUCAGUCCUGUGCAUUUUCAACCGGUCAG" bigarr10;
     ]
 
 let () = Secondary_vis.circle_graph "test_output/rna1" rna1
