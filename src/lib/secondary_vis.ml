@@ -1,7 +1,10 @@
+(* Canvas *)
+let (width, height) = (400., 800.)
+
 (* Diagram *)
 let circ cr arc =
   let pi = 4. *. atan 500. in
-  let (xc, yc) = 128., 128. in
+  let (xc, yc) = width /. 2., height /. 4. in
   let radius = 100. in
   let (angle1,angle2) = 45. *. pi /. 180.0, 210. *. pi /. 180.0  in
 
@@ -16,20 +19,27 @@ let circ cr arc =
 let font = try Sys.argv.(1) with _ -> "Sans"
 
 let circle_graph filename r =
-  ignore r;
-  let surface = Cairo.SVG.create (filename^".svg") ~w:600. ~h:300. in
-  let cr = Cairo.create surface in
+  let name = Secondary.get_name r in 
+  (* let seq = Secondary.get_seq r in  *)
+  (* let pairs = Secondary.get_pairs r |> Array.to_list |> List.fold_left  in *)
+
+  let cr = Cairo.create(Cairo.PDF.create (filename^".pdf") ~w:width ~h:height) in
   circ cr Cairo.arc;
-  Cairo.translate cr 200. 0.;
   
-  Cairo.select_font_face cr font ~weight:Bold;
-  Cairo.set_font_size cr 90.0;
-  Cairo.move_to cr 50. 200.;
-  Cairo.show_text cr (Secondary.get_name r);
+  Cairo.select_font_face cr font;
+  Cairo.set_font_size cr 30.;
+  Cairo.set_source_rgb cr 139. 0. 0.;
+  Cairo.move_to cr (width /. 2.5) 40.;
+  Cairo.show_text cr name;
+  
+  (* Cairo.set_font_size cr 14.;
+  Cairo.move_to cr 200. 100.;
+  Cairo.show_text cr seq; *)
 
-  Cairo.PNG.write surface (filename^".png");
-  Cairo.Surface.finish surface
+  (* Cairo.move_to cr 200. 100.;
+  Cairo.show_text cr ; *)
 
+  Cairo.Surface.finish(Cairo.get_target cr)
 
 let compare_graph (filename: string) (r1: Secondary.t) (r2: Secondary.t) =
   ignore filename;
