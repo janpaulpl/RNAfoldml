@@ -171,6 +171,44 @@ let bigarr1 =
   in
   Array.append [| -1; -1; 6; -1; 5; 4; 2; 35; -1; 10 |] arr
 
+let bigarr2 =
+  Array.append
+    [| 22; 21; -1; -1; 5; 4; 16; -1; -1; 15 |]
+    [| 14; -1; -1; -1; 10; 9; 6; 20; 19; 18; 17; 1; 0 |]
+
+let bigarr3 =
+  Array.append
+    [| 27; -1; 10; 4; 3; 9; 8; -1; 6; 5; 2; 26; -1; 21; 20 |]
+    [| 19; -1; 18; 17; 15; 14; 13; 25; 24; 23; 22; 11; 0 |]
+
+let bigarr4 =
+  Array.append
+    [| 3; 2; 1; 0; 23; 22; -1; -1; 20; -1; 15; 14; 13 |]
+    [| 12; 11; 10; 19; 18; 17; 16; 8; -1; 5; 4 |]
+
+let bigarr5 =
+  let arr =
+    Array.append
+      [| 36; 35; -1; 5; -1; 3; 9; 8; 7; 6; 11; 10; 19; 18 |]
+      [| -1; 16; 15; -1; 13; 12; -1; -1; 33; 31; 27; 26; 25 |]
+  in
+  Array.append arr [| 24; 30; -1; 28; 23; -1; 22; -1; 1; 0 |]
+
+let bigarr6 =
+  Array.append
+    [| -1; -1; -1; 17; 16; 15; 10; 9; -1; 7; 6; 14; 13; 12; 11; 5 |]
+    [| 4; 3; 27; -1; -1; -1; -1; 24; 23; 26; 25; 18 |]
+
+let bigarr7 =
+  Array.append
+    [| 7; 19; 17; 15; 14; 13; 12; 0; -1; -1 |]
+    [| -1; -1; 6; 5; 4; 3; -1; 2; -1; 1; -1 |]
+
+let bigarr8 =
+  Array.append
+    [| 10; 9; -1; 6; 5; 4; 3; -1; -1; 1; 0; -1; 25 |]
+    [| -1; -1; 23; 22; 18; 17; -1; 21; 20; 16; 15; -1; 12; -1 |]
+
 let () =
   fasta1 |> List.hd |> Nussinov.predict
   |> Secondary_print.to_ct "test_output/fasta1.ct"
@@ -300,6 +338,7 @@ let pseudoknot_tests =
 let akutsu_tests =
   List.flatten
     [
+      akutsu_test "akutsu_empty" "" [||];
       akutsu_test "akutsu_GGACCUUG" "GGACCUUG"
         [| 3; 4; -1; 0; 1; -1; -1; -1 |];
       akutsu_test "akutsu_AGAUC" "AGAUC" [| -1; 4; 3; 2; 1 |];
@@ -324,6 +363,22 @@ let akutsu_tests =
         [| -1; 2; 1; 9; 5; 4; 8; -1; 6; 3 |];
       akutsu_test "akutsu_GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA"
         "GGCUAUGUUAUAUCUAUUGUGAUCUAGUAUCUAGCA" bigarr1;
+      akutsu_test "akutsu_ACUGAUCUAGGGAUC" "ACUGAUCUAGGGAUC"
+        [| -1; 3; -1; 1; 5; 4; 9; 8; 7; 6; 14; -1; 13; 12; 10 |];
+      akutsu_test "akutsu_AUCUAUCUUCUUUCAGGGAUCAU"
+        "AUCUAUCUUCUUUCAGGGAUCAU" bigarr2;
+      akutsu_test "akustu_AUCAUCUUAGGGGGACUAUGUCAUAUCU"
+        "AUCAUCUUAGGGGGACUAUGUCAUAUCU" bigarr3;
+      akutsu_test "akutsu_GGCCAUCUGUACUAGUGUACCUAU"
+        "GGCCAUCUGUACUAGUGUACCUAU" bigarr4;
+      akutsu_test "akutsu_GUCACUGAUCAUGAUAUUUCCCUGGUACAUUCUAUAC"
+        "GUCACUGAUCAUGAUAUUUCCCUGGUACAUUCUAUAC" bigarr5;
+      akutsu_test "akutsu_AAACCCACUGUCAUGGGGGGGGGGCAUC"
+        "AAACCCACUGUCAUGGGGGGGGGGCAUC" bigarr6;
+      akutsu_test "akutsu_AAAACCCUUUGGGGGUCUAUC" "AAAACCCUUUGGGGGUCUAUC"
+        bigarr7;
+      akutsu_test "akutsu_CAUCAUGUUUGUGUGUGGCUAUCAUCU"
+        "CAUCAUGUUUGUGUGUGGCUAUCAUCU" bigarr8;
     ]
 
 let () = Secondary_vis.circle_graph "test_output/rna1" rna1
