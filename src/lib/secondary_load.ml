@@ -34,14 +34,19 @@ let from_dot f : Secondary.t =
       let ic = open_in f in
       let name = input_line ic in
       let seq = input_line ic in
-      let dot = input_line ic in
+      let dot =
+        really_input_string ic
+          (in_channel_length ic - String.length name - String.length seq
+         - 2)
+      in
       close_in ic;
       dot |> from_dot_string (Rna.from_string seq name)
     with
     | Invalid_argument m -> Invalid_argument m |> raise
     | _ ->
         Invalid_argument
-          "Unable to load secondary structure in from dot file" |> raise
+          ("Unable to load secondary structure from dot file: " ^ f)
+        |> raise
 
 (** [from_ct_string name ct_lines] is the rna secondary structure with
     name [name] and sequence and base pairs determined by the

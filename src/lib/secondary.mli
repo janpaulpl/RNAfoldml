@@ -48,7 +48,7 @@ val num_pairs : t -> int
     [r]. *)
 
 val assoc_to_array : int -> (int * int) list -> int array
-(** [assoc_to_array size pairs] is the array [a]] with [a.i = j] if
+(** [assoc_to_array size pairs] is the array [a] with [a.i = j] if
     [(i,j)] or [(j,i)] in [pairs] and remaining entries are [-1]. *)
 
 val get_seq : t -> string
