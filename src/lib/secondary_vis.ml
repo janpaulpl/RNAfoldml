@@ -31,7 +31,6 @@ let circle_graph filename r =
   Cairo.Surface.finish surface
 
 
-
 let compare_graph (filename: string) (r1: Secondary.t) (r2: Secondary.t) =
   ignore filename;
   ignore r1;

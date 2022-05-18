@@ -1,3 +1,5 @@
 (test
  (name main)
- (libraries RNAfoldml ounit2))
+ (libraries RNAfoldml ounit2)
+ (instrumentation
+  (backend bisect_ppx)))
